@@ -1,0 +1,230 @@
+import {
+  CalendarDays,
+  Clock3,
+  Flower2,
+  HeartHandshake,
+  Leaf,
+  LucideIcon,
+  MapPinned,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  Wind,
+} from "lucide-react";
+
+export type Feature = {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+};
+
+export type Product = {
+  name: string;
+  description: string;
+  image: string;
+};
+
+export type GalleryItem = {
+  title: string;
+  image: string;
+  size: "wide" | "tall" | "square";
+  note?: string;
+};
+
+export type Reservation = {
+  client: string;
+  email: string;
+  date: string;
+  time: string;
+  session: string;
+  status: "Confirmada" | "Pendiente" | "Cancelada";
+};
+
+export const primaryNavLinks = [
+  { label: "Nosotros", href: "#historia" },
+  { label: "Api-inhalación", href: "#api-inhalacion" },
+  { label: "Productos", href: "#productos" },
+  { label: "Galería", href: "#galeria" },
+  { label: "Preguntas frecuentes", href: "#faq" },
+  { label: "Visítanos", href: "#visitanos" },
+];
+
+export const mobileNavLinks = [
+  { label: "Nosotros", href: "#historia" },
+  { label: "Api-inhalación", href: "#api-inhalacion" },
+  { label: "Productos de la colmena", href: "#productos" },
+  { label: "Galería", href: "#galeria" },
+  { label: "Preguntas frecuentes", href: "#faq" },
+  { label: "Visítanos en Arata", href: "#visitanos" },
+];
+
+export const featureCards: Feature[] = [
+  {
+    title: "Colmena",
+    description: "El corazón del proyecto: una arquitectura viva que inspira bienestar, escucha y equilibrio.",
+    icon: Flower2,
+  },
+  {
+    title: "Naturaleza",
+    description: "Aire puro, horizonte infinito y una ruralidad silenciosa que define el ritmo de la experiencia.",
+    icon: Leaf,
+  },
+  {
+    title: "Bienestar",
+    description: "Conexión profunda con lo esencial a través del cuerpo, la respiración y la calma.",
+    icon: Sparkles,
+  },
+  {
+    title: "Historia familiar",
+    description: "Más de 25 años de experiencia apícola puestos al servicio de una hospitalidad sensible y cuidada.",
+    icon: HeartHandshake,
+  },
+];
+
+export const apiBenefits: Feature[] = [
+  {
+    title: "Respiración consciente",
+    description: "Sesiones lentas para bajar el ritmo y escuchar el cuerpo.",
+    icon: Wind,
+  },
+  {
+    title: "Relajación profunda",
+    description: "El entorno acompaña con temperatura noble, aroma suave y pausa real.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Naturaleza viva",
+    description: "Propóleos, cera y aceites esenciales en un microclima único.",
+    icon: Leaf,
+  },
+  {
+    title: "Silencio rural",
+    description: "Un refugio delicado, lejos del ruido y cerca del horizonte pampeano.",
+    icon: MapPinned,
+  },
+];
+
+export const products: Product[] = [
+  {
+    name: "Miel pura",
+    description: "Cosecha dorada, floral y transparente, pensada para una mesa simple y ritual.",
+    image: "/ai/honey-product-still-life.png",
+  },
+  {
+    name: "Propóleos",
+    description: "Extracto noble para acompañar momentos de cuidado y bienestar cotidiano.",
+    image: "/ai/honey-product-still-life.png",
+  },
+  {
+    name: "Panal de miel",
+    description: "Textura natural y sabor directo al origen de la colmena.",
+    image: "/ai/honey-product-still-life.png",
+  },
+  {
+    name: "Bálsamo labial",
+    description: "Cera de abejas y terminación artesanal en una pieza pequeña y premium.",
+    image: "/ai/honey-product-still-life.png",
+  },
+];
+
+export const galleryItems: GalleryItem[] = [
+  {
+    title: "Cabaña de api-inhalación",
+    image: "/comparativa_primeras_impresiones_web_1.png",
+    size: "wide",
+    note: "Exterior y llegada",
+  },
+  {
+    title: "Paisaje pampeano",
+    image: "/ai/pampa-tree-golden.png",
+    size: "tall",
+    note: "Horizonte y silencio",
+  },
+  {
+    title: "Interior de experiencia",
+    image: "/ai/api-cabin-interior.png",
+    size: "square",
+    note: "Calma y ritual",
+  },
+  {
+    title: "Productos de la colmena",
+    image: "/ai/honey-product-still-life.png",
+    size: "square",
+    note: "Materia prima noble",
+  },
+  {
+    title: "Apiario y colmenas",
+    image: "/comparativa_primeras_impresiones_web.png",
+    size: "wide",
+    note: "Origen del proyecto",
+  },
+];
+
+export const faqs = [
+  {
+    question: "¿Qué es la api-inhalación?",
+    answer:
+      "Es una experiencia de bienestar que permite respirar el aire vivo de la colmena, naturalmente cargado de propóleos, cera y aromas esenciales.",
+  },
+  {
+    question: "¿Dónde se realiza la experiencia?",
+    answer:
+      "Se vive en Arata, La Pampa, dentro de una cabaña pensada para sostener calma, temperatura amable y contacto con el paisaje.",
+  },
+  {
+    question: "¿Cuánto dura una sesión?",
+    answer:
+      "La referencia de esta propuesta visual contempla sesiones de 45 a 60 minutos, con horarios coordinados según disponibilidad.",
+  },
+  {
+    question: "¿Puedo comprar productos de la colmena?",
+    answer:
+      "Sí. La experiencia convive con una línea artesanal de miel, propóleos, panal y productos de cuidado.",
+  },
+  {
+    question: "¿Cómo reservo un turno?",
+    answer:
+      "Podés completar el formulario de la web o escribir por WhatsApp para coordinar fecha, horario y detalles de la visita.",
+  },
+];
+
+export const adminMetrics = [
+  { label: "Reservas hoy", value: "3", tone: "sage", detail: "+2 hoy", icon: CalendarDays },
+  { label: "Pendientes de confirmar", value: "5", tone: "rose", detail: "Requiere atencion", icon: Clock3 },
+  { label: "Disponibilidad", value: "80%", tone: "sand", detail: "Optimo", icon: ShoppingBag },
+];
+
+export const reservations: Reservation[] = [
+  {
+    client: "Elena Garcia",
+    email: "elena.g@email.com",
+    date: "15 May, 2024",
+    time: "10:30 AM",
+    session: "Api-inhalacion",
+    status: "Confirmada",
+  },
+  {
+    client: "Marcos Mendoza",
+    email: "m.mendoza@email.com",
+    date: "15 May, 2024",
+    time: "03:00 PM",
+    session: "Api-inhalacion",
+    status: "Pendiente",
+  },
+  {
+    client: "Lucia Fernandez",
+    email: "l.fernandez@email.com",
+    date: "16 May, 2024",
+    time: "09:00 AM",
+    session: "Visita guiada",
+    status: "Confirmada",
+  },
+  {
+    client: "Javier Rojas",
+    email: "j.rojas@email.com",
+    date: "16 May, 2024",
+    time: "11:00 AM",
+    session: "Api-inhalacion",
+    status: "Cancelada",
+  },
+];
