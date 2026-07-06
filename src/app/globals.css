@@ -333,9 +333,31 @@ textarea {
 }
 
 .gallery-shell {
-  --gallery-offset: 2.5rem;
+  --gallery-offset: clamp(3rem, 7vh, 4.5rem);
   height: calc(100svh - var(--header-offset, 0px) - var(--gallery-offset));
   scroll-margin-top: calc(var(--header-offset) + var(--gallery-offset));
+}
+
+.gallery-balance {
+  align-items: center;
+}
+
+.gallery-copy-column {
+  justify-content: center;
+}
+
+.gallery-copy {
+  justify-content: center;
+}
+
+.gallery-collage-column {
+  align-self: center;
+}
+
+@media (min-width: 1280px) {
+  .gallery-collage-column {
+    transform: translateY(0.375rem);
+  }
 }
 
 .faq-shell {
@@ -371,7 +393,7 @@ textarea {
   }
 
   .gallery-shell {
-    --gallery-offset: 3rem;
+    --gallery-offset: clamp(3.25rem, 8vh, 5rem);
   }
 
   .faq-shell {

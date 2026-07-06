@@ -163,19 +163,23 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="galeria" className="section-shell gallery-shell !items-center !py-4 md:!py-5">
-        <div className="grid h-full items-center gap-8 xl:grid-cols-[0.45fr_0.55fr] xl:gap-7">
-          <div className="flex h-full items-center justify-center self-center">
+      <section id="galeria" className="section-shell gallery-shell !py-4 md:!py-5">
+        <div className="gallery-balance grid h-full gap-8 xl:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] xl:gap-10">
+          <div className="gallery-copy-column flex h-full items-center">
+            <div className="flex w-full justify-center xl:justify-start">
             <SectionTitle
               eyebrow="Galería y experiencia"
               title="Una atmósfera visual más cercana a la maqueta: noble, aireada y serena."
               description="Combinamos las referencias que nos compartiste con imágenes nuevas para completar la narrativa del paisaje, la cabaña y los productos."
-              align="center"
-              className="w-full max-w-[560px] gap-3 [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.6rem] [&_p]:mx-auto [&_p]:max-w-[30ch] [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
+              align="left"
+              className="gallery-copy w-full max-w-[560px] gap-3 !items-center !text-center xl:!items-start xl:!text-left [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.6rem] [&_p]:max-w-[30ch] [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem] xl:[&_p]:mx-0"
             />
           </div>
-          <div className="h-full">
-            <GalleryGrid items={galleryItems} />
+          </div>
+          <div className="gallery-collage-column flex h-full items-center justify-center">
+            <div className="w-full max-w-[760px]">
+              <GalleryGrid items={galleryItems} />
+            </div>
           </div>
         </div>
       </section>
