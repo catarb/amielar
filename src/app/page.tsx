@@ -180,23 +180,23 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="reserva" className="section-shell viewport-shell reservation-shell !items-center !py-3 md:!py-4">
-        <div className="grid h-full items-center gap-0 overflow-hidden rounded-[42px] border border-[rgba(67,59,38,0.08)] bg-white/60 shadow-[0_28px_70px_rgba(67,59,38,0.08)] lg:grid-cols-[0.92fr_1.08fr]">
-          <div className="order-2 relative min-h-[320px] lg:order-1 lg:min-h-[420px]">
+      <section id="reserva" className="section-shell viewport-shell reservation-shell !items-center !py-2 md:!py-3">
+        <div className="reservation-composition mx-auto grid w-full max-w-[1320px] overflow-hidden lg:grid-cols-[0.45fr_0.55fr]">
+          <div className="order-2 relative min-h-[280px] lg:order-1 lg:min-h-0">
             <Image
               src="/ai/pampa-tree-golden.png"
               alt="Campo pampeano dorado"
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              sizes="(max-width: 1024px) 100vw, 45vw"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0.08)_0%,rgba(18,21,23,0.18)_100%)]" />
-            <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-7 lg:p-8">
-              <p className="font-serif text-3xl italic md:text-[2.6rem]">Conecta con nosotros</p>
-              <p className="mt-4 max-w-sm text-sm leading-7 text-white/82 md:text-[0.98rem]">
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0.08)_0%,rgba(18,21,23,0.32)_100%)]" />
+            <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-6 lg:p-8">
+              <p className="font-serif text-[2rem] italic leading-tight md:text-[2.35rem]">Conecta con nosotros</p>
+              <p className="mt-3 max-w-sm text-sm leading-6 text-white/82 md:text-[0.92rem]">
                 Estamos en el corazón de La Pampa, apostando a una experiencia que mezcla paisaje, colmena y bienestar.
               </p>
-              <div className="mt-7 space-y-3 text-sm">
+              <div className="mt-5 space-y-2.5 text-[0.9rem]">
                 <div className="flex items-center gap-3">
                   <MessageCircleMore className="h-4 w-4 text-[var(--gold)]" />
                   WhatsApp · 2302 555555
@@ -208,7 +208,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="order-1 flex h-full items-center justify-center p-4 md:p-6 lg:order-2 lg:p-8">
+          <div className="order-1 flex items-center justify-center px-5 py-6 md:px-7 md:py-8 lg:order-2 lg:px-10 lg:py-10 xl:px-12">
             <BookingForm />
           </div>
         </div>

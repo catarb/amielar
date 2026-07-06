@@ -1,9 +1,9 @@
 export function BookingForm() {
   return (
-    <form className="card-shell mx-auto flex w-full max-w-[560px] flex-col justify-center space-y-4 p-5 md:space-y-4 md:p-6 xl:p-7">
-      <div className="space-y-2 text-center">
-        <span className="label-chip">Reserva de turnos</span>
-        <p className="mx-auto max-w-[34ch] text-[0.96rem] leading-7 text-[color:var(--muted-ink)]">
+    <form className="mx-auto flex w-full max-w-[540px] flex-col justify-center space-y-3.5">
+      <div className="flex flex-col items-center space-y-2 text-center">
+        <h2 className="font-serif text-[2rem] italic leading-tight text-[var(--earth)] md:text-[2.25rem]">Reserva de turnos</h2>
+        <p className="mx-auto max-w-[34ch] text-[0.92rem] leading-6 text-[color:var(--muted-ink)]">
           Completa tu consulta y te responderemos con disponibilidad, detalles y recomendaciones.
         </p>
       </div>
@@ -36,7 +36,7 @@ export function BookingForm() {
         <textarea rows={3} placeholder="Contanos si queres reservar, consultar por productos o coordinar una visita." />
       </label>
 
-      <button type="submit" className="primary-button w-full justify-center">
+      <button type="submit" className="primary-button reservation-submit w-full justify-center py-3">
         Enviar solicitud
       </button>
     </form>

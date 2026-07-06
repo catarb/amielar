@@ -227,7 +227,7 @@ textarea {
 .field-group {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.55rem;
 }
 
 .field-group span {
@@ -241,10 +241,10 @@ textarea {
 .field-group textarea {
   width: 100%;
   border: 1px solid rgba(67, 59, 38, 0.12);
-  border-radius: 1rem;
-  background: rgba(250, 249, 246, 0.94);
-  min-height: 3.35rem;
-  padding: 0.8rem 1rem;
+  border-radius: 1.05rem;
+  background: rgba(250, 249, 246, 0.9);
+  min-height: 3.15rem;
+  padding: 0.82rem 1rem;
   color: var(--ink);
   outline: none;
   transition:
@@ -254,7 +254,7 @@ textarea {
 }
 
 .field-group textarea {
-  min-height: 7.25rem;
+  min-height: 5.5rem;
   resize: none;
   line-height: 1.55;
 }
@@ -265,6 +265,25 @@ textarea {
   border-color: rgba(212, 162, 59, 0.65);
   box-shadow: 0 0 0 4px rgba(212, 162, 59, 0.12);
   background: white;
+}
+
+.reservation-composition {
+  min-height: min(700px, calc(100svh - var(--header-offset, 0px) - 3.5rem));
+  border: 1px solid rgba(67, 59, 38, 0.1);
+  border-radius: 2.5rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 249, 246, 0.94));
+  box-shadow:
+    0 20px 56px rgba(67, 59, 38, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.reservation-submit {
+  min-height: 3.25rem;
+}
+
+.reservation-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(185, 135, 36, 0.28);
 }
 
 @media (min-width: 768px) {
@@ -332,7 +351,7 @@ textarea {
 }
 
 .reservation-shell {
-  --reservation-offset: 3rem;
+  --reservation-offset: 1.75rem;
   scroll-margin-top: calc(var(--header-offset) + var(--reservation-offset));
 }
 
@@ -364,6 +383,12 @@ textarea {
   }
 
   .reservation-shell {
-    --reservation-offset: 3.5rem;
+    --reservation-offset: 2rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .reservation-composition {
+    min-height: auto;
   }
 }
