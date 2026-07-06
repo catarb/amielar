@@ -167,14 +167,14 @@ export default function Home() {
         <div className="gallery-balance grid h-full gap-8 xl:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] xl:gap-10">
           <div className="gallery-copy-column flex h-full items-center">
             <div className="flex w-full justify-center xl:justify-start">
-            <SectionTitle
-              eyebrow="Galería y experiencia"
-              title="Una atmósfera visual más cercana a la maqueta: noble, aireada y serena."
-              description="Combinamos las referencias que nos compartiste con imágenes nuevas para completar la narrativa del paisaje, la cabaña y los productos."
-              align="left"
-              className="gallery-copy w-full max-w-[560px] gap-3 !items-center !text-center xl:!items-start xl:!text-left [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.6rem] [&_p]:max-w-[30ch] [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem] xl:[&_p]:mx-0"
-            />
-          </div>
+              <SectionTitle
+                eyebrow="Galería y experiencia"
+                title="Una atmósfera visual más cercana a la maqueta: noble, aireada y serena."
+                description="Combinamos las referencias que nos compartiste con imágenes nuevas para completar la narrativa del paisaje, la cabaña y los productos."
+                align="left"
+                className="gallery-copy w-full max-w-[560px] gap-3 !items-center !text-center xl:!items-start xl:!text-left [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.6rem] [&_p]:max-w-[30ch] [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem] xl:[&_p]:mx-0"
+              />
+            </div>
           </div>
           <div className="gallery-collage-column flex h-full items-center justify-center">
             <div className="w-full max-w-[760px]">
@@ -184,42 +184,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="reserva" className="section-shell viewport-shell reservation-shell !items-center !py-2 md:!py-3">
-        <div className="reservation-composition mx-auto grid w-full max-w-[1320px] overflow-hidden lg:grid-cols-[0.45fr_0.55fr]">
-          <div className="order-2 relative min-h-[280px] lg:order-1 lg:min-h-0">
-            <Image
-              src="/ai/pampa-tree-golden.png"
-              alt="Campo pampeano dorado"
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 45vw"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0.08)_0%,rgba(18,21,23,0.32)_100%)]" />
-            <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-6 lg:p-8">
-              <p className="font-serif text-[2rem] italic leading-tight md:text-[2.35rem]">Conecta con nosotros</p>
-              <p className="mt-3 max-w-sm text-sm leading-6 text-white/82 md:text-[0.92rem]">
-                Estamos en el corazón de La Pampa, apostando a una experiencia que mezcla paisaje, colmena y bienestar.
-              </p>
-              <div className="mt-5 space-y-2.5 text-[0.9rem]">
-                <div className="flex items-center gap-3">
-                  <MessageCircleMore className="h-4 w-4 text-[var(--gold)]" />
-                  WhatsApp · 2302 555555
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-[var(--gold)]" />
-                  amielar.visitas@gmail.com
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="order-1 flex items-center justify-center px-5 py-6 md:px-7 md:py-8 lg:order-2 lg:px-10 lg:py-10 xl:px-12">
-            <BookingForm />
-          </div>
-        </div>
-      </section>
-
       <section id="faq" className="section-shell faq-shell !items-center !py-4 md:!py-5">
-        <div className="grid h-full gap-8 xl:grid-cols-[0.44fr_0.56fr] xl:gap-7 xl:items-center">
+        <div className="grid h-full gap-8 xl:grid-cols-[0.44fr_0.56fr] xl:items-center xl:gap-7">
           <div className="flex h-full items-center justify-center self-center">
             <SectionTitle
               eyebrow="Preguntas frecuentes"
@@ -236,7 +202,7 @@ export default function Home() {
       </section>
 
       <section id="visitanos" className="section-shell visit-shell !items-center !py-4 md:!py-5">
-        <div className="grid h-full gap-7 lg:grid-cols-[0.85fr_1.15fr] lg:gap-6 lg:items-center">
+        <div className="grid h-full gap-7 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-6">
           <div className="flex h-full items-center justify-center self-center">
             <div className="flex w-full max-w-[520px] flex-col items-center justify-center gap-6 text-center">
               <SectionTitle
@@ -280,6 +246,40 @@ export default function Home() {
               </div>
             </div>
           </article>
+        </div>
+      </section>
+
+      <section id="reserva" className="section-shell viewport-shell reservation-shell !items-center !py-2 md:!py-3">
+        <div className="reservation-composition mx-auto grid w-full max-w-[1320px] overflow-hidden lg:grid-cols-[0.45fr_0.55fr]">
+          <div className="order-2 relative min-h-[280px] lg:order-1 lg:min-h-0">
+            <Image
+              src="/ai/pampa-tree-golden.png"
+              alt="Campo pampeano dorado"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 45vw"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0.08)_0%,rgba(18,21,23,0.32)_100%)]" />
+            <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-6 lg:p-8">
+              <p className="font-serif text-[2rem] italic leading-tight md:text-[2.35rem]">Conecta con nosotros</p>
+              <p className="mt-3 max-w-sm text-sm leading-6 text-white/82 md:text-[0.92rem]">
+                Estamos en el corazón de La Pampa, apostando a una experiencia que mezcla paisaje, colmena y bienestar.
+              </p>
+              <div className="mt-5 space-y-2.5 text-[0.9rem]">
+                <div className="flex items-center gap-3">
+                  <MessageCircleMore className="h-4 w-4 text-[var(--gold)]" />
+                  WhatsApp · 2302 555555
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 text-[var(--gold)]" />
+                  amielar.visitas@gmail.com
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="order-1 flex items-center justify-center px-5 py-6 md:px-7 md:py-8 lg:order-2 lg:px-10 lg:py-10 xl:px-12">
+            <BookingForm />
+          </div>
         </div>
       </section>
 

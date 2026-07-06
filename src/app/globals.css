@@ -77,6 +77,7 @@ textarea {
   margin: 0 auto;
   max-width: 1440px;
   padding: 5.5rem 1.25rem;
+  overflow: visible;
 }
 
 .anchor-offset {
@@ -412,5 +413,49 @@ textarea {
 @media (max-width: 1023px) {
   .reservation-composition {
     min-height: auto;
+  }
+
+  .api-shell,
+  .products-shell,
+  .gallery-shell,
+  .faq-shell,
+  .visit-shell {
+    height: auto;
+  }
+
+  .viewport-shell {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .section-shell {
+    padding-block: 4.5rem;
+  }
+
+  .viewport-shell {
+    min-height: auto;
+    display: block;
+    padding-block: 4.5rem;
+  }
+
+  .api-shell,
+  .products-shell,
+  .gallery-shell,
+  .faq-shell,
+  .visit-shell,
+  .reservation-shell {
+    height: auto;
+    min-height: 0;
+  }
+
+  .gallery-balance,
+  .gallery-copy-column,
+  .gallery-collage-column {
+    align-items: stretch;
+  }
+
+  .gallery-copy {
+    justify-content: flex-start;
   }
 }
