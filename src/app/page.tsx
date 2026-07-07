@@ -9,6 +9,7 @@ import { GalleryGrid } from "@/components/GalleryGrid";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ProductCard } from "@/components/ProductCard";
+import { ReserveLink } from "@/components/ReserveLink";
 import { SectionTitle } from "@/components/SectionTitle";
 import { apiBenefits, faqs, featureCards, galleryItems, products } from "@/data/site";
 
@@ -48,12 +49,12 @@ export default function Home() {
                   accent="gold"
                   className="min-h-[194px] p-4 md:p-5 [&_h3]:text-[1.38rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-[0.88rem] [&_p]:leading-6 [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
                 />
-                <article className="relative min-h-[194px] overflow-hidden rounded-[26px] bg-[var(--earth)] p-4 text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] md:p-5">
+                <article className="relative min-h-[194px] overflow-hidden rounded-[26px] bg-[var(--earth)] p-4 text-center text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] md:p-5 md:text-left">
                   <div className="absolute right-0 top-0 h-14 w-14 bg-[radial-gradient(circle,rgba(212,162,59,0.2),transparent_68%)]" />
                   <span className="text-[0.7rem] uppercase tracking-[0.22em] text-white/68">Historia familiar</span>
                   <h3 className="mt-2 font-serif text-[1.38rem] leading-tight">{featureCards[3].title}</h3>
-                  <p className="mt-2 max-w-sm text-[0.88rem] leading-6 text-white/76">{featureCards[3].description}</p>
-                  <a href="#api-inhalacion" className="mt-3 inline-flex items-center gap-2 text-[0.84rem] font-medium text-[var(--gold)]">
+                  <p className="mt-2 w-full text-[0.88rem] leading-6 text-white/76 md:mx-0 md:max-w-sm">{featureCards[3].description}</p>
+                  <a href="#api-inhalacion" className="mt-4 inline-flex items-center gap-2 self-center text-[0.84rem] font-medium text-[var(--gold)] md:mt-3 md:self-start">
                     Leer más
                     <MoveRight className="h-4 w-4" />
                   </a>
@@ -70,11 +71,11 @@ export default function Home() {
                 sizes="(max-width: 1280px) 100vw, 42vw"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0)_45%,rgba(18,21,23,0.34)_100%)]" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-white md:p-5">
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-center text-white md:p-5 md:text-left">
                 <span className="rounded-full border border-white/28 bg-white/10 px-2.5 py-0.5 text-[0.68rem] uppercase tracking-[0.22em] backdrop-blur-sm">
                   Naturaleza
                 </span>
-                <p className="mt-2 max-w-md font-serif text-[1.56rem] leading-[1.05] md:text-[1.82rem]">
+                <p className="mt-2 w-full font-serif text-[1.56rem] leading-[1.05] md:max-w-md md:text-[1.82rem]">
                   Aire puro, horizonte infinito y un paisaje que devuelve perspectiva.
                 </p>
               </div>
@@ -98,18 +99,18 @@ export default function Home() {
                 sizes="(max-width: 1024px) 100vw, 45vw"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0)_48%,rgba(18,21,23,0.24)_100%)]" />
-              <div className="absolute bottom-3 left-3 max-w-[18rem] rounded-[24px] border border-white/34 bg-white/72 px-4 py-2 backdrop-blur-md">
+              <div className="absolute bottom-3 left-1/2 w-[calc(100%-1.5rem)] max-w-[18rem] -translate-x-1/2 rounded-[24px] border border-white/34 bg-white/72 px-4 py-2 text-center backdrop-blur-md md:left-3 md:w-auto md:translate-x-0 md:text-left">
                 <p className="text-[0.7rem] uppercase tracking-[0.22em] text-[var(--gold-deep)]">Aire vivo</p>
                 <p className="mt-1 text-[0.82rem] leading-5 text-[var(--ink)]">Microclima noble, silencioso y cálido.</p>
               </div>
             </article>
 
-            <div className="min-w-0 lg:flex lg:h-full lg:flex-col">
+            <div className="flex min-w-0 flex-col items-center lg:h-full lg:items-stretch">
               <SectionTitle
                 title="Entrar en la colmena, respirar aire vivo"
                 description="La api-inhalación permite absorber el aire saturado de propóleos, cera y aceites esenciales que las abejas mantienen dentro de su hogar. Es una inmersión en un microclima único de calma y conexión."
                 align="center"
-                className="max-w-none gap-1.5 [&_h2]:text-[1.58rem] [&_h2]:leading-[1.02] md:[&_h2]:text-[1.9rem] [&_p]:text-[0.78rem] [&_p]:leading-[1.3rem] md:[&_p]:text-[0.86rem]"
+                className="w-full max-w-none gap-1.5 [&_h2]:mx-auto [&_h2]:w-full [&_h2]:max-w-none [&_h2]:text-[1.58rem] [&_h2]:leading-[1.02] md:[&_h2]:text-[1.9rem] [&_p]:mx-auto [&_p]:w-full [&_p]:max-w-none [&_p]:text-[0.78rem] [&_p]:leading-[1.3rem] md:[&_p]:text-[0.86rem]"
               />
               <div className="mt-3 grid flex-1 gap-3 sm:grid-cols-2">
                 {apiBenefits.map((benefit, index) => (
@@ -119,13 +120,13 @@ export default function Home() {
                     description={benefit.description}
                     icon={benefit.icon}
                     accent={index === 1 ? "earth" : "gold"}
-                    className="flex min-h-[128px] flex-col justify-center p-4 text-center md:p-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-[2.25rem] [&_div.inline-flex]:w-[2.25rem] [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4 [&_h3]:text-[1.12rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-[0.8rem] [&_p]:leading-[1.35rem]"
+                    className="w-full min-h-[180px] p-4 text-center md:min-h-[128px] md:p-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-[2.25rem] [&_div.inline-flex]:w-[2.25rem] [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4 [&_h3]:text-[1.12rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-[0.8rem] [&_p]:leading-[1.35rem]"
                   />
                 ))}
               </div>
-              <a href="#reserva" className="primary-button mt-3 inline-flex h-10.5 self-center px-4.5 py-0 text-[0.82rem]">
+              <ReserveLink className="primary-button mx-auto mt-3 flex h-10.5 w-full max-w-[20rem] justify-center px-4.5 py-0 text-[0.82rem] md:inline-flex md:w-auto md:max-w-none">
                 Reservar mi sesión
-              </a>
+              </ReserveLink>
             </div>
           </div>
         </div>
@@ -140,7 +141,7 @@ export default function Home() {
                 title="Productos de la colmena"
                 description="Cosechados con respeto, pensados para extender la experiencia de bienestar con una estética pulida y artesanal."
                 align="center"
-                className="w-full gap-3 [&_h2]:text-[2.25rem] [&_h2]:leading-[1.02] md:[&_h2]:text-[2.65rem] [&_p]:mx-auto [&_p]:max-w-[28ch] [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
+                className="w-full gap-3 [&_h2]:max-w-none [&_h2]:text-[2.25rem] [&_h2]:leading-[1.02] md:[&_h2]:text-[2.65rem] [&_p]:mx-auto [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
               />
               <a
                 href="#contacto"
@@ -151,10 +152,10 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div className="-mx-4 overflow-x-auto px-4 pb-3 md:mx-0 md:overflow-visible md:px-0 md:pb-0">
-            <div className="flex snap-x snap-mandatory gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
+          <div className="px-0 pb-3 md:mx-0 md:overflow-visible md:px-0 md:pb-0">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {products.map((product) => (
-                <div key={product.name} className="min-w-[82vw] snap-start sm:min-w-[54vw] md:min-w-0">
+                <div key={product.name} className="w-full">
                   <ProductCard {...product} className="h-full" />
                 </div>
               ))}
@@ -166,13 +167,13 @@ export default function Home() {
       <section id="galeria" className="section-shell gallery-shell !py-4 md:!py-5">
         <div className="gallery-balance grid h-full gap-8 xl:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] xl:gap-10">
           <div className="gallery-copy-column flex h-full items-center">
-            <div className="flex w-full justify-center xl:justify-start">
+            <div className="flex w-full justify-center">
               <SectionTitle
                 eyebrow="Galería y experiencia"
                 title="Una atmósfera visual más cercana a la maqueta: noble, aireada y serena."
                 description="Combinamos las referencias que nos compartiste con imágenes nuevas para completar la narrativa del paisaje, la cabaña y los productos."
                 align="left"
-                className="gallery-copy w-full max-w-[560px] gap-3 !items-center !text-center xl:!items-start xl:!text-left [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.6rem] [&_p]:max-w-[30ch] [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem] xl:[&_p]:mx-0"
+                className="gallery-copy mx-auto w-full max-w-[560px] gap-3 !items-center !text-center [&_h2]:mx-auto [&_h2]:max-w-none [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.6rem] [&_p]:mx-auto [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem] xl:!items-start xl:!text-left xl:[&_h2]:mx-0 xl:[&_h2]:max-w-none xl:[&_p]:mx-0"
               />
             </div>
           </div>
@@ -192,10 +193,10 @@ export default function Home() {
               title="Dudas frecuentes antes de tu visita."
               description="Resolvemos las consultas más comunes para que llegues con tranquilidad a tu experiencia."
               align="center"
-              className="w-full max-w-[520px] gap-4 [&_h2]:text-[2.2rem] [&_h2]:leading-[1.04] md:[&_h2]:text-[2.6rem] [&_p]:mx-auto [&_p]:max-w-[28ch] [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
+                className="w-full max-w-[560px] gap-4 [&_h2]:max-w-none [&_h2]:text-[2.2rem] [&_h2]:leading-[1.04] md:[&_h2]:text-[2.6rem] [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
             />
           </div>
-          <div className="flex h-full items-center">
+          <div className="flex h-full w-full items-center justify-center">
             <FAQ items={faqs} />
           </div>
         </div>
@@ -204,33 +205,33 @@ export default function Home() {
       <section id="visitanos" className="section-shell visit-shell !items-center !py-4 md:!py-5">
         <div className="grid h-full gap-7 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-6">
           <div className="flex h-full items-center justify-center self-center">
-            <div className="flex w-full max-w-[520px] flex-col items-center justify-center gap-6 text-center">
+            <div className="flex w-full max-w-[560px] flex-col items-center justify-center gap-6 text-center">
               <SectionTitle
                 eyebrow="Visítanos en Arata"
                 title="Una ubicación pensada para respirar más lento."
                 description="Arata, La Pampa, se convierte en el telón perfecto para una experiencia de bienestar rural, cuidado artesanal y horizonte abierto."
                 align="center"
-                className="w-full gap-3 [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.55rem] [&_p]:mx-auto [&_p]:max-w-[30ch] [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
+                className="w-full gap-3 [&_h2]:max-w-none [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.55rem] [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
               />
               <div className="grid w-full gap-4 sm:grid-cols-2">
                 <Card
                   title="WhatsApp"
                   description="2302 555555"
                   icon={MessageCircleMore}
-                  className="flex min-h-[150px] flex-col justify-center px-5 py-5 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-[0.82rem] [&_p]:leading-6"
+                  className="w-full min-h-[178px] px-6 py-7 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-[0.82rem] [&_p]:leading-6"
                 />
                 <Card
                   title="Email"
                   description="amielar.visitas@gmail.com"
                   icon={Mail}
                   accent="olive"
-                  className="flex min-h-[150px] flex-col justify-center px-5 py-5 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-[0.82rem] [&_p]:leading-6"
+                  className="w-full min-h-[178px] px-6 py-7 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-[0.82rem] [&_p]:leading-6"
                 />
               </div>
             </div>
           </div>
-          <article className="card-shell overflow-hidden p-3 shadow-[0_16px_36px_rgba(67,59,38,0.08)]">
-            <div className="relative min-h-[300px] overflow-hidden rounded-[28px] md:min-h-[360px]">
+          <article className="card-shell w-full overflow-hidden p-3 shadow-[0_16px_36px_rgba(67,59,38,0.08)]">
+            <div className="relative min-h-[320px] overflow-hidden rounded-[28px] md:min-h-[360px]">
               <Image
                 src="/pantallas_1.png"
                 alt="Mapa de Arata, La Pampa"
@@ -238,7 +239,7 @@ export default function Home() {
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="absolute left-5 top-5 rounded-full border border-white/40 bg-white/72 px-4 py-2 text-sm backdrop-blur-md">
+              <div className="absolute left-1/2 top-5 -translate-x-1/2 rounded-full border border-white/40 bg-white/72 px-4 py-2 text-sm backdrop-blur-md md:left-5 md:translate-x-0">
                 <span className="inline-flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-[var(--gold-deep)]" />
                   Arata, La Pampa
@@ -250,8 +251,11 @@ export default function Home() {
       </section>
 
       <section id="reserva" className="section-shell viewport-shell reservation-shell !items-center !py-2 md:!py-3">
-        <div className="reservation-composition mx-auto grid w-full max-w-[1320px] overflow-hidden lg:grid-cols-[0.45fr_0.55fr]">
-          <div className="order-2 relative min-h-[280px] lg:order-1 lg:min-h-0">
+        <div
+          data-reservation-card="true"
+          className="reservation-composition mx-auto grid w-full max-w-[1320px] overflow-hidden lg:grid-cols-[0.45fr_0.55fr]"
+        >
+          <div className="reservation-image-block order-1 relative min-h-[260px] lg:order-1 lg:min-h-0">
             <Image
               src="/ai/pampa-tree-golden.png"
               alt="Campo pampeano dorado"
@@ -260,12 +264,12 @@ export default function Home() {
               sizes="(max-width: 1024px) 100vw, 45vw"
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0.08)_0%,rgba(18,21,23,0.32)_100%)]" />
-            <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-6 lg:p-8">
-              <p className="font-serif text-[2rem] italic leading-tight md:text-[2.35rem]">Conecta con nosotros</p>
-              <p className="mt-3 max-w-sm text-sm leading-6 text-white/82 md:text-[0.92rem]">
+            <div className="absolute inset-x-0 bottom-0 p-5 text-center text-white md:p-6 md:text-left lg:p-6">
+              <p className="font-serif text-[2rem] italic leading-tight md:text-[2.2rem]">Conecta con nosotros</p>
+              <p className="mt-2.5 max-w-sm text-sm leading-5.5 text-white/82 md:text-[0.9rem]">
                 Estamos en el corazón de La Pampa, apostando a una experiencia que mezcla paisaje, colmena y bienestar.
               </p>
-              <div className="mt-5 space-y-2.5 text-[0.9rem]">
+              <div className="mt-3.5 space-y-1.5 text-[0.84rem]">
                 <div className="flex items-center gap-3">
                   <MessageCircleMore className="h-4 w-4 text-[var(--gold)]" />
                   WhatsApp · 2302 555555
@@ -277,7 +281,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="order-1 flex items-center justify-center px-5 py-6 md:px-7 md:py-8 lg:order-2 lg:px-10 lg:py-10 xl:px-12">
+          <div className="reservation-form-wrap order-2 flex items-center justify-center px-5 py-6 md:px-7 md:py-6 lg:order-2 lg:px-8 lg:py-5 xl:px-9">
             <BookingForm />
           </div>
         </div>

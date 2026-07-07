@@ -5,6 +5,8 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 
+import { ReserveLink } from "@/components/ReserveLink";
+import { SectionLink } from "@/components/SectionLink";
 import { mobileNavLinks, primaryNavLinks } from "@/data/site";
 
 const DEFAULT_ACTIVE = "#historia";
@@ -73,20 +75,31 @@ export function Header() {
     };
   }, [open]);
 
+  useEffect(() => {
+    const closeMenuOnDesktop = () => {
+      if (window.innerWidth >= 1024) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", closeMenuOnDesktop);
+    return () => window.removeEventListener("resize", closeMenuOnDesktop);
+  }, []);
+
   return (
     <>
-      <header ref={headerRef} className="sticky top-0 z-50 pt-4">
+      <header ref={headerRef} data-site-header="true" className="sticky top-0 z-50 pt-3 md:pt-4">
         <div
-          className={`mx-auto flex w-[calc(100%-48px)] max-w-[1440px] items-center justify-between rounded-[28px] border px-6 transition-all duration-300 ${
+          className={`mx-auto flex w-[calc(100%-24px)] max-w-[1440px] items-center justify-between rounded-[28px] border px-4 sm:w-[calc(100%-32px)] sm:px-5 md:w-[calc(100%-48px)] md:px-6 transition-all duration-300 ${
             scrolled
               ? "bg-[rgba(250,249,246,0.95)] shadow-[0_22px_54px_rgba(67,59,38,0.09)] backdrop-blur-lg"
               : "bg-[rgba(250,249,246,0.88)] shadow-[0_18px_50px_rgba(67,59,38,0.07)] backdrop-blur-md"
           } border-[rgba(67,59,38,0.1)]`}
         >
-          <a
+          <SectionLink
             href="#historia"
-            className="flex h-[72px] shrink-0 items-center gap-2.5"
-            onClick={() => {
+            className="flex h-[68px] shrink-0 items-center gap-2.5 md:h-[72px]"
+            onNavigate={() => {
               setActiveHash(DEFAULT_ACTIVE);
               setOpen(false);
             }}
@@ -95,17 +108,17 @@ export function Header() {
             <span className="whitespace-nowrap font-serif text-[29px] leading-none tracking-[-0.03em] text-[var(--earth)] xl:text-[30px]">
               AMIELAR
             </span>
-          </a>
+          </SectionLink>
 
-          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 min-[1680px]:flex">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 lg:flex">
             {primaryNavLinks.map((link) => {
               const active = activeHash === link.href && !(activeHash === "#historia" && link.label === "Nuestra historia");
 
               return (
-                <a
+                <SectionLink
                   key={`${link.label}-${link.href}`}
                   href={link.href}
-                  onClick={() => setActiveHash(link.href)}
+                  onNavigate={() => setActiveHash(link.href)}
                   className={`whitespace-nowrap rounded-full px-3 py-2 text-[14px] font-medium transition-all duration-300 ease-out ${
                     active
                       ? "bg-[#F3EEE4] text-[#433B26] shadow-[0_6px_16px_rgba(67,59,38,0.04)]"
@@ -113,12 +126,12 @@ export function Header() {
                   }`}
                 >
                   {link.label}
-                </a>
+                </SectionLink>
               );
             })}
           </nav>
 
-          <div className="hidden shrink-0 items-center gap-2 min-[1680px]:flex">
+          <div className="hidden shrink-0 items-center gap-2 lg:flex">
             <a
               aria-label="Contactar por WhatsApp"
               className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[rgba(107,112,92,0.08)] hover:text-[#433B26] hover:shadow-[0_10px_24px_rgba(67,59,38,0.05)]"
@@ -128,21 +141,19 @@ export function Header() {
             >
               <FaWhatsapp className="h-5 w-5 text-[var(--olive)] transition-transform duration-300 ease-out hover:scale-[1.05]" />
             </a>
-            <a
+            <ReserveLink
               className="inline-flex h-11 items-center whitespace-nowrap rounded-full bg-[#D4A23B] px-5 text-[14px] font-semibold text-[#fffdf7] shadow-[0_10px_24px_rgba(212,162,59,0.2)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[#c69735] hover:shadow-[0_14px_28px_rgba(212,162,59,0.24)]"
-              href="#reserva"
             >
               Reservar turno
-            </a>
+            </ReserveLink>
           </div>
 
-          <div className="flex items-center gap-2 min-[1680px]:hidden">
-            <a
+          <div className="flex items-center gap-2 lg:hidden">
+            <ReserveLink
               className="hidden h-10 items-center whitespace-nowrap rounded-full bg-[#D4A23B] px-4 text-[14px] font-semibold text-[#fffdf7] shadow-[0_8px_18px_rgba(212,162,59,0.18)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[#c69735] sm:inline-flex"
-              href="#reserva"
             >
               Reservar
-            </a>
+            </ReserveLink>
             <button
               type="button"
               onClick={() => setOpen((current) => !current)}
@@ -156,7 +167,7 @@ export function Header() {
         </div>
 
         <div
-          className={`mx-auto mt-2 w-[calc(100%-48px)] max-w-[1440px] overflow-hidden rounded-[24px] border border-[rgba(67,59,38,0.08)] bg-[rgba(250,249,246,0.94)] shadow-[0_18px_40px_rgba(67,59,38,0.06)] backdrop-blur-md transition-all duration-300 ease-out min-[1680px]:hidden ${
+          className={`mx-auto mt-2 w-[calc(100%-24px)] max-w-[1440px] overflow-hidden rounded-[24px] border border-[rgba(67,59,38,0.08)] bg-[rgba(250,249,246,0.94)] shadow-[0_18px_40px_rgba(67,59,38,0.06)] backdrop-blur-md transition-all duration-300 ease-out sm:w-[calc(100%-32px)] md:w-[calc(100%-48px)] lg:hidden ${
             open ? "max-h-[calc(100dvh-7rem)] opacity-100" : "max-h-0 border-transparent opacity-0"
           }`}
         >
@@ -166,10 +177,10 @@ export function Header() {
                 const active = activeHash === link.href && !(activeHash === "#historia" && link.label === "Nuestra historia");
 
                 return (
-                  <a
+                  <SectionLink
                     key={`${link.label}-${link.href}`}
                     href={link.href}
-                    onClick={() => {
+                    onNavigate={() => {
                       setActiveHash(link.href);
                       setOpen(false);
                     }}
@@ -180,7 +191,7 @@ export function Header() {
                     }`}
                   >
                     {link.label}
-                  </a>
+                  </SectionLink>
                 );
               })}
             </nav>
@@ -195,13 +206,12 @@ export function Header() {
               >
                 <FaWhatsapp className="h-5 w-5 text-[var(--olive)] transition-transform duration-300 ease-out hover:scale-[1.05]" />
               </a>
-              <a
+              <ReserveLink
                 className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-[#D4A23B] px-6 text-[15px] font-semibold text-[#fffdf7] transition-all duration-300 ease-out hover:bg-[#c69735]"
-                href="#reserva"
-                onClick={() => setOpen(false)}
+                onNavigate={() => setOpen(false)}
               >
                 Reservar turno
-              </a>
+              </ReserveLink>
             </div>
           </div>
         </div>

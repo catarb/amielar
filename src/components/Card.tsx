@@ -18,16 +18,16 @@ export function Card({ icon: Icon, title, description, accent = "gold", footer, 
   };
 
   return (
-    <article className={`card-shell relative overflow-hidden p-8 ${className}`}>
+    <article className={`card-shell relative flex flex-col items-center overflow-hidden p-8 text-center md:items-start md:text-left ${className}`}>
       <div className="absolute right-0 top-0 h-28 w-28 rounded-full bg-[radial-gradient(circle,rgba(212,162,59,0.18),transparent_68%)]" />
       {Icon ? (
         <div className={`mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl ${accentMap[accent]}`}>
           <Icon className="h-5 w-5" />
         </div>
       ) : null}
-      <h3 className="font-serif text-2xl text-[var(--ink)]">{title}</h3>
-      <p className="mt-3 text-sm leading-7 text-[color:var(--muted-ink)] md:text-base">{description}</p>
-      {footer ? <div className="mt-6">{footer}</div> : null}
+      <h3 className="w-full font-serif text-2xl text-[var(--ink)]">{title}</h3>
+      <p className="mt-3 w-full text-sm leading-7 text-[color:var(--muted-ink)] md:text-base">{description}</p>
+      {footer ? <div className="mt-6 w-full">{footer}</div> : null}
     </article>
   );
 }

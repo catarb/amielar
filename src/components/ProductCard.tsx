@@ -25,10 +25,10 @@ export function ProductCard({ name, description, image, className = "" }: Produc
       </div>
       <div className="flex flex-1 flex-col items-center px-5 py-4 text-center md:px-6 md:py-5">
         <h3 className="font-serif text-[1.42rem] leading-tight text-[var(--ink)] md:text-[1.56rem]">{name}</h3>
-        <p className="mt-2.5 max-w-[18ch] text-[0.8rem] leading-6 text-[color:var(--muted-ink)] md:text-[0.85rem] md:leading-6">
+        <p className="mt-2.5 w-full text-[0.8rem] leading-6 text-[color:var(--muted-ink)] md:max-w-[18ch] md:text-[0.85rem] md:leading-6">
           {description}
         </p>
-        <button className="secondary-button mt-auto justify-center px-5 py-2.5">
+        <button className="secondary-button mt-auto w-auto min-w-[11rem] justify-center px-4 py-2 text-[0.88rem] md:px-5 md:py-2.5">
           Consultar
           <ArrowUpRight className="h-4 w-4" />
         </button>
