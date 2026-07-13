@@ -22,6 +22,7 @@ export type Product = {
   name: string;
   description: string;
   image: string;
+  imagePosition?: string;
 };
 
 export type GalleryItem = {
@@ -108,22 +109,23 @@ export const products: Product[] = [
   {
     name: "Miel pura",
     description: "Cosecha dorada, floral y transparente, pensada para una mesa simple y ritual.",
-    image: "/ai/honey-product-still-life.png",
+    image: "/A_4_v2.png",
+    imagePosition: "object-[50%_48%]",
   },
   {
     name: "Propóleos",
     description: "Extracto noble para acompañar momentos de cuidado y bienestar cotidiano.",
-    image: "/ai/honey-product-still-life.png",
+    image: "/A_6.png",
   },
   {
     name: "Panal de miel",
     description: "Textura natural y sabor directo al origen de la colmena.",
-    image: "/ai/honey-product-still-life.png",
+    image: "/A_5.png",
   },
   {
     name: "Bálsamo labial",
     description: "Cera de abejas y terminación artesanal en una pieza pequeña y premium.",
-    image: "/ai/honey-product-still-life.png",
+    image: "/A_7.png",
   },
 ];
 

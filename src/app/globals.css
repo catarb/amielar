@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf9f6;
-  --background-strong: #f2efe7;
-  --surface: rgba(255, 255, 255, 0.78);
-  --surface-strong: #ffffff;
-  --gold: #d4a23b;
-  --gold-deep: #8e6300;
-  --olive: #6b705c;
-  --earth: #433b26;
-  --ink: #121517;
-  --muted-ink: #60594c;
-  --line: rgba(67, 59, 38, 0.12);
+  --background: #fbf8f1;
+  --background-strong: #f3eee2;
+  --surface: rgba(255, 253, 248, 0.8);
+  --surface-strong: #fffdfa;
+  --gold: #d7b74b;
+  --gold-deep: #be9934;
+  --olive: #9ea17b;
+  --earth: #5f5a48;
+  --ink: #3f3b31;
+  --muted-ink: #736d5d;
+  --line: rgba(95, 90, 72, 0.12);
 }
 
 * {
@@ -27,9 +27,9 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at top left, rgba(212, 162, 59, 0.08), transparent 28%),
-    radial-gradient(circle at top right, rgba(107, 112, 92, 0.08), transparent 24%),
-    linear-gradient(180deg, #fcfbf8 0%, #f7f3eb 100%);
+    radial-gradient(circle at top left, rgba(205, 179, 93, 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(156, 160, 122, 0.08), transparent 24%),
+    linear-gradient(180deg, #fdfbf6 0%, #f7f2e8 100%);
   color: var(--ink);
   font-family: var(--font-montserrat), sans-serif;
 }
@@ -105,32 +105,32 @@ textarea {
   height: 120px;
   width: 120px;
   border-radius: 28px;
-  background: radial-gradient(circle, rgba(212, 162, 59, 0.2), transparent 68%);
+  background: radial-gradient(circle, rgba(205, 179, 93, 0.2), transparent 68%);
 }
 
 .label-chip {
   width: fit-content;
   border-radius: 999px;
-  border: 1px solid rgba(212, 162, 59, 0.24);
-  background: rgba(255, 251, 241, 0.94);
+  border: 1px solid rgba(205, 179, 93, 0.28);
+  background: rgba(252, 247, 237, 0.94);
   padding: 0.55rem 0.9rem;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--gold-deep);
+  color: var(--olive);
 }
 
 .hero-badge {
   border-radius: 999px;
-  border: 1px solid rgba(212, 162, 59, 0.28);
-  background: rgba(255, 251, 241, 0.68);
+  border: 1px solid rgba(205, 179, 93, 0.24);
+  background: rgba(252, 247, 237, 0.72);
   padding: 0.62rem 0.96rem;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--gold-deep);
+  color: var(--olive);
   box-shadow: 0 8px 24px rgba(67, 59, 38, 0.03);
   backdrop-filter: blur(10px);
 }
@@ -142,7 +142,7 @@ textarea {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(circle at 18% 28%, rgba(212, 162, 59, 0.08), transparent 24%),
+    radial-gradient(circle at 18% 28%, rgba(205, 179, 93, 0.08), transparent 24%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 26%);
 }
 
@@ -167,12 +167,12 @@ textarea {
 
 .hero-action.primary-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 34px rgba(185, 135, 36, 0.28);
+  box-shadow: 0 16px 34px rgba(164, 131, 53, 0.26);
 }
 
 .hero-action.secondary-button:hover {
   transform: translateY(-2px);
-  background: rgba(107, 112, 92, 0.08);
+  background: rgba(156, 160, 122, 0.08);
   box-shadow: 0 12px 26px rgba(67, 59, 38, 0.05);
 }
 
@@ -203,15 +203,16 @@ textarea {
 }
 
 .primary-button {
-  border: 1px solid rgba(142, 99, 0, 0.08);
-  background: linear-gradient(135deg, #d9aa42, #b98724);
-  color: #fffdf7;
-  box-shadow: 0 12px 28px rgba(185, 135, 36, 0.26);
+  border: 1px solid rgba(164, 131, 53, 0.12);
+  background: linear-gradient(135deg, #cdb35d, #b79343);
+  color: #fffdf8;
+  box-shadow: 0 12px 28px rgba(164, 131, 53, 0.24);
 }
 
 .primary-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 16px 34px rgba(185, 135, 36, 0.32);
+  background: linear-gradient(135deg, #c5ab56, #ae8a3d);
+  box-shadow: 0 16px 34px rgba(164, 131, 53, 0.28);
 }
 
 .secondary-button {
@@ -222,7 +223,11 @@ textarea {
 
 .secondary-button:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(156, 160, 122, 0.08);
+}
+
+.secondary-button svg {
+  color: var(--olive);
 }
 
 .field-group {
@@ -263,8 +268,8 @@ textarea {
 .field-group input:focus,
 .field-group select:focus,
 .field-group textarea:focus {
-  border-color: rgba(212, 162, 59, 0.65);
-  box-shadow: 0 0 0 4px rgba(212, 162, 59, 0.12);
+  border-color: rgba(205, 179, 93, 0.58);
+  box-shadow: 0 0 0 4px rgba(205, 179, 93, 0.12);
   background: white;
 }
 
@@ -284,7 +289,7 @@ textarea {
 
 .reservation-submit:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px rgba(185, 135, 36, 0.28);
+  box-shadow: 0 14px 30px rgba(164, 131, 53, 0.26);
 }
 
 @media (min-width: 768px) {

@@ -50,11 +50,11 @@ export default function Home() {
                   className="min-h-[194px] p-4 md:p-5 [&_h3]:text-[1.38rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-[0.88rem] [&_p]:leading-6 [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
                 />
                 <article className="relative min-h-[194px] overflow-hidden rounded-[26px] bg-[var(--earth)] p-4 text-center text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] md:p-5 md:text-left">
-                  <div className="absolute right-0 top-0 h-14 w-14 bg-[radial-gradient(circle,rgba(212,162,59,0.2),transparent_68%)]" />
+                  <div className="absolute right-0 top-0 h-14 w-14 bg-[radial-gradient(circle,rgba(205,179,93,0.18),transparent_68%)]" />
                   <span className="text-[0.7rem] uppercase tracking-[0.22em] text-white/68">Historia familiar</span>
                   <h3 className="mt-2 font-serif text-[1.38rem] leading-tight">{featureCards[3].title}</h3>
                   <p className="mt-2 w-full text-[0.88rem] leading-6 text-white/76 md:mx-0 md:max-w-sm">{featureCards[3].description}</p>
-                  <a href="#api-inhalacion" className="mt-4 inline-flex items-center gap-2 self-center text-[0.84rem] font-medium text-[var(--gold)] md:mt-3 md:self-start">
+                  <a href="#api-inhalacion" className="mt-4 inline-flex items-center gap-2 self-center text-[0.84rem] font-medium text-[var(--olive)] md:mt-3 md:self-start">
                     Leer más
                     <MoveRight className="h-4 w-4" />
                   </a>
@@ -64,10 +64,10 @@ export default function Home() {
 
             <article className="relative min-h-[392px] overflow-hidden rounded-[30px] border border-[rgba(67,59,38,0.1)] shadow-[0_24px_60px_rgba(67,59,38,0.1)] md:min-h-[408px]">
               <Image
-                src="/ai/pampa-tree-golden.png"
-                alt="Paisaje pampeano al atardecer"
+                src="/A_2.png"
+                alt="Cabina de AMIELAR entre arboles y naturaleza"
                 fill
-                className="object-cover"
+                className="object-cover object-[54%_42%] brightness-[1.03] contrast-[1.04]"
                 sizes="(max-width: 1280px) 100vw, 42vw"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0)_45%,rgba(18,21,23,0.34)_100%)]" />
@@ -88,19 +88,19 @@ export default function Home() {
         id="api-inhalacion"
         className="section-shell api-shell !items-start !max-w-[1440px] !overflow-hidden !py-2 md:!py-3"
       >
-        <div className="flex h-full flex-col rounded-[42px] bg-[linear-gradient(180deg,#f7f3eb_0%,#f2eee6_100%)] px-5 py-3 md:px-8 md:py-4 xl:px-10">
+        <div className="flex h-full flex-col rounded-[42px] bg-[linear-gradient(180deg,#f8f4eb_0%,#f1ebdd_100%)] px-5 py-3 md:px-8 md:py-4 xl:px-10">
           <div className="grid flex-1 gap-5 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
             <article className="relative min-h-[225px] overflow-hidden rounded-[32px] border border-[rgba(67,59,38,0.1)] shadow-[0_26px_64px_rgba(67,59,38,0.12)] md:min-h-[260px] lg:h-full">
               <Image
-                src="/ai/api-cabin-interior.png"
-                alt="Interior calido de una cabana de api-inhalacion"
+                src="/A_3.png"
+                alt="Personas interactuando con la colmena junto a la cabina de api-inhalacion"
                 fill
-                className="object-cover"
+                className="object-cover object-[38%_42%]"
                 sizes="(max-width: 1024px) 100vw, 45vw"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0)_48%,rgba(18,21,23,0.24)_100%)]" />
               <div className="absolute bottom-3 left-1/2 w-[calc(100%-1.5rem)] max-w-[18rem] -translate-x-1/2 rounded-[24px] border border-white/34 bg-white/72 px-4 py-2 text-center backdrop-blur-md md:left-3 md:w-auto md:translate-x-0 md:text-left">
-                <p className="text-[0.7rem] uppercase tracking-[0.22em] text-[var(--gold-deep)]">Aire vivo</p>
+                <p className="text-[0.7rem] uppercase tracking-[0.22em] text-[var(--olive)]">Aire vivo</p>
                 <p className="mt-1 text-[0.82rem] leading-5 text-[var(--ink)]">Microclima noble, silencioso y cálido.</p>
               </div>
             </article>
@@ -218,14 +218,14 @@ export default function Home() {
                   title="WhatsApp"
                   description="2302 555555"
                   icon={MessageCircleMore}
-                  className="w-full min-h-[178px] px-6 py-7 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-[0.82rem] [&_p]:leading-6"
+                  className="w-full min-h-[178px] px-6 py-7 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.82rem] [&_p]:leading-6"
                 />
                 <Card
                   title="Email"
                   description="amielar.visitas@gmail.com"
                   icon={Mail}
                   accent="olive"
-                  className="w-full min-h-[178px] px-6 py-7 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-[0.82rem] [&_p]:leading-6"
+                  className="w-full min-h-[178px] px-6 py-7 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.82rem] [&_p]:leading-6"
                 />
               </div>
             </div>
@@ -241,7 +241,7 @@ export default function Home() {
               />
               <div className="absolute left-1/2 top-5 -translate-x-1/2 rounded-full border border-white/40 bg-white/72 px-4 py-2 text-sm backdrop-blur-md md:left-5 md:translate-x-0">
                 <span className="inline-flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-[var(--gold-deep)]" />
+                  <MapPin className="h-4 w-4 text-[var(--olive)]" />
                   Arata, La Pampa
                 </span>
               </div>
@@ -271,11 +271,11 @@ export default function Home() {
               </p>
               <div className="mt-3.5 space-y-1.5 text-[0.84rem]">
                 <div className="flex items-center gap-3">
-                  <MessageCircleMore className="h-4 w-4 text-[var(--gold)]" />
+                  <MessageCircleMore className="h-4 w-4 text-[var(--olive)]" />
                   WhatsApp · 2302 555555
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-[var(--gold)]" />
+                  <Mail className="h-4 w-4 text-[var(--olive)]" />
                   amielar.visitas@gmail.com
                 </div>
               </div>

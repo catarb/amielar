@@ -12,14 +12,14 @@ type CardProps = {
 
 export function Card({ icon: Icon, title, description, accent = "gold", footer, className = "" }: CardProps) {
   const accentMap = {
-    gold: "bg-[rgba(212,162,59,0.14)] text-[var(--gold-deep)]",
-    olive: "bg-[rgba(107,112,92,0.16)] text-[var(--olive)]",
-    earth: "bg-[rgba(67,59,38,0.12)] text-[var(--earth)]",
+    gold: "bg-[rgba(205,179,93,0.14)] text-[var(--gold-deep)]",
+    olive: "bg-[rgba(156,160,122,0.16)] text-[var(--olive)]",
+    earth: "bg-[rgba(75,67,49,0.12)] text-[var(--earth)]",
   };
 
   return (
     <article className={`card-shell relative flex flex-col items-center overflow-hidden p-8 text-center md:items-start md:text-left ${className}`}>
-      <div className="absolute right-0 top-0 h-28 w-28 rounded-full bg-[radial-gradient(circle,rgba(212,162,59,0.18),transparent_68%)]" />
+      <div className="absolute right-0 top-0 h-28 w-28 rounded-full bg-[radial-gradient(circle,rgba(205,179,93,0.16),transparent_68%)]" />
       {Icon ? (
         <div className={`mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl ${accentMap[accent]}`}>
           <Icon className="h-5 w-5" />

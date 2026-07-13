@@ -40,15 +40,16 @@ export function Hero() {
         <div className="relative min-h-[470px] overflow-hidden lg:min-h-[calc(100svh-126px)]">
           <div className="hero-photo-frame absolute inset-0 rounded-[24px]" />
           <Image
-            src="/ai/hero-main-v2.png"
-            alt="Cabana de api-inhalacion en el campo pampeano"
+            src="/A_1.png"
+            alt="Cabina de api-inhalacion de AMIELAR al atardecer"
             fill
             priority
-            className="rounded-[24px] object-cover object-center object-[center_42%] saturate-[0.96] contrast-[1.04] brightness-[1.03] sepia-[0.03]"
+            className="rounded-[24px] object-cover object-[52%_56%] sm:object-[52%_55%] md:object-[54%_54%] lg:object-[56%_54%]"
             sizes="(max-width: 1024px) 100vw, 60vw"
           />
-          <div className="absolute inset-0 rounded-[24px] bg-[linear-gradient(90deg,rgba(250,249,246,0.98)_0%,rgba(250,249,246,0.94)_8%,rgba(250,249,246,0.72)_16%,rgba(250,249,246,0.38)_24%,rgba(250,249,246,0.12)_33%,rgba(18,21,23,0.04)_100%)]" />
-          <div className="absolute inset-x-0 top-0 h-28 rounded-t-[24px] bg-[linear-gradient(180deg,rgba(246,241,232,0.28),transparent)]" />
+          <div className="absolute inset-0 rounded-[24px] bg-[linear-gradient(90deg,rgba(251,248,241,0.99)_0%,rgba(251,248,241,0.96)_7%,rgba(251,248,241,0.82)_15%,rgba(251,248,241,0.56)_24%,rgba(251,248,241,0.28)_33%,rgba(251,248,241,0.1)_42%,rgba(18,21,23,0.03)_100%)]" />
+          <div className="absolute inset-y-0 left-0 hidden w-12 bg-[linear-gradient(90deg,#fbf8f1_0%,rgba(251,248,241,0.94)_44%,rgba(251,248,241,0.58)_76%,rgba(251,248,241,0)_100%)] md:block" />
+          <div className="absolute inset-x-0 top-0 h-28 rounded-t-[24px] bg-[linear-gradient(180deg,rgba(246,241,231,0.28),transparent)]" />
         </div>
       </div>
     </section>

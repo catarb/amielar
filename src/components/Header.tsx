@@ -92,21 +92,29 @@ export function Header() {
         <div
           className={`mx-auto flex w-[calc(100%-24px)] max-w-[1440px] items-center justify-between rounded-[28px] border px-4 sm:w-[calc(100%-32px)] sm:px-5 md:w-[calc(100%-48px)] md:px-6 transition-all duration-300 ${
             scrolled
-              ? "bg-[rgba(250,249,246,0.95)] shadow-[0_22px_54px_rgba(67,59,38,0.09)] backdrop-blur-lg"
-              : "bg-[rgba(250,249,246,0.88)] shadow-[0_18px_50px_rgba(67,59,38,0.07)] backdrop-blur-md"
+              ? "bg-[rgba(251,248,241,0.95)] shadow-[0_22px_54px_rgba(67,59,38,0.09)] backdrop-blur-lg"
+              : "bg-[rgba(251,248,241,0.88)] shadow-[0_18px_50px_rgba(67,59,38,0.07)] backdrop-blur-md"
           } border-[rgba(67,59,38,0.1)]`}
         >
           <SectionLink
             href="#historia"
-            className="flex h-[68px] shrink-0 items-center gap-2.5 md:h-[72px]"
+            className="flex h-[68px] shrink-0 items-center gap-2.5 md:h-[72px] md:gap-3"
             onNavigate={() => {
               setActiveHash(DEFAULT_ACTIVE);
               setOpen(false);
             }}
           >
-            <Image src="/propuesta_logo.png" alt="AMIELAR" width={30} height={30} className="h-7.5 w-7.5 shrink-0" />
-            <span className="whitespace-nowrap font-serif text-[29px] leading-none tracking-[-0.03em] text-[var(--earth)] xl:text-[30px]">
-              AMIELAR
+            <Image
+              src="/logo_header_mark.png"
+              alt="AMIELAR"
+              width={252}
+              height={193}
+              className="block h-[2.25rem] w-auto max-w-none shrink-0 object-contain sm:h-[2.45rem] md:h-[3rem]"
+              priority
+            />
+            <span className="flex shrink-0 items-baseline whitespace-nowrap font-serif text-[2rem] leading-none tracking-[-0.05em] text-[var(--olive)] sm:text-[2.15rem] md:text-[2.55rem]">
+              <span>AMIEL</span>
+              <span className="text-[var(--gold)]">AR</span>
             </span>
           </SectionLink>
 
@@ -121,8 +129,8 @@ export function Header() {
                   onNavigate={() => setActiveHash(link.href)}
                   className={`whitespace-nowrap rounded-full px-3 py-2 text-[14px] font-medium transition-all duration-300 ease-out ${
                     active
-                      ? "bg-[#F3EEE4] text-[#433B26] shadow-[0_6px_16px_rgba(67,59,38,0.04)]"
-                      : "text-[var(--muted-ink)] hover:bg-[#F3EEE4] hover:text-[#433B26]"
+                      ? "bg-[rgba(156,160,122,0.14)] text-[var(--olive)] shadow-[0_6px_16px_rgba(67,59,38,0.04)]"
+                      : "text-[var(--muted-ink)] hover:bg-[rgba(156,160,122,0.1)] hover:text-[var(--olive)]"
                   }`}
                 >
                   {link.label}
@@ -134,7 +142,7 @@ export function Header() {
           <div className="hidden shrink-0 items-center gap-2 lg:flex">
             <a
               aria-label="Contactar por WhatsApp"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[rgba(107,112,92,0.08)] hover:text-[#433B26] hover:shadow-[0_10px_24px_rgba(67,59,38,0.05)]"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[rgba(156,160,122,0.08)] hover:text-[var(--earth)] hover:shadow-[0_10px_24px_rgba(67,59,38,0.05)]"
               href="https://wa.me/5492302555555"
               target="_blank"
               rel="noreferrer"
@@ -142,7 +150,7 @@ export function Header() {
               <FaWhatsapp className="h-5 w-5 text-[var(--olive)] transition-transform duration-300 ease-out hover:scale-[1.05]" />
             </a>
             <ReserveLink
-              className="inline-flex h-11 items-center whitespace-nowrap rounded-full bg-[#D4A23B] px-5 text-[14px] font-semibold text-[#fffdf7] shadow-[0_10px_24px_rgba(212,162,59,0.2)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[#c69735] hover:shadow-[0_14px_28px_rgba(212,162,59,0.24)]"
+              className="inline-flex h-11 items-center whitespace-nowrap rounded-full bg-[var(--gold)] px-5 text-[14px] font-semibold text-[#fffdf8] shadow-[0_10px_24px_rgba(164,131,53,0.2)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[var(--gold-deep)] hover:shadow-[0_14px_28px_rgba(164,131,53,0.24)]"
             >
               Reservar turno
             </ReserveLink>
@@ -150,14 +158,14 @@ export function Header() {
 
           <div className="flex items-center gap-2 lg:hidden">
             <ReserveLink
-              className="hidden h-10 items-center whitespace-nowrap rounded-full bg-[#D4A23B] px-4 text-[14px] font-semibold text-[#fffdf7] shadow-[0_8px_18px_rgba(212,162,59,0.18)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[#c69735] sm:inline-flex"
+              className="hidden h-10 items-center whitespace-nowrap rounded-full bg-[var(--gold)] px-4 text-[14px] font-semibold text-[#fffdf8] shadow-[0_8px_18px_rgba(164,131,53,0.18)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[var(--gold-deep)] sm:inline-flex"
             >
               Reservar
             </ReserveLink>
             <button
               type="button"
               onClick={() => setOpen((current) => !current)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/82 text-[var(--earth)] transition-all duration-300 ease-out hover:bg-[#F3EEE4]"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/82 text-[var(--earth)] transition-all duration-300 ease-out hover:bg-[rgba(156,160,122,0.1)]"
               aria-label={open ? "Cerrar menu" : "Abrir menu"}
               aria-expanded={open}
             >
@@ -167,7 +175,7 @@ export function Header() {
         </div>
 
         <div
-          className={`mx-auto mt-2 w-[calc(100%-24px)] max-w-[1440px] overflow-hidden rounded-[24px] border border-[rgba(67,59,38,0.08)] bg-[rgba(250,249,246,0.94)] shadow-[0_18px_40px_rgba(67,59,38,0.06)] backdrop-blur-md transition-all duration-300 ease-out sm:w-[calc(100%-32px)] md:w-[calc(100%-48px)] lg:hidden ${
+          className={`mx-auto mt-2 w-[calc(100%-24px)] max-w-[1440px] overflow-hidden rounded-[24px] border border-[rgba(67,59,38,0.08)] bg-[rgba(251,248,241,0.94)] shadow-[0_18px_40px_rgba(67,59,38,0.06)] backdrop-blur-md transition-all duration-300 ease-out sm:w-[calc(100%-32px)] md:w-[calc(100%-48px)] lg:hidden ${
             open ? "max-h-[calc(100dvh-7rem)] opacity-100" : "max-h-0 border-transparent opacity-0"
           }`}
         >
@@ -186,8 +194,8 @@ export function Header() {
                     }}
                     className={`rounded-[18px] px-4 py-3 text-[15px] font-medium transition-all duration-300 ease-out ${
                       active
-                        ? "bg-[#F3EEE4] text-[#433B26] shadow-[0_6px_16px_rgba(67,59,38,0.04)]"
-                        : "text-[var(--muted-ink)] hover:bg-[#F3EEE4] hover:text-[#433B26]"
+                        ? "bg-[rgba(156,160,122,0.14)] text-[var(--olive)] shadow-[0_6px_16px_rgba(67,59,38,0.04)]"
+                        : "text-[var(--muted-ink)] hover:bg-[rgba(156,160,122,0.1)] hover:text-[var(--olive)]"
                     }`}
                   >
                     {link.label}
@@ -199,7 +207,7 @@ export function Header() {
             <div className="mt-3 flex flex-col gap-2 sm:flex-row">
               <a
                 aria-label="Contactar por WhatsApp"
-                className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] transition-all duration-300 ease-out hover:bg-[rgba(107,112,92,0.08)]"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] transition-all duration-300 ease-out hover:bg-[rgba(156,160,122,0.08)]"
                 href="https://wa.me/5492302555555"
                 target="_blank"
                 rel="noreferrer"
@@ -207,7 +215,7 @@ export function Header() {
                 <FaWhatsapp className="h-5 w-5 text-[var(--olive)] transition-transform duration-300 ease-out hover:scale-[1.05]" />
               </a>
               <ReserveLink
-                className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-[#D4A23B] px-6 text-[15px] font-semibold text-[#fffdf7] transition-all duration-300 ease-out hover:bg-[#c69735]"
+                className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-[var(--gold)] px-6 text-[15px] font-semibold text-[#fffdf8] transition-all duration-300 ease-out hover:bg-[var(--gold-deep)]"
                 onNavigate={() => setOpen(false)}
               >
                 Reservar turno
