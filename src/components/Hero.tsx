@@ -40,7 +40,7 @@ export function Hero() {
         <div className="relative min-h-[470px] overflow-hidden lg:min-h-[calc(100svh-126px)]">
           <div className="hero-photo-frame absolute inset-0 rounded-[24px]" />
           <Image
-            src="/A_1.png"
+            src="/A_1_v2.png"
             alt="Cabina de api-inhalacion de AMIELAR al atardecer"
             fill
             priority

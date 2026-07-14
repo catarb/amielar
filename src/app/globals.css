@@ -188,6 +188,7 @@ textarea {
 
 .primary-button,
 .secondary-button {
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;

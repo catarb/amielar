@@ -23,6 +23,7 @@ export type Product = {
   description: string;
   image: string;
   imagePosition?: string;
+  whatsappMessage: string;
 };
 
 export type GalleryItem = {
@@ -30,6 +31,7 @@ export type GalleryItem = {
   image: string;
   size: "wide" | "tall" | "square";
   note?: string;
+  imagePosition?: string;
 };
 
 export type Reservation = {
@@ -111,54 +113,63 @@ export const products: Product[] = [
     description: "Cosecha dorada, floral y transparente, pensada para una mesa simple y ritual.",
     image: "/A_4_v2.png",
     imagePosition: "object-[50%_48%]",
+    whatsappMessage: "¡Hola! 👋 Me gustaría recibir información sobre la Miel Pura de AMIELAR.",
   },
   {
     name: "Propóleos",
     description: "Extracto noble para acompañar momentos de cuidado y bienestar cotidiano.",
     image: "/A_6.png",
+    whatsappMessage: "¡Hola! 👋 Me gustaría recibir información sobre los Propóleos de AMIELAR.",
   },
   {
     name: "Panal de miel",
     description: "Textura natural y sabor directo al origen de la colmena.",
     image: "/A_5.png",
+    whatsappMessage: "¡Hola! 👋 Me gustaría recibir información sobre el Panal de Miel de AMIELAR.",
   },
   {
     name: "Bálsamo labial",
     description: "Cera de abejas y terminación artesanal en una pieza pequeña y premium.",
     image: "/A_7.png",
+    whatsappMessage: "¡Hola! 👋 Me gustaría recibir información sobre el Bálsamo Labial de AMIELAR.",
   },
 ];
 
 export const galleryItems: GalleryItem[] = [
   {
     title: "Cabaña de api-inhalación",
-    image: "/comparativa_primeras_impresiones_web_1.png",
+    image: "/A_8.png",
     size: "wide",
     note: "Exterior y llegada",
+    imagePosition: "object-[58%_24%] md:object-[58%_26%]",
   },
   {
     title: "Paisaje pampeano",
-    image: "/ai/pampa-tree-golden.png",
+    image: "/A_10.png",
     size: "tall",
     note: "Horizonte y silencio",
+    imagePosition: "object-[50%_49%] md:object-[50%_48%]",
   },
   {
     title: "Interior de experiencia",
-    image: "/ai/api-cabin-interior.png",
+    image: "/A_11.jpeg",
     size: "square",
     note: "Calma y ritual",
+    imagePosition: "object-[38%_58%] md:object-[40%_56%]",
   },
   {
     title: "Productos de la colmena",
-    image: "/ai/honey-product-still-life.png",
+    image: "/A_12.png",
     size: "square",
     note: "Materia prima noble",
+    imagePosition: "object-[50%_62%] md:object-[50%_60%]",
   },
   {
     title: "Apiario y colmenas",
-    image: "/comparativa_primeras_impresiones_web.png",
+    image: "/A_9.png",
     size: "wide",
     note: "Origen del proyecto",
+    imagePosition: "object-[50%_56%] md:object-[50%_54%]",
   },
 ];
 

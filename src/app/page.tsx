@@ -39,7 +39,8 @@ export default function Home() {
                 description={featureCards[0].description}
                 icon={featureCards[0].icon}
                 accent="gold"
-                className="min-h-[176px] p-4 md:p-5 [&_h3]:text-[1.45rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-[0.9rem] [&_p]:leading-6 [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
+                href="#api-inhalacion"
+                className="min-h-[176px] items-center p-4 text-center md:items-center md:p-5 md:text-center [&_h3]:text-center [&_h3]:text-[1.45rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.9rem] [&_p]:leading-6 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
               />
               <div className="grid gap-3 md:grid-cols-[0.9fr_1.1fr]">
                 <Card
@@ -47,18 +48,19 @@ export default function Home() {
                   description={featureCards[2].description}
                   icon={featureCards[2].icon}
                   accent="gold"
-                  className="min-h-[194px] p-4 md:p-5 [&_h3]:text-[1.38rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-[0.88rem] [&_p]:leading-6 [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
+                  href="#api-inhalacion"
+                  className="min-h-[194px] items-center p-4 text-center md:items-center md:p-5 md:text-center [&_h3]:text-center [&_h3]:text-[1.38rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.88rem] [&_p]:leading-6 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
                 />
-                <article className="relative min-h-[194px] overflow-hidden rounded-[26px] bg-[var(--earth)] p-4 text-center text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] md:p-5 md:text-left">
+                <a href="#api-inhalacion" className="group relative flex min-h-[194px] cursor-pointer flex-col items-center overflow-hidden rounded-[26px] bg-[var(--earth)] p-4 text-center text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] transition-all duration-[300ms] ease-out hover:translate-y-[-6px] hover:brightness-[1.03] hover:shadow-[0_24px_52px_rgba(67,59,38,0.22),0_0_0_1px_rgba(205,179,93,0.16)] active:translate-y-[-3px] active:scale-[0.98] active:transition-transform active:duration-150 md:items-center md:p-5 md:text-center">
                   <div className="absolute right-0 top-0 h-14 w-14 bg-[radial-gradient(circle,rgba(205,179,93,0.18),transparent_68%)]" />
                   <span className="text-[0.7rem] uppercase tracking-[0.22em] text-white/68">Historia familiar</span>
-                  <h3 className="mt-2 font-serif text-[1.38rem] leading-tight">{featureCards[3].title}</h3>
-                  <p className="mt-2 w-full text-[0.88rem] leading-6 text-white/76 md:mx-0 md:max-w-sm">{featureCards[3].description}</p>
-                  <a href="#api-inhalacion" className="mt-4 inline-flex items-center gap-2 self-center text-[0.84rem] font-medium text-[var(--olive)] md:mt-3 md:self-start">
+                  <h3 className="mt-2 font-serif text-[1.38rem] leading-tight transition-all duration-[300ms] group-hover:tracking-[-0.015em]">{featureCards[3].title}</h3>
+                  <p className="mt-2 w-full text-[0.88rem] leading-6 text-white/76 md:mx-auto md:max-w-sm">{featureCards[3].description}</p>
+                  <span className="mt-4 inline-flex items-center gap-2 self-center text-[0.84rem] font-semibold text-[var(--olive)] transition-all duration-[300ms] group-hover:translate-x-1 group-hover:text-[var(--gold)] md:mt-3 md:self-center">
                     Leer más
-                    <MoveRight className="h-4 w-4" />
-                  </a>
-                </article>
+                    <MoveRight className="h-4 w-4 transition-transform duration-[300ms] group-hover:translate-x-1" />
+                  </span>
+                </a>
               </div>
             </div>
 
@@ -120,8 +122,8 @@ export default function Home() {
                     description={benefit.description}
                     icon={benefit.icon}
                     accent={index === 1 ? "earth" : "gold"}
-                    className="w-full min-h-[180px] p-4 text-center md:min-h-[128px] md:p-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-[2.25rem] [&_div.inline-flex]:w-[2.25rem] [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4 [&_h3]:text-[1.12rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-[0.8rem] [&_p]:leading-[1.35rem]"
-                  />
+                    className="w-full min-h-[180px] items-center p-4 text-center md:min-h-[128px] md:items-center md:p-5 md:text-center [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-[2.25rem] [&_div.inline-flex]:w-[2.25rem] [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4 [&_h3]:text-center [&_h3]:text-[1.12rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.8rem] [&_p]:leading-[1.35rem]"
+                    />
                 ))}
               </div>
               <ReserveLink className="primary-button mx-auto mt-3 flex h-10.5 w-full max-w-[20rem] justify-center px-4.5 py-0 text-[0.82rem] md:inline-flex md:w-auto md:max-w-none">
@@ -218,26 +220,29 @@ export default function Home() {
                   title="WhatsApp"
                   description="2302 555555"
                   icon={MessageCircleMore}
-                  className="w-full min-h-[178px] px-6 py-7 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.82rem] [&_p]:leading-6"
+                  href="https://wa.me/5492302555555"
+                  className="w-full min-h-[178px] px-6 py-7 text-center md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.82rem] [&_p]:leading-6"
                 />
                 <Card
                   title="Email"
                   description="amielar.visitas@gmail.com"
                   icon={Mail}
                   accent="olive"
-                  className="w-full min-h-[178px] px-6 py-7 text-center shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.82rem] [&_p]:leading-6"
+                  href="mailto:amielar.visitas@gmail.com"
+                  className="w-full min-h-[178px] px-6 py-7 text-center md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.82rem] [&_p]:leading-6"
                 />
               </div>
             </div>
           </div>
           <article className="card-shell w-full overflow-hidden p-3 shadow-[0_16px_36px_rgba(67,59,38,0.08)]">
             <div className="relative min-h-[320px] overflow-hidden rounded-[28px] md:min-h-[360px]">
-              <Image
-                src="/pantallas_1.png"
-                alt="Mapa de Arata, La Pampa"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+              <iframe
+                title="Mapa de Arata, La Pampa"
+                src="https://www.google.com/maps?q=Arata,+La+Pampa,+Argentina&z=15&output=embed"
+                className="absolute inset-0 h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
               />
               <div className="absolute left-1/2 top-5 -translate-x-1/2 rounded-full border border-white/40 bg-white/72 px-4 py-2 text-sm backdrop-blur-md md:left-5 md:translate-x-0">
                 <span className="inline-flex items-center gap-2">
@@ -257,10 +262,10 @@ export default function Home() {
         >
           <div className="reservation-image-block order-1 relative min-h-[260px] lg:order-1 lg:min-h-0">
             <Image
-              src="/ai/pampa-tree-golden.png"
+              src="/A_13.png"
               alt="Campo pampeano dorado"
               fill
-              className="object-cover"
+              className="object-cover object-[50%_44%]"
               sizes="(max-width: 1024px) 100vw, 45vw"
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0.08)_0%,rgba(18,21,23,0.32)_100%)]" />

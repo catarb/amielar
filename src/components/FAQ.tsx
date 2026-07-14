@@ -13,7 +13,7 @@ export function FAQ({ items }: FAQProps) {
       {items.map((item) => (
         <details
           key={item.question}
-          className="group card-shell flex w-full max-w-none flex-col justify-center overflow-hidden px-8 py-6 shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(67,59,38,0.09)] open:bg-[rgba(255,253,248,0.96)] md:min-h-0 md:px-6 md:py-5"
+          className="group card-shell flex w-full max-w-none cursor-pointer flex-col justify-center overflow-hidden px-8 py-6 shadow-[0_12px_28px_rgba(67,59,38,0.06)] transition-all duration-[300ms] ease-out hover:translate-y-[-6px] hover:border-[rgba(205,179,93,0.24)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(252,249,242,1))] hover:shadow-[0_22px_44px_rgba(67,59,38,0.12),0_0_0_1px_rgba(205,179,93,0.12)] active:translate-y-[-3px] active:scale-[0.98] active:transition-transform active:duration-150 open:bg-[rgba(255,253,248,0.96)] md:min-h-0 md:px-6 md:py-5"
         >
           <summary className="flex min-h-[104px] cursor-pointer list-none flex-col items-center justify-center gap-3 text-center font-medium text-[var(--ink)] transition-colors duration-300 group-open:text-[var(--earth)] md:min-h-0 md:flex-row md:justify-between md:gap-6 md:text-left">
             <span className="w-full text-[0.98rem] leading-6 md:text-[1.02rem]">{item.question}</span>

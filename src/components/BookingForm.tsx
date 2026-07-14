@@ -36,7 +36,7 @@ export function BookingForm() {
         <textarea rows={4} placeholder="Contanos si queres reservar, consultar por productos o coordinar una visita." />
       </label>
 
-      <button type="submit" className="primary-button reservation-submit w-full justify-center py-2.5">
+      <button type="submit" className="primary-button reservation-submit w-full cursor-pointer justify-center py-2.5">
         Enviar solicitud
       </button>
     </form>

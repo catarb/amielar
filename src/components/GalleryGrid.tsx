@@ -23,13 +23,13 @@ export function GalleryGrid({ items }: GalleryGridProps) {
         return (
           <article
             key={`${item.title}-${index}`}
-            className={`group relative h-full overflow-hidden rounded-[32px] border border-[rgba(67,59,38,0.1)] shadow-[0_14px_32px_rgba(67,59,38,0.07)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(67,59,38,0.1)] md:min-h-0 ${mobileHeightClass} ${spanClass}`}
+            className={`group relative h-full cursor-pointer overflow-hidden rounded-[32px] border border-[rgba(67,59,38,0.1)] shadow-[0_14px_32px_rgba(67,59,38,0.07)] transition-all duration-[300ms] ease-out hover:translate-y-[-6px] hover:border-[rgba(205,179,93,0.24)] hover:shadow-[0_22px_44px_rgba(67,59,38,0.12),0_0_0_1px_rgba(205,179,93,0.12)] active:translate-y-[-3px] active:scale-[0.98] active:transition-transform active:duration-150 md:min-h-0 ${mobileHeightClass} ${spanClass}`}
           >
             <Image
               src={item.image}
               alt={item.title}
               fill
-              className="object-cover transition duration-300 ease-out group-hover:scale-[1.03]"
+              className={`object-cover transition duration-300 ease-out group-hover:scale-[1.03] ${item.imagePosition ?? ""}`}
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0)_0%,rgba(18,21,23,0.1)_56%,rgba(18,21,23,0.62)_100%)]" />
@@ -37,7 +37,7 @@ export function GalleryGrid({ items }: GalleryGridProps) {
               <div className="inline-flex rounded-full border border-white/30 bg-white/12 px-3 py-1 text-[0.67rem] uppercase tracking-[0.26em] text-white/84 backdrop-blur-md">
                 {item.note ?? "Experiencia"}
               </div>
-              <h3 className="mx-auto mt-3 w-full max-w-[11ch] font-serif text-[1.55rem] leading-[1.02] text-white md:mx-0 md:max-w-[10ch] md:text-[1.8rem]">
+              <h3 className="mx-auto mt-3 w-full max-w-[11ch] font-serif text-[1.55rem] leading-[1.02] text-white transition-all duration-[300ms] group-hover:tracking-[-0.015em] md:mx-0 md:max-w-[10ch] md:text-[1.8rem]">
                 {item.title}
               </h3>
             </div>
