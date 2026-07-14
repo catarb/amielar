@@ -3,13 +3,17 @@
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 import { ReserveLink } from "@/components/ReserveLink";
 import { SectionLink } from "@/components/SectionLink";
 import { mobileNavLinks, primaryNavLinks } from "@/data/site";
 
 const DEFAULT_ACTIVE = "#historia";
+const INSTAGRAM_URL = "https://www.instagram.com/amielarargentina/";
+const SOCIAL_BUTTON_CLASS =
+  "inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] shadow-[0_8px_18px_rgba(67,59,38,0.04)] transition-all duration-[250ms] ease-out hover:translate-y-[-2px] hover:bg-[rgba(156,160,122,0.08)] hover:text-[var(--earth)] hover:shadow-[0_14px_28px_rgba(67,59,38,0.08)]";
+const SOCIAL_ICON_CLASS = "h-5 w-5 text-[var(--olive)] transition-transform duration-[250ms] ease-out hover:scale-[1.05]";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -141,13 +145,22 @@ export function Header() {
 
           <div className="hidden shrink-0 items-center gap-2 lg:flex">
             <a
+              aria-label="Abrir Instagram de AMIELAR"
+              className={SOCIAL_BUTTON_CLASS}
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram className={SOCIAL_ICON_CLASS} />
+            </a>
+            <a
               aria-label="Contactar por WhatsApp"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[rgba(156,160,122,0.08)] hover:text-[var(--earth)] hover:shadow-[0_10px_24px_rgba(67,59,38,0.05)]"
+              className={SOCIAL_BUTTON_CLASS}
               href="https://wa.me/5492302555555"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
-              <FaWhatsapp className="h-5 w-5 text-[var(--olive)] transition-transform duration-300 ease-out hover:scale-[1.05]" />
+              <FaWhatsapp className={SOCIAL_ICON_CLASS} />
             </a>
             <ReserveLink
               className="inline-flex h-11 items-center whitespace-nowrap rounded-full bg-[var(--gold)] px-5 text-[14px] font-semibold text-[#fffdf8] shadow-[0_10px_24px_rgba(164,131,53,0.2)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[var(--gold-deep)] hover:shadow-[0_14px_28px_rgba(164,131,53,0.24)]"
@@ -204,15 +217,24 @@ export function Header() {
               })}
             </nav>
 
-            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <a
+                aria-label="Abrir Instagram de AMIELAR"
+                className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] shadow-[0_8px_18px_rgba(67,59,38,0.04)] transition-all duration-[250ms] ease-out hover:translate-y-[-2px] hover:bg-[rgba(156,160,122,0.08)] hover:shadow-[0_14px_28px_rgba(67,59,38,0.08)]"
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaInstagram className="h-5 w-5 text-[var(--olive)] transition-transform duration-[250ms] ease-out hover:scale-[1.05]" />
+              </a>
               <a
                 aria-label="Contactar por WhatsApp"
-                className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] transition-all duration-300 ease-out hover:bg-[rgba(156,160,122,0.08)]"
+                className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] shadow-[0_8px_18px_rgba(67,59,38,0.04)] transition-all duration-[250ms] ease-out hover:translate-y-[-2px] hover:bg-[rgba(156,160,122,0.08)] hover:shadow-[0_14px_28px_rgba(67,59,38,0.08)]"
                 href="https://wa.me/5492302555555"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
-                <FaWhatsapp className="h-5 w-5 text-[var(--olive)] transition-transform duration-300 ease-out hover:scale-[1.05]" />
+                <FaWhatsapp className="h-5 w-5 text-[var(--olive)] transition-transform duration-[250ms] ease-out hover:scale-[1.05]" />
               </a>
               <ReserveLink
                 className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-[var(--gold)] px-6 text-[15px] font-semibold text-[#fffdf8] transition-all duration-300 ease-out hover:bg-[var(--gold-deep)]"
