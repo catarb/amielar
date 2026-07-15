@@ -64,7 +64,7 @@ export const mobileNavLinks = [
 export const featureCards: Feature[] = [
   {
     title: "Colmena",
-    description: "El corazón del proyecto: una arquitectura viva que inspira bienestar, escucha y equilibrio.",
+    description: "Más de 30 años aprendiendo de las abejas y transformando la experiencia de una familia de apicultores en bienestar, naturaleza y salud.",
     icon: Flower2,
   },
   {
@@ -74,12 +74,32 @@ export const featureCards: Feature[] = [
   },
   {
     title: "Bienestar",
-    description: "Conexión profunda con lo esencial a través del cuerpo, la respiración y la calma.",
+    description: "AMIELAR nace del deseo de compartir todo ese conocimiento a través de la api-inhalación, productos naturales y una experiencia única en contacto con la naturaleza.",
     icon: Sparkles,
   },
   {
     title: "Historia familiar",
-    description: "Más de 25 años de experiencia apícola puestos al servicio de una hospitalidad sensible y cuidada.",
+    description: "Todo comenzó con Hugo Pablo Tosso y sus primeras 25 colmenas. Hoy, junto a Pablo Andrés Tosso, una segunda generación continúa ese legado y da vida a AMIELAR.",
+    icon: HeartHandshake,
+  },
+];
+
+export const aboutStoryCards: Feature[] = [
+  {
+    title: "Colmenares Don Pablo",
+    description: "Todo comenzó cuando Hugo Pablo Tosso decidió iniciarse en la apicultura con apenas 25 colmenas, dando origen a Colmenares Don Pablo.",
+    icon: Flower2,
+  },
+  {
+    title: "Un legado familiar",
+    description:
+      "Con el paso de los años, el emprendimiento se consolidó no solo por la producción de miel, sino también por la crianza y venta de reinas y celdas, convirtiéndose en un referente para numerosos apicultores de la región.",
+    icon: Sparkles,
+  },
+  {
+    title: "Nace AMIELAR",
+    description:
+      "Ese legado fue continuado por su hijo, Pablo Andrés Tosso, dando lugar a una segunda generación dedicada a la apicultura y sentando las bases de lo que hoy es AMIELAR.",
     icon: HeartHandshake,
   },
 ];
@@ -111,27 +131,27 @@ export const products: Product[] = [
   {
     name: "Miel pura",
     description: "Cosecha dorada, floral y transparente, pensada para una mesa simple y ritual.",
-    image: "/A_4_v2.png",
-    imagePosition: "object-[50%_48%]",
-    whatsappMessage: "¡Hola! 👋 Me gustaría recibir información sobre la Miel Pura de AMIELAR.",
+    image: "/A_4.jpeg",
+    imagePosition: "object-[50%_72%] md:object-[50%_48%]",
+    whatsappMessage: "¡Hola! Me gustaría recibir información sobre la Miel Pura de AMIELAR.",
   },
   {
     name: "Propóleos",
     description: "Extracto noble para acompañar momentos de cuidado y bienestar cotidiano.",
-    image: "/A_6.png",
-    whatsappMessage: "¡Hola! 👋 Me gustaría recibir información sobre los Propóleos de AMIELAR.",
+    image: "/A_6.jpeg",
+    whatsappMessage: "¡Hola! Me gustaría recibir información sobre los Propóleos de AMIELAR.",
   },
   {
     name: "Panal de miel",
     description: "Textura natural y sabor directo al origen de la colmena.",
-    image: "/A_5.png",
-    whatsappMessage: "¡Hola! 👋 Me gustaría recibir información sobre el Panal de Miel de AMIELAR.",
+    image: "/A_5.jpeg",
+    whatsappMessage: "¡Hola! Me gustaría recibir información sobre el Panal de Miel de AMIELAR.",
   },
   {
     name: "Bálsamo labial",
     description: "Cera de abejas y terminación artesanal en una pieza pequeña y premium.",
     image: "/A_7.png",
-    whatsappMessage: "¡Hola! 👋 Me gustaría recibir información sobre el Bálsamo Labial de AMIELAR.",
+    whatsappMessage: "¡Hola! Me gustaría recibir información sobre el Bálsamo Labial de AMIELAR.",
   },
 ];
 
@@ -210,7 +230,7 @@ export const adminMetrics = [
 export const reservations: Reservation[] = [
   {
     client: "Elena Garcia",
-    email: "elena.g@email.com",
+    email: "administracion@amielarargentina.com",
     date: "15 May, 2024",
     time: "10:30 AM",
     session: "Api-inhalacion",
@@ -218,7 +238,7 @@ export const reservations: Reservation[] = [
   },
   {
     client: "Marcos Mendoza",
-    email: "m.mendoza@email.com",
+    email: "administracion@amielarargentina.com",
     date: "15 May, 2024",
     time: "03:00 PM",
     session: "Api-inhalacion",
@@ -226,7 +246,7 @@ export const reservations: Reservation[] = [
   },
   {
     client: "Lucia Fernandez",
-    email: "l.fernandez@email.com",
+    email: "administracion@amielarargentina.com",
     date: "16 May, 2024",
     time: "09:00 AM",
     session: "Visita guiada",
@@ -234,7 +254,7 @@ export const reservations: Reservation[] = [
   },
   {
     client: "Javier Rojas",
-    email: "j.rojas@email.com",
+    email: "administracion@amielarargentina.com",
     date: "16 May, 2024",
     time: "11:00 AM",
     session: "Api-inhalacion",

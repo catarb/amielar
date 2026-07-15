@@ -327,6 +327,13 @@ textarea {
   padding-block: clamp(2.25rem, 4vh, 3.75rem);
 }
 
+.history-shell {
+  min-height: calc(100svh - var(--header-offset, 0px) - 0.5rem);
+  align-items: flex-start;
+  padding-block: 0;
+  scroll-margin-top: calc(var(--header-offset, 0px) - 1.75rem);
+}
+
 .api-shell {
   --api-offset: 2.5rem;
   height: calc(100svh - var(--header-offset, 0px) - var(--api-offset));

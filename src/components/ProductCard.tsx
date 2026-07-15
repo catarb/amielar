@@ -10,7 +10,7 @@ type ProductCardProps = {
   className?: string;
 };
 
-const WHATSAPP_NUMBER = "5492302555555";
+const WHATSAPP_NUMBER = "5492302393510";
 
 export function ProductCard({ name, description, image, imagePosition, whatsappMessage, className = "" }: ProductCardProps) {
   const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -24,6 +24,7 @@ export function ProductCard({ name, description, image, imagePosition, whatsappM
           src={image}
           alt={name}
           fill
+          unoptimized
           className={`object-cover transition duration-300 ease-out group-hover:scale-[1.03] ${imagePosition ?? "object-center"}`}
           sizes="(max-width: 768px) 100vw, 25vw"
         />

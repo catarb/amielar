@@ -29,7 +29,7 @@ export function BookingForm() {
       </label>
       <label className="field-group w-full text-left">
         <span>Telefono</span>
-        <input type="tel" placeholder="+54 9 2302 55 5555" />
+        <input type="tel" placeholder="+54 9 2302 39-3510" />
       </label>
       <label className="field-group w-full text-left">
         <span>Mensaje opcional</span>

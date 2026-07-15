@@ -1,10 +1,12 @@
 "use client";
 
 const RESERVATION_ID = "reserva";
+const HISTORY_ID = "historia";
 const DESKTOP_MIN_WIDTH = 1024;
 const DESKTOP_TOP_GAP = 24;
 const MOBILE_TOP_GAP = 16;
 const RESERVATION_TOP_GAP = 0;
+const HISTORY_TOP_GAP = 8;
 
 export function scrollToSection(targetHash: string, event?: { preventDefault?: () => void }) {
   event?.preventDefault?.();
@@ -34,6 +36,8 @@ export function scrollToSection(targetHash: string, event?: { preventDefault?: (
   if (isDesktop) {
     if (targetId === RESERVATION_ID) {
       topGap = RESERVATION_TOP_GAP;
+    } else if (targetId === HISTORY_ID) {
+      topGap = HISTORY_TOP_GAP;
     } else {
       const availableHeight = viewportHeight - headerHeight;
       const centeredGap = Math.max((availableHeight - sectionHeight) / 2, DESKTOP_TOP_GAP);

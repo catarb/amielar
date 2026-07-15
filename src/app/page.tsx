@@ -22,7 +22,7 @@ export default function Home() {
 
       <section
         id="historia"
-        className="anchor-offset section-shell viewport-shell !max-w-[1440px] !px-6 md:!px-8 lg:!px-10 xl:!px-12"
+        className="anchor-offset history-shell section-shell viewport-shell !max-w-[1440px] !px-6 md:!px-8 lg:!px-10 xl:!px-12"
       >
         <div className="w-full">
           <div className="mx-auto max-w-[54rem] text-center">
@@ -51,11 +51,13 @@ export default function Home() {
                   href="#api-inhalacion"
                   className="min-h-[194px] items-center p-4 text-center md:items-center md:p-5 md:text-center [&_h3]:text-center [&_h3]:text-[1.38rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.88rem] [&_p]:leading-6 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
                 />
-                <a href="#api-inhalacion" className="group relative flex min-h-[194px] cursor-pointer flex-col items-center overflow-hidden rounded-[26px] bg-[var(--earth)] p-4 text-center text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] transition-all duration-[300ms] ease-out hover:translate-y-[-6px] hover:brightness-[1.03] hover:shadow-[0_24px_52px_rgba(67,59,38,0.22),0_0_0_1px_rgba(205,179,93,0.16)] active:translate-y-[-3px] active:scale-[0.98] active:transition-transform active:duration-150 md:items-center md:p-5 md:text-center">
+                <a href="#api-inhalacion" className="group relative flex min-h-[194px] cursor-pointer flex-col items-center justify-between overflow-hidden rounded-[26px] bg-[var(--earth)] p-4 text-center text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] transition-all duration-[300ms] ease-out hover:translate-y-[-6px] hover:brightness-[1.03] hover:shadow-[0_24px_52px_rgba(67,59,38,0.22),0_0_0_1px_rgba(205,179,93,0.16)] active:translate-y-[-3px] active:scale-[0.98] active:transition-transform active:duration-150 md:items-center md:p-5 md:text-center">
                   <div className="absolute right-0 top-0 h-14 w-14 bg-[radial-gradient(circle,rgba(205,179,93,0.18),transparent_68%)]" />
-                  <span className="text-[0.7rem] uppercase tracking-[0.22em] text-white/68">Historia familiar</span>
-                  <h3 className="mt-2 font-serif text-[1.38rem] leading-tight transition-all duration-[300ms] group-hover:tracking-[-0.015em]">{featureCards[3].title}</h3>
-                  <p className="mt-2 w-full text-[0.88rem] leading-6 text-white/76 md:mx-auto md:max-w-sm">{featureCards[3].description}</p>
+                  <div>
+                    <span className="text-[0.7rem] uppercase tracking-[0.22em] text-white/68">Historia familiar</span>
+                    <h3 className="mt-2 font-serif text-[1.38rem] leading-tight transition-all duration-[300ms] group-hover:tracking-[-0.015em]">{featureCards[3].title}</h3>
+                    <p className="mt-2 w-full text-[0.88rem] leading-6 text-white/76 md:mx-auto md:max-w-sm">{featureCards[3].description}</p>
+                  </div>
                   <span className="mt-4 inline-flex items-center gap-2 self-center text-[0.84rem] font-semibold text-[var(--olive)] transition-all duration-[300ms] group-hover:translate-x-1 group-hover:text-[var(--gold)] md:mt-3 md:self-center">
                     Leer más
                     <MoveRight className="h-4 w-4 transition-transform duration-[300ms] group-hover:translate-x-1" />
@@ -67,7 +69,7 @@ export default function Home() {
             <article className="relative min-h-[392px] overflow-hidden rounded-[30px] border border-[rgba(67,59,38,0.1)] shadow-[0_24px_60px_rgba(67,59,38,0.1)] md:min-h-[408px]">
               <Image
                 src="/A_2.png"
-                alt="Cabina de AMIELAR entre arboles y naturaleza"
+                alt="Cabina de AMIELAR entre árboles y naturaleza"
                 fill
                 className="object-cover object-[54%_42%] brightness-[1.03] contrast-[1.04]"
                 sizes="(max-width: 1280px) 100vw, 42vw"
@@ -215,21 +217,21 @@ export default function Home() {
                 align="center"
                 className="w-full gap-3 [&_h2]:max-w-none [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.55rem] [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
               />
-              <div className="grid w-full gap-4 sm:grid-cols-2">
+              <div className="grid w-full gap-3 md:grid-cols-2 lg:gap-4">
                 <Card
                   title="WhatsApp"
-                  description="2302 555555"
+                  description="+54 9 2302 39-3510"
                   icon={MessageCircleMore}
-                  href="https://wa.me/5492302555555"
-                  className="w-full min-h-[178px] px-6 py-7 text-center md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.82rem] [&_p]:leading-6"
+                  href="https://wa.me/5492302393510"
+                  className="w-full min-h-[178px] justify-center px-5 py-7 text-center md:min-h-[164px] md:px-4 md:py-5 lg:px-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:w-full [&_p]:max-w-full [&_p]:text-center [&_p]:text-[clamp(0.9rem,1vw,1rem)] [&_p]:leading-5.5 [&_p]:whitespace-normal"
                 />
                 <Card
                   title="Email"
-                  description="amielar.visitas@gmail.com"
+                  description="administracion@amielarargentina.com"
                   icon={Mail}
                   accent="olive"
-                  href="mailto:amielar.visitas@gmail.com"
-                  className="w-full min-h-[178px] px-6 py-7 text-center md:min-h-[150px] md:px-5 md:py-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.82rem] [&_p]:leading-6"
+                  href="mailto:administracion@amielarargentina.com"
+                  className="w-full min-h-[178px] justify-center px-5 py-7 text-center md:min-h-[164px] md:px-4 md:py-5 lg:px-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:w-full [&_p]:max-w-full [&_p]:text-center [&_p]:text-[clamp(0.76rem,0.78vw,0.88rem)] [&_p]:leading-5 [&_p]:whitespace-normal [&_p]:break-words [&_p]:[overflow-wrap:anywhere] [&_p]:[word-break:break-word] md:[&_p]:whitespace-nowrap"
                 />
               </div>
             </div>
@@ -277,11 +279,11 @@ export default function Home() {
               <div className="mt-3.5 space-y-1.5 text-[0.84rem]">
                 <div className="flex items-center gap-3">
                   <MessageCircleMore className="h-4 w-4 text-[var(--olive)]" />
-                  WhatsApp · 2302 555555
+                  WhatsApp · +54 9 2302 39-3510
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="h-4 w-4 text-[var(--olive)]" />
-                  amielar.visitas@gmail.com
+                  administracion@amielarargentina.com
                 </div>
               </div>
             </div>

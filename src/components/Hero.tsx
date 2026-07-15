@@ -26,7 +26,7 @@ export function Hero() {
               </ReserveLink>
               <a
                 className="secondary-button hero-action justify-center"
-                href="https://wa.me/5492302555555"
+                href="https://wa.me/5492302393510"
                 target="_blank"
                 rel="noreferrer"
               >

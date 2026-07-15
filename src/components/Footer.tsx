@@ -17,12 +17,13 @@ export function Footer() {
               height={193}
               className="h-auto w-[5.8rem] shrink-0 object-contain md:w-[6.3rem] lg:w-[6.8rem]"
             />
-            <div className="flex min-h-[5.8rem] items-center lg:min-h-[6.3rem]">
-              <div className="flex translate-y-[0.34rem] items-baseline whitespace-nowrap font-serif text-[2.25rem] leading-none tracking-[-0.05em] text-[var(--olive)] md:translate-y-[0.38rem] md:text-[2.55rem] lg:translate-y-[0.42rem] lg:text-[2.85rem]">
-                <span>AMIEL</span>
-                <span className="text-[var(--gold)]">AR</span>
-              </div>
-            </div>
+            <Image
+              src="/logo_Recortado_transparent.png"
+              alt="AMIELAR"
+              width={2059}
+              height={764}
+              className="block h-[3.85rem] w-auto max-w-none shrink-0 self-center translate-y-[0.2rem] object-contain md:h-[4.2rem] lg:h-[4.8rem]"
+            />
           </div>
 
           <p className="mt-3 max-w-[24rem] text-sm leading-6 text-[color:var(--muted-ink)] md:text-[0.95rem]">
@@ -58,7 +59,7 @@ export function Footer() {
         <p className="mt-2 text-[0.58rem] uppercase tracking-[0.26em] text-[color:var(--muted-ink)] md:text-[0.76rem]">
           DISEÑO Y DESARROLLO WEB POR{" "}
           <a
-            href="mailto:catalinarb25@gmail.com"
+            href="mailto:administracion@amielarargentina.com"
             className="transition-colors duration-200 hover:text-[var(--olive)]"
           >
             L-R DIGITAL

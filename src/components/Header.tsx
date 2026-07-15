@@ -116,10 +116,14 @@ export function Header() {
               className="block h-[2.25rem] w-auto max-w-none shrink-0 object-contain sm:h-[2.45rem] md:h-[3rem]"
               priority
             />
-            <span className="flex shrink-0 items-baseline whitespace-nowrap font-serif text-[2rem] leading-none tracking-[-0.05em] text-[var(--olive)] sm:text-[2.15rem] md:text-[2.55rem]">
-              <span>AMIEL</span>
-              <span className="text-[var(--gold)]">AR</span>
-            </span>
+            <Image
+              src="/logo_Recortado_transparent.png"
+              alt="AMIELAR"
+              width={2059}
+              height={764}
+              className="block h-[3.5rem] w-auto max-w-none shrink-0 self-center translate-y-[0.18rem] object-contain sm:h-[3.7rem] md:h-[4.25rem]"
+              priority
+            />
           </SectionLink>
 
           <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 lg:flex">
@@ -156,7 +160,7 @@ export function Header() {
             <a
               aria-label="Contactar por WhatsApp"
               className={SOCIAL_BUTTON_CLASS}
-              href="https://wa.me/5492302555555"
+              href="https://wa.me/5492302393510"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -230,7 +234,7 @@ export function Header() {
               <a
                 aria-label="Contactar por WhatsApp"
                 className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] shadow-[0_8px_18px_rgba(67,59,38,0.04)] transition-all duration-[250ms] ease-out hover:translate-y-[-2px] hover:bg-[rgba(156,160,122,0.08)] hover:shadow-[0_14px_28px_rgba(67,59,38,0.08)]"
-                href="https://wa.me/5492302555555"
+                href="https://wa.me/5492302393510"
                 target="_blank"
                 rel="noopener noreferrer"
               >
