@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
@@ -12,14 +13,24 @@ import { mobileNavLinks, primaryNavLinks } from "@/data/site";
 const DEFAULT_ACTIVE = "#historia";
 const INSTAGRAM_URL = "https://www.instagram.com/amielarargentina/";
 const SOCIAL_BUTTON_CLASS =
-  "inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] shadow-[0_8px_18px_rgba(67,59,38,0.04)] transition-all duration-[250ms] ease-out hover:translate-y-[-2px] hover:bg-[rgba(156,160,122,0.08)] hover:text-[var(--earth)] hover:shadow-[0_14px_28px_rgba(67,59,38,0.08)]";
-const SOCIAL_ICON_CLASS = "h-5 w-5 text-[var(--olive)] transition-transform duration-[250ms] ease-out hover:scale-[1.05]";
+  "site-icon-button";
+const SOCIAL_ICON_CLASS = "h-5 w-5 text-[var(--olive)]";
 
 export function Header() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeHash, setActiveHash] = useState(DEFAULT_ACTIVE);
   const headerRef = useRef<HTMLElement | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const closeMenu = (restoreFocus = false) => {
+    setOpen(false);
+
+    if (restoreFocus) {
+      window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+    }
+  };
 
   useEffect(() => {
     const updateHeaderOffset = () => {
@@ -69,13 +80,24 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+    if (!open) {
+      return;
     }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeMenu(true);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
 
@@ -94,7 +116,7 @@ export function Header() {
     <>
       <header ref={headerRef} data-site-header="true" className="sticky top-0 z-50 pt-3 md:pt-4">
         <div
-          className={`mx-auto flex w-[calc(100%-24px)] max-w-[1440px] items-center justify-between rounded-[28px] border px-4 sm:w-[calc(100%-32px)] sm:px-5 md:w-[calc(100%-48px)] md:px-6 transition-all duration-300 ${
+          className={`site-header-shell mx-auto flex w-[calc(100%-24px)] max-w-[1440px] items-center justify-between border px-4 sm:w-[calc(100%-32px)] sm:px-5 md:w-[calc(100%-48px)] md:px-6 transition-all duration-300 ${
             scrolled
               ? "bg-[rgba(251,248,241,0.95)] shadow-[0_22px_54px_rgba(67,59,38,0.09)] backdrop-blur-lg"
               : "bg-[rgba(251,248,241,0.88)] shadow-[0_18px_50px_rgba(67,59,38,0.07)] backdrop-blur-md"
@@ -110,9 +132,10 @@ export function Header() {
           >
             <Image
               src="/logo_header_mark.png"
-              alt="AMIELAR"
+              alt=""
               width={252}
               height={193}
+              sizes="(max-width: 639px) 47px, (max-width: 767px) 51px, 63px"
               className="block h-[2.25rem] w-auto max-w-none shrink-0 object-contain sm:h-[2.45rem] md:h-[3rem]"
               priority
             />
@@ -121,6 +144,7 @@ export function Header() {
               alt="AMIELAR"
               width={2059}
               height={764}
+              sizes="(max-width: 639px) 151px, (max-width: 767px) 160px, 184px"
               className="block h-[3.5rem] w-auto max-w-none shrink-0 self-center translate-y-[0.18rem] object-contain sm:h-[3.7rem] md:h-[4.25rem]"
               priority
             />
@@ -128,14 +152,17 @@ export function Header() {
 
           <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 lg:flex">
             {primaryNavLinks.map((link) => {
-              const active = activeHash === link.href && !(activeHash === "#historia" && link.label === "Nuestra historia");
+              const active =
+                pathname === "/" &&
+                activeHash === link.href &&
+                !(activeHash === "#historia" && link.label === "Nuestra historia");
 
               return (
                 <SectionLink
                   key={`${link.label}-${link.href}`}
                   href={link.href}
                   onNavigate={() => setActiveHash(link.href)}
-                  className={`whitespace-nowrap rounded-full px-3 py-2 text-[14px] font-medium transition-all duration-300 ease-out ${
+                  className={`site-nav-link whitespace-nowrap ${
                     active
                       ? "bg-[rgba(156,160,122,0.14)] text-[var(--olive)] shadow-[0_6px_16px_rgba(67,59,38,0.04)]"
                       : "text-[var(--muted-ink)] hover:bg-[rgba(156,160,122,0.1)] hover:text-[var(--olive)]"
@@ -167,7 +194,7 @@ export function Header() {
               <FaWhatsapp className={SOCIAL_ICON_CLASS} />
             </a>
             <ReserveLink
-              className="inline-flex h-11 items-center whitespace-nowrap rounded-full bg-[var(--gold)] px-5 text-[14px] font-semibold text-[#fffdf8] shadow-[0_10px_24px_rgba(164,131,53,0.2)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[var(--gold-deep)] hover:shadow-[0_14px_28px_rgba(164,131,53,0.24)]"
+              className="site-header-action site-header-action-primary whitespace-nowrap"
             >
               Reservar turno
             </ReserveLink>
@@ -175,16 +202,18 @@ export function Header() {
 
           <div className="flex items-center gap-2 lg:hidden">
             <ReserveLink
-              className="hidden h-10 items-center whitespace-nowrap rounded-full bg-[var(--gold)] px-4 text-[14px] font-semibold text-[#fffdf8] shadow-[0_8px_18px_rgba(164,131,53,0.18)] transition-all duration-300 ease-out hover:translate-y-[-1px] hover:bg-[var(--gold-deep)] sm:inline-flex"
+              className="site-header-action site-header-action-primary !hidden whitespace-nowrap sm:!inline-flex"
             >
               Reservar
             </ReserveLink>
             <button
+              ref={menuButtonRef}
               type="button"
-              onClick={() => setOpen((current) => !current)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/82 text-[var(--earth)] transition-all duration-300 ease-out hover:bg-[rgba(156,160,122,0.1)]"
+              onClick={() => (open ? closeMenu(true) : setOpen(true))}
+              className="site-icon-button"
               aria-label={open ? "Cerrar menu" : "Abrir menu"}
               aria-expanded={open}
+              aria-controls="landing-mobile-menu"
             >
               {open ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
             </button>
@@ -192,14 +221,20 @@ export function Header() {
         </div>
 
         <div
-          className={`mx-auto mt-2 w-[calc(100%-24px)] max-w-[1440px] overflow-hidden rounded-[24px] border border-[rgba(67,59,38,0.08)] bg-[rgba(251,248,241,0.94)] shadow-[0_18px_40px_rgba(67,59,38,0.06)] backdrop-blur-md transition-all duration-300 ease-out sm:w-[calc(100%-32px)] md:w-[calc(100%-48px)] lg:hidden ${
+          id="landing-mobile-menu"
+          className={`site-header-shell mx-auto mt-2 w-[calc(100%-24px)] max-w-[1440px] overflow-hidden border border-[rgba(67,59,38,0.08)] bg-[rgba(251,248,241,0.94)] shadow-[0_18px_40px_rgba(67,59,38,0.06)] backdrop-blur-md transition-all duration-300 ease-out sm:w-[calc(100%-32px)] md:w-[calc(100%-48px)] lg:hidden ${
             open ? "max-h-[calc(100dvh-7rem)] opacity-100" : "max-h-0 border-transparent opacity-0"
           }`}
+          aria-hidden={!open}
+          inert={!open ? true : undefined}
         >
           <div className="overflow-y-auto px-4 pb-6 pt-3">
             <nav className="flex flex-col gap-1.5">
               {mobileNavLinks.map((link) => {
-                const active = activeHash === link.href && !(activeHash === "#historia" && link.label === "Nuestra historia");
+                const active =
+                  pathname === "/" &&
+                  activeHash === link.href &&
+                  !(activeHash === "#historia" && link.label === "Nuestra historia");
 
                 return (
                   <SectionLink
@@ -207,9 +242,9 @@ export function Header() {
                     href={link.href}
                     onNavigate={() => {
                       setActiveHash(link.href);
-                      setOpen(false);
+                      closeMenu();
                     }}
-                    className={`rounded-[18px] px-4 py-3 text-[15px] font-medium transition-all duration-300 ease-out ${
+                    className={`site-nav-link site-nav-link-mobile ${
                       active
                         ? "bg-[rgba(156,160,122,0.14)] text-[var(--olive)] shadow-[0_6px_16px_rgba(67,59,38,0.04)]"
                         : "text-[var(--muted-ink)] hover:bg-[rgba(156,160,122,0.1)] hover:text-[var(--olive)]"
@@ -224,25 +259,25 @@ export function Header() {
             <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
               <a
                 aria-label="Abrir Instagram de AMIELAR"
-                className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] shadow-[0_8px_18px_rgba(67,59,38,0.04)] transition-all duration-[250ms] ease-out hover:translate-y-[-2px] hover:bg-[rgba(156,160,122,0.08)] hover:shadow-[0_14px_28px_rgba(67,59,38,0.08)]"
+                className="site-icon-button site-icon-button-mobile"
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaInstagram className="h-5 w-5 text-[var(--olive)] transition-transform duration-[250ms] ease-out hover:scale-[1.05]" />
+                <FaInstagram className="h-5 w-5 text-[var(--olive)]" />
               </a>
               <a
                 aria-label="Contactar por WhatsApp"
-                className="inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[rgba(67,59,38,0.1)] bg-white/88 text-[var(--earth)] shadow-[0_8px_18px_rgba(67,59,38,0.04)] transition-all duration-[250ms] ease-out hover:translate-y-[-2px] hover:bg-[rgba(156,160,122,0.08)] hover:shadow-[0_14px_28px_rgba(67,59,38,0.08)]"
+                className="site-icon-button site-icon-button-mobile"
                 href="https://wa.me/5492302393510"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaWhatsapp className="h-5 w-5 text-[var(--olive)] transition-transform duration-[250ms] ease-out hover:scale-[1.05]" />
+                <FaWhatsapp className="h-5 w-5 text-[var(--olive)]" />
               </a>
               <ReserveLink
-                className="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-[var(--gold)] px-6 text-[15px] font-semibold text-[#fffdf8] transition-all duration-300 ease-out hover:bg-[var(--gold-deep)]"
-                onNavigate={() => setOpen(false)}
+                className="site-header-action site-header-action-primary site-header-action-mobile whitespace-nowrap"
+                onNavigate={() => closeMenu()}
               >
                 Reservar turno
               </ReserveLink>
@@ -253,7 +288,7 @@ export function Header() {
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/15 backdrop-blur-[2px]"
-          onClick={() => setOpen(false)}
+          onClick={() => closeMenu(true)}
           aria-hidden="true"
         />
       )}

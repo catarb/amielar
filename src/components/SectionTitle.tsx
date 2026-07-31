@@ -23,11 +23,11 @@ export function SectionTitle({
         </span>
       ) : null}
       <div className="space-y-3">
-        <h2 className="mx-auto max-w-[14ch] font-serif text-4xl leading-tight text-[var(--ink)] md:mx-0 md:max-w-none md:text-5xl">
+        <h2 className="site-section-title mx-auto max-w-[14ch] text-[var(--ink)] md:mx-0 md:max-w-none">
           {title}
         </h2>
         {description ? (
-          <p className="mx-auto max-w-[34ch] text-base leading-7 text-[color:var(--muted-ink)] md:mx-0 md:max-w-none md:text-lg">
+          <p className="site-section-copy mx-auto max-w-[34ch] text-[color:var(--muted-ink)] md:mx-0 md:max-w-none">
             {description}
           </p>
         ) : null}

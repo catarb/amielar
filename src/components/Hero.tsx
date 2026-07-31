@@ -14,11 +14,11 @@ export function Hero() {
               <MapPin className="h-3.5 w-3.5" />
               Arata · La Pampa · Argentina
             </span>
-            <h1 className="mt-6 w-full max-w-none font-serif text-[2.7rem] leading-[0.9] tracking-[-0.04em] text-[var(--earth)] md:mt-7 md:max-w-[10.8ch] md:text-[3.55rem] xl:text-[3.9rem]">
-              AMIELAR: aire de colmena, naturaleza y bienestar en Arata
+            <h1 className="site-display-title mt-6 w-full max-w-none text-[var(--earth)] md:mt-7 md:max-w-[10.8ch]">
+              Viví la experiencia de respirar el aire de la colmena
             </h1>
             <p className="mt-4 w-full max-w-none text-[0.98rem] leading-[1.62] text-[color:var(--muted-ink)] md:mt-5 md:max-w-[35rem] md:text-[1rem]">
-              Vivi una experiencia rural unica: productos de la colmena, historia familiar y turnos de api-inhalacion en un entorno natural de La Pampa.
+              Una experiencia rural única, productos de la colmena, historia familiar y turnos de api-inhalación en un entorno natural.
             </p>
             <div className="mt-6 flex w-full max-w-[20rem] flex-col items-center gap-3 sm:max-w-none sm:flex-row lg:justify-start">
               <ReserveLink className="primary-button hero-action justify-center">

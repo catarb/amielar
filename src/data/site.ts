@@ -1,12 +1,12 @@
 import {
   CalendarDays,
   Clock3,
+  Ear,
+  Eye,
   Flower2,
   HeartHandshake,
   Leaf,
   LucideIcon,
-  MapPinned,
-  ShieldCheck,
   ShoppingBag,
   Sparkles,
   Wind,
@@ -64,7 +64,7 @@ export const mobileNavLinks = [
 export const featureCards: Feature[] = [
   {
     title: "Colmena",
-    description: "Más de 30 años aprendiendo de las abejas y transformando la experiencia de una familia de apicultores en bienestar, naturaleza y salud.",
+    description: "La colmena es nuestro punto de partida: más de 30 años de experiencia apícola, aprendizaje constante y respeto por el ritmo de las abejas.",
     icon: Flower2,
   },
   {
@@ -74,12 +74,13 @@ export const featureCards: Feature[] = [
   },
   {
     title: "Bienestar",
-    description: "AMIELAR nace del deseo de compartir todo ese conocimiento a través de la api-inhalación, productos naturales y una experiencia única en contacto con la naturaleza.",
+    description:
+      "Transformamos más de 30 años de conocimiento apícola en una experiencia sensorial pionera en Argentina, que invita a conectar con las abejas, la naturaleza y el propio bienestar respiratorio.",
     icon: Sparkles,
   },
   {
     title: "Historia familiar",
-    description: "Todo comenzó con Hugo Pablo Tosso y sus primeras 25 colmenas. Hoy, junto a Pablo Andrés Tosso, una segunda generación continúa ese legado y da vida a AMIELAR.",
+    description: "Todo comenzó con Hugo Pablo Tosso y sus primeras 25 colmenas. Hoy, una segunda generación honra ese legado y se anima a dar un paso más dando vida a Amielar.",
     icon: HeartHandshake,
   },
 ];
@@ -106,24 +107,19 @@ export const aboutStoryCards: Feature[] = [
 
 export const apiBenefits: Feature[] = [
   {
-    title: "Respiración consciente",
-    description: "Sesiones lentas para bajar el ritmo y escuchar el cuerpo.",
+    title: "Observar",
+    description: "A través de dos colmenas vidriadas especialmente preparadas, descubrí de cerca la organización de las abejas, su relación con el ambiente y el vínculo que construyen con las personas.",
+    icon: Eye,
+  },
+  {
+    title: "Respirar",
+    description: "El aire de la colmena llega mediante un sistema que permite inhalarlo sin contacto directo con las abejas. Una invitación a respirar lento, hacer una pausa y reconectar con el propio ritmo.",
     icon: Wind,
   },
   {
-    title: "Relajación profunda",
-    description: "El entorno acompaña con temperatura noble, aroma suave y pausa real.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Naturaleza viva",
-    description: "Propóleos, cera y aceites esenciales en un microclima único.",
-    icon: Leaf,
-  },
-  {
-    title: "Silencio rural",
-    description: "Un refugio delicado, lejos del ruido y cerca del horizonte pampeano.",
-    icon: MapPinned,
+    title: "Escuchar",
+    description: "El zumbido de la colonia se combina con un relato guiado que acompaña la respiración y conduce la experiencia hacia un estado de calma, atención y conexión.",
+    icon: Ear,
   },
 ];
 
@@ -190,34 +186,6 @@ export const galleryItems: GalleryItem[] = [
     size: "wide",
     note: "Origen del proyecto",
     imagePosition: "object-[50%_56%] md:object-[50%_54%]",
-  },
-];
-
-export const faqs = [
-  {
-    question: "¿Qué es la api-inhalación?",
-    answer:
-      "Es una experiencia de bienestar que permite respirar el aire vivo de la colmena, naturalmente cargado de propóleos, cera y aromas esenciales.",
-  },
-  {
-    question: "¿Dónde se realiza la experiencia?",
-    answer:
-      "Se vive en Arata, La Pampa, dentro de una cabaña pensada para sostener calma, temperatura amable y contacto con el paisaje.",
-  },
-  {
-    question: "¿Cuánto dura una sesión?",
-    answer:
-      "La referencia de esta propuesta visual contempla sesiones de 45 a 60 minutos, con horarios coordinados según disponibilidad.",
-  },
-  {
-    question: "¿Puedo comprar productos de la colmena?",
-    answer:
-      "Sí. La experiencia convive con una línea artesanal de miel, propóleos, panal y productos de cuidado.",
-  },
-  {
-    question: "¿Cómo reservo un turno?",
-    answer:
-      "Podés completar el formulario de la web o escribir por WhatsApp para coordinar fecha, horario y detalles de la visita.",
   },
 ];
 

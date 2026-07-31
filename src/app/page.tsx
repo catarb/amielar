@@ -3,15 +3,17 @@ import { Mail, MapPin, MessageCircleMore, MoveRight } from "lucide-react";
 
 import { BookingForm } from "@/components/BookingForm";
 import { Card } from "@/components/Card";
-import { FAQ } from "@/components/FAQ";
+import { FaqAccordion } from "@/components/FaqAccordion";
 import { Footer } from "@/components/Footer";
 import { GalleryGrid } from "@/components/GalleryGrid";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ProductCard } from "@/components/ProductCard";
 import { ReserveLink } from "@/components/ReserveLink";
+import { SectionLink } from "@/components/SectionLink";
 import { SectionTitle } from "@/components/SectionTitle";
-import { apiBenefits, faqs, featureCards, galleryItems, products } from "@/data/site";
+import { featuredAireDeColmenaFaqs } from "@/data/aireDeColmenaFaqs";
+import { apiBenefits, featureCards, galleryItems, products } from "@/data/site";
 
 export default function Home() {
   return (
@@ -24,54 +26,64 @@ export default function Home() {
         id="historia"
         className="anchor-offset history-shell section-shell viewport-shell !max-w-[1440px] !px-6 md:!px-8 lg:!px-10 xl:!px-12"
       >
-        <div className="w-full">
+        <div className="w-full lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:pb-[clamp(1rem,2vh,1.5rem)]">
           <div className="mx-auto max-w-[54rem] text-center">
-            <h2 className="font-serif text-[2.15rem] italic leading-tight text-[var(--earth)] md:text-[2.3rem]">¿Qué es AMIELAR?</h2>
-            <p className="mx-auto mt-2 max-w-2xl text-[0.94rem] leading-6 text-[color:var(--muted-ink)] md:text-[1rem]">
-              Un proyecto familiar que nace del amor por las abejas y la búsqueda de un bienestar integral en sintonía con el paisaje pampeano.
+            <h2 className="site-section-title italic text-[var(--earth)]">¿Qué es AMIELAR?</h2>
+            <p className="site-section-copy mx-auto mt-2 max-w-2xl text-[color:var(--muted-ink)]">
+              Un proyecto familiar nacido del amor por las abejas, que une generaciones de conocimiento apícola con innovación y bienestar.
             </p>
           </div>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-2 md:items-stretch xl:grid-cols-[0.98fr_1.02fr]">
-            <div className="grid gap-3">
+          <div className="mt-[clamp(0.625rem,1.5vh,1rem)] grid gap-[clamp(0.75rem,1.4vw,1rem)] lg:min-h-0 lg:flex-1 lg:grid-cols-[0.96fr_1.04fr] lg:items-stretch">
+            <div className="grid content-start gap-[clamp(0.375rem,0.8vh,0.625rem)] lg:h-full lg:min-h-0 lg:grid-rows-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:content-stretch">
               <Card
                 title={featureCards[0].title}
                 description={featureCards[0].description}
                 icon={featureCards[0].icon}
                 accent="gold"
                 href="#api-inhalacion"
-                className="min-h-[176px] items-center p-4 text-center md:items-center md:p-5 md:text-center [&_h3]:text-center [&_h3]:text-[1.45rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.9rem] [&_p]:leading-6 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
+                centeredHeader
+                className="min-h-0 items-center justify-center p-[clamp(0.75rem,1.8vh,1rem)] text-center lg:h-full lg:py-[clamp(0.5rem,1.2vh,0.75rem)] [&_h3]:text-center [&_h3]:text-[1.45rem] [&_h3]:leading-tight lg:[&_h3]:w-auto [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.9rem] [&_p]:leading-[1.4rem] lg:[&_p]:mt-0 lg:[&_p]:text-[clamp(0.84rem,1.15vw,0.9rem)] lg:[&_p]:leading-[clamp(1.25rem,1.7vw,1.4rem)] [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 lg:[&_div.inline-flex]:absolute lg:[&_div.inline-flex]:right-[calc(50%+3.75rem)] lg:[&_div.inline-flex]:mx-0 lg:[&_div.inline-flex]:mb-0 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
               />
-              <div className="grid gap-3 md:grid-cols-[0.9fr_1.1fr]">
+              <div className="grid items-start gap-[clamp(0.375rem,0.8vh,0.625rem)] sm:grid-cols-2 lg:h-full lg:min-h-0 lg:items-stretch">
                 <Card
                   title={featureCards[2].title}
                   description={featureCards[2].description}
                   icon={featureCards[2].icon}
                   accent="gold"
-                  href="#api-inhalacion"
-                  className="min-h-[194px] items-center p-4 text-center md:items-center md:p-5 md:text-center [&_h3]:text-center [&_h3]:text-[1.38rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.88rem] [&_p]:leading-6 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-10 [&_div.inline-flex]:w-10 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
+                  href="/aire-de-colmena"
+                  footer={
+                    <span className="inline-flex items-center gap-2 text-[0.8rem] font-semibold text-[var(--olive)] transition-all duration-[300ms] group-hover:translate-x-1 group-hover:text-[var(--gold-deep)]">
+                      Descubrir la experiencia
+                      <MoveRight className="h-3.5 w-3.5 transition-transform duration-[300ms] group-hover:translate-x-1" />
+                    </span>
+                  }
+                  className="min-h-0 items-center justify-center p-[clamp(0.7rem,1.45vh,0.9rem)] text-center sm:h-full [&>div:last-child]:mt-2.5 [&_h3]:text-center [&_h3]:text-[1.3rem] [&_h3]:leading-tight [&_p]:mt-1.5 [&_p]:text-center [&_p]:text-[clamp(0.76rem,1.02vw,0.84rem)] [&_p]:leading-[clamp(1.12rem,1.45vw,1.3rem)] [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-2 [&_div.inline-flex]:h-9 [&_div.inline-flex]:w-9 [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4"
                 />
-                <a href="#api-inhalacion" className="group relative flex min-h-[194px] cursor-pointer flex-col items-center justify-between overflow-hidden rounded-[26px] bg-[var(--earth)] p-4 text-center text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] transition-all duration-[300ms] ease-out hover:translate-y-[-6px] hover:brightness-[1.03] hover:shadow-[0_24px_52px_rgba(67,59,38,0.22),0_0_0_1px_rgba(205,179,93,0.16)] active:translate-y-[-3px] active:scale-[0.98] active:transition-transform active:duration-150 md:items-center md:p-5 md:text-center">
+                <a href="/nuestra-historia" className="site-card-interactive group relative flex h-fit min-h-0 flex-col items-center justify-center overflow-hidden bg-[var(--earth)] p-[clamp(0.7rem,1.45vh,0.9rem)] text-center text-white shadow-[0_20px_48px_rgba(67,59,38,0.18)] hover:brightness-[1.03] sm:h-full">
                   <div className="absolute right-0 top-0 h-14 w-14 bg-[radial-gradient(circle,rgba(205,179,93,0.18),transparent_68%)]" />
-                  <div>
-                    <span className="text-[0.7rem] uppercase tracking-[0.22em] text-white/68">Historia familiar</span>
-                    <h3 className="mt-2 font-serif text-[1.38rem] leading-tight transition-all duration-[300ms] group-hover:tracking-[-0.015em]">{featureCards[3].title}</h3>
-                    <p className="mt-2 w-full text-[0.88rem] leading-6 text-white/76 md:mx-auto md:max-w-sm">{featureCards[3].description}</p>
+                  <div className="w-full">
+                    <span className="site-eyebrow text-[var(--gold-on-dark)]">Historia familiar</span>
+                    <h3 className="mt-0.5 font-serif text-[1.3rem] leading-tight transition-all duration-[300ms] group-hover:tracking-[-0.015em]">{featureCards[3].title}</h3>
+                    <p className="mt-1.5 w-full text-[clamp(0.76rem,1.02vw,0.84rem)] leading-[clamp(1.12rem,1.45vw,1.3rem)] text-white/76">
+                      <strong className="mb-0.5 block font-semibold text-white/90">El origen</strong>
+                      {featureCards[3].description}
+                    </p>
                   </div>
-                  <span className="mt-4 inline-flex items-center gap-2 self-center text-[0.84rem] font-semibold text-[var(--olive)] transition-all duration-[300ms] group-hover:translate-x-1 group-hover:text-[var(--gold)] md:mt-3 md:self-center">
-                    Leer más
-                    <MoveRight className="h-4 w-4 transition-transform duration-[300ms] group-hover:translate-x-1" />
+                  <span className="mt-2.5 inline-flex items-center gap-2 self-center text-[0.8rem] font-semibold text-[var(--olive)] transition-all duration-[300ms] group-hover:translate-x-1 group-hover:text-[var(--gold)]">
+                    Conocer nuestra historia
+                    <MoveRight className="h-3.5 w-3.5 transition-transform duration-[300ms] group-hover:translate-x-1" />
                   </span>
                 </a>
               </div>
             </div>
 
-            <article className="relative min-h-[392px] overflow-hidden rounded-[30px] border border-[rgba(67,59,38,0.1)] shadow-[0_24px_60px_rgba(67,59,38,0.1)] md:min-h-[408px]">
+            <article className="site-photo-frame relative min-h-[392px] overflow-hidden border border-[rgba(67,59,38,0.1)] md:min-h-[408px] lg:h-full lg:min-h-0">
               <Image
                 src="/A_2.png"
                 alt="Cabina de AMIELAR entre árboles y naturaleza"
                 fill
-                className="object-cover object-[54%_42%] brightness-[1.03] contrast-[1.04]"
+                className="site-photo-image object-cover object-[54%_42%] brightness-[1.03] contrast-[1.04]"
                 sizes="(max-width: 1280px) 100vw, 42vw"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0)_45%,rgba(18,21,23,0.34)_100%)]" />
@@ -80,7 +92,9 @@ export default function Home() {
                   Naturaleza
                 </span>
                 <p className="mt-2 w-full font-serif text-[1.56rem] leading-[1.05] md:max-w-md md:text-[1.82rem]">
-                  Aire puro, horizonte infinito y un paisaje que devuelve perspectiva.
+                  Aire de colmena, horizonte infinito y una respiración que encuentra
+                  <br />
+                  su propio ritmo.
                 </p>
               </div>
             </article>
@@ -93,13 +107,13 @@ export default function Home() {
         className="section-shell api-shell !items-start !max-w-[1440px] !overflow-hidden !py-2 md:!py-3"
       >
         <div className="flex h-full flex-col rounded-[42px] bg-[linear-gradient(180deg,#f8f4eb_0%,#f1ebdd_100%)] px-5 py-3 md:px-8 md:py-4 xl:px-10">
-          <div className="grid flex-1 gap-5 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
-            <article className="relative min-h-[225px] overflow-hidden rounded-[32px] border border-[rgba(67,59,38,0.1)] shadow-[0_26px_64px_rgba(67,59,38,0.12)] md:min-h-[260px] lg:h-full">
+          <div className="grid flex-1 gap-5 lg:grid-cols-[0.88fr_1.12fr] lg:items-start xl:min-h-0 xl:items-stretch">
+            <article className="site-photo-frame relative min-h-[225px] overflow-hidden border border-[rgba(67,59,38,0.1)] md:min-h-[260px] lg:h-full">
               <Image
                 src="/A_3.png"
                 alt="Personas interactuando con la colmena junto a la cabina de api-inhalacion"
                 fill
-                className="object-cover object-[38%_42%]"
+                className="site-photo-image object-cover object-[38%_42%]"
                 sizes="(max-width: 1024px) 100vw, 45vw"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0)_48%,rgba(18,21,23,0.24)_100%)]" />
@@ -109,14 +123,17 @@ export default function Home() {
               </div>
             </article>
 
-            <div className="flex min-w-0 flex-col items-center lg:h-full lg:items-stretch">
+            <div className="api-content-column flex min-w-0 flex-col items-center lg:h-full lg:items-stretch xl:min-h-0">
               <SectionTitle
                 title="Entrar en la colmena, respirar aire vivo"
-                description="La api-inhalación permite absorber el aire saturado de propóleos, cera y aceites esenciales que las abejas mantienen dentro de su hogar. Es una inmersión en un microclima único de calma y conexión."
+                description="La api-inhalación invita a respirar el microclima de la colmena: un aire cargado de compuestos volátiles provenientes del propóleo, la cera, la miel, el polen, la jalea real, los aceites esenciales y las feromonas de las abejas. Una inmersión sensorial en un ambiente ancestral, construido y preservado por las abejas durante millones de años, donde la respiración, el sonido y la calma se encuentran."
                 align="center"
-                className="w-full max-w-none gap-1.5 [&_h2]:mx-auto [&_h2]:w-full [&_h2]:max-w-none [&_h2]:text-[1.58rem] [&_h2]:leading-[1.02] md:[&_h2]:text-[1.9rem] [&_p]:mx-auto [&_p]:w-full [&_p]:max-w-none [&_p]:text-[0.78rem] [&_p]:leading-[1.3rem] md:[&_p]:text-[0.86rem]"
+                className="api-content-heading w-full max-w-none gap-1.5 [&_h2]:mx-auto [&_h2]:w-full [&_h2]:max-w-none [&_p]:mx-auto [&_p]:w-full [&_p]:max-w-none"
               />
-              <div className="mt-3 grid flex-1 gap-3 sm:grid-cols-2">
+              <p className="api-senses-eyebrow site-eyebrow mx-auto mt-2 text-center text-[var(--olive)]">
+                Una experiencia para todos los sentidos
+              </p>
+              <div className="api-benefits-grid mt-2 grid flex-1 auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {apiBenefits.map((benefit, index) => (
                   <Card
                     key={benefit.title}
@@ -124,13 +141,23 @@ export default function Home() {
                     description={benefit.description}
                     icon={benefit.icon}
                     accent={index === 1 ? "earth" : "gold"}
-                    className="w-full min-h-[180px] items-center p-4 text-center md:min-h-[128px] md:items-center md:p-5 md:text-center [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-[2.25rem] [&_div.inline-flex]:w-[2.25rem] [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4 [&_h3]:text-center [&_h3]:text-[1.12rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.8rem] [&_p]:leading-[1.35rem]"
+                    uniformContentRows
+                    className="api-benefit-card w-full min-h-[180px] items-center p-4 text-center md:min-h-[128px] md:items-center md:p-4 md:text-center [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-3 [&_div.inline-flex]:h-[2.25rem] [&_div.inline-flex]:w-[2.25rem] [&_div.inline-flex>svg]:h-4 [&_div.inline-flex>svg]:w-4 [&_h3]:text-center [&_h3]:text-[1.12rem] [&_h3]:leading-tight [&_p]:mt-2 [&_p]:text-center [&_p]:text-[0.78rem] [&_p]:leading-[1.24rem]"
                     />
                 ))}
               </div>
-              <ReserveLink className="primary-button mx-auto mt-3 flex h-10.5 w-full max-w-[20rem] justify-center px-4.5 py-0 text-[0.82rem] md:inline-flex md:w-auto md:max-w-none">
-                Reservar mi sesión
-              </ReserveLink>
+              <div className="api-benefit-actions mx-auto mt-3 flex w-full max-w-[20rem] flex-col items-stretch justify-center gap-2.5 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center">
+                <SectionLink
+                  href="/aire-de-colmena#experiencias"
+                  className="api-benefit-action primary-button w-full justify-center px-4 text-center text-[0.82rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#be9934]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4efdf] sm:w-auto"
+                >
+                  Ver todas las experiencias
+                  <MoveRight className="h-4 w-4" />
+                </SectionLink>
+                <ReserveLink className="api-benefit-action secondary-button w-full justify-center px-4 text-center text-[0.82rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#be9934]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4efdf] sm:w-auto">
+                  Reservar mi sesión
+                </ReserveLink>
+              </div>
             </div>
           </div>
         </div>
@@ -145,7 +172,7 @@ export default function Home() {
                 title="Productos de la colmena"
                 description="Cosechados con respeto, pensados para extender la experiencia de bienestar con una estética pulida y artesanal."
                 align="center"
-                className="w-full gap-3 [&_h2]:max-w-none [&_h2]:text-[2.25rem] [&_h2]:leading-[1.02] md:[&_h2]:text-[2.65rem] [&_p]:mx-auto [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
+                className="w-full gap-3 [&_h2]:max-w-none [&_p]:mx-auto [&_p]:max-w-none"
               />
               <a
                 href="#contacto"
@@ -177,7 +204,7 @@ export default function Home() {
                 title="Una atmósfera visual más cercana a la maqueta: noble, aireada y serena."
                 description="Combinamos las referencias que nos compartiste con imágenes nuevas para completar la narrativa del paisaje, la cabaña y los productos."
                 align="left"
-                className="gallery-copy mx-auto w-full max-w-[560px] gap-3 !items-center !text-center [&_h2]:mx-auto [&_h2]:max-w-none [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.6rem] [&_p]:mx-auto [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem] xl:!items-start xl:!text-left xl:[&_h2]:mx-0 xl:[&_h2]:max-w-none xl:[&_p]:mx-0"
+                className="gallery-copy mx-auto w-full max-w-[560px] gap-3 !items-center !text-center [&_h2]:mx-auto [&_h2]:max-w-none [&_p]:mx-auto [&_p]:max-w-none xl:!items-start xl:!text-left xl:[&_h2]:mx-0 xl:[&_h2]:max-w-none xl:[&_p]:mx-0"
               />
             </div>
           </div>
@@ -197,11 +224,20 @@ export default function Home() {
               title="Dudas frecuentes antes de tu visita."
               description="Resolvemos las consultas más comunes para que llegues con tranquilidad a tu experiencia."
               align="center"
-                className="w-full max-w-[560px] gap-4 [&_h2]:max-w-none [&_h2]:text-[2.2rem] [&_h2]:leading-[1.04] md:[&_h2]:text-[2.6rem] [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
+                className="w-full max-w-[560px] gap-4 [&_h2]:max-w-none [&_p]:max-w-none"
             />
           </div>
           <div className="flex h-full w-full items-center justify-center">
-            <FAQ items={faqs} />
+            <div className="flex w-full flex-col items-center gap-4">
+              <FaqAccordion items={featuredAireDeColmenaFaqs} variant="landing" />
+              <SectionLink
+                href="/aire-de-colmena#preguntas"
+                className="primary-button justify-center px-5 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#be9934]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf8f1]"
+              >
+                Ver todas las preguntas
+                <MoveRight className="h-4 w-4" />
+              </SectionLink>
+            </div>
           </div>
         </div>
       </section>
@@ -215,7 +251,7 @@ export default function Home() {
                 title="Una ubicación pensada para respirar más lento."
                 description="Arata, La Pampa, se convierte en el telón perfecto para una experiencia de bienestar rural, cuidado artesanal y horizonte abierto."
                 align="center"
-                className="w-full gap-3 [&_h2]:max-w-none [&_h2]:text-[2.2rem] [&_h2]:leading-[1.03] md:[&_h2]:text-[2.55rem] [&_p]:max-w-none [&_p]:text-[0.96rem] [&_p]:leading-7 md:[&_p]:text-[1rem]"
+                className="w-full gap-3 [&_h2]:max-w-none [&_p]:max-w-none"
               />
               <div className="grid w-full gap-3 md:grid-cols-2 lg:gap-4">
                 <Card
@@ -262,12 +298,12 @@ export default function Home() {
           data-reservation-card="true"
           className="reservation-composition mx-auto grid w-full max-w-[1320px] overflow-hidden lg:grid-cols-[0.45fr_0.55fr]"
         >
-          <div className="reservation-image-block order-1 relative min-h-[260px] lg:order-1 lg:min-h-0">
+            <div className="reservation-image-block site-photo-frame order-1 relative min-h-[260px] lg:order-1 lg:min-h-0">
             <Image
               src="/A_13.png"
               alt="Campo pampeano dorado"
               fill
-              className="object-cover object-[50%_44%]"
+              className="site-photo-image object-cover object-[50%_44%]"
               sizes="(max-width: 1024px) 100vw, 45vw"
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0.08)_0%,rgba(18,21,23,0.32)_100%)]" />

@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { SectionLink } from "@/components/SectionLink";
 import { primaryNavLinks } from "@/data/site";
 
 export function Footer() {
@@ -12,9 +13,10 @@ export function Footer() {
           <div className="flex flex-col items-center gap-3 lg:flex-row lg:items-center lg:gap-4">
             <Image
               src="/logo_header_mark.png"
-              alt="AMIELAR"
+              alt=""
               width={252}
               height={193}
+              sizes="(max-width: 767px) 93px, (max-width: 1023px) 101px, 109px"
               className="h-auto w-[5.8rem] shrink-0 object-contain md:w-[6.3rem] lg:w-[6.8rem]"
             />
             <Image
@@ -22,6 +24,7 @@ export function Footer() {
               alt="AMIELAR"
               width={2059}
               height={764}
+              sizes="(max-width: 767px) 166px, (max-width: 1023px) 181px, 207px"
               className="block h-[3.85rem] w-auto max-w-none shrink-0 self-center translate-y-[0.2rem] object-contain md:h-[4.2rem] lg:h-[4.8rem]"
             />
           </div>
@@ -40,13 +43,13 @@ export function Footer() {
 
           <div className="mt-4 space-y-3.5 text-[0.98rem] text-[color:var(--muted-ink)] md:text-[1.02rem]">
             {primaryNavLinks.map((link) => (
-              <a
+              <SectionLink
                 key={`${link.label}-${link.href}`}
                 href={link.href}
-                className="block transition-colors duration-200 hover:text-[var(--olive)]"
+                className="block transition-colors duration-300 hover:text-[var(--olive)]"
               >
                 {link.label}
-              </a>
+              </SectionLink>
             ))}
           </div>
         </div>
@@ -60,7 +63,7 @@ export function Footer() {
           DISEÑO Y DESARROLLO WEB POR{" "}
           <a
             href="mailto:administracion@amielarargentina.com"
-            className="transition-colors duration-200 hover:text-[var(--olive)]"
+            className="transition-colors duration-300 hover:text-[var(--olive)]"
           >
             L-R DIGITAL
           </a>

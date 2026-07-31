@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { EB_Garamond, Montserrat } from "next/font/google";
 
+import { RouteAnchorRestorer } from "@/components/RouteAnchorRestorer";
+
 import "./globals.css";
 
 const garamond = EB_Garamond({
   subsets: ["latin"],
   variable: "--font-garamond",
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const montserrat = Montserrat({
@@ -37,7 +39,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${garamond.variable} ${montserrat.variable}`}>{children}</body>
+      <body className={`${garamond.variable} ${montserrat.variable}`}>
+        <RouteAnchorRestorer />
+        {children}
+      </body>
     </html>
   );
 }
