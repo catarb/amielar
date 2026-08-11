@@ -12,7 +12,7 @@ const links = [
   { id: "introduccion", label: "Descubrí" },
   { id: "experiencias", label: "Experiencias" },
   { id: "informacion-practica", label: "Antes de venir" },
-  { id: "testimonios", label: "Historias" },
+  { id: "testimonios", label: "Testimonios" },
   { id: "preguntas", label: "Preguntas" },
 ] as const;
 

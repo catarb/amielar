@@ -14,8 +14,9 @@ export function Hero() {
               <MapPin className="h-3.5 w-3.5" />
               Arata · La Pampa · Argentina
             </span>
-            <h1 className="site-display-title mt-6 w-full max-w-none text-[var(--earth)] md:mt-7 md:max-w-[10.8ch]">
-              Viví la experiencia de respirar el aire de la colmena
+            <h1 className="hero-main-title site-display-title mt-6 w-full max-w-none text-[var(--earth)] md:mt-7 md:max-w-[10.8ch]">
+              <span className="block whitespace-nowrap">Respirá aire</span>{" "}
+              <span className="block whitespace-nowrap">de colmena</span>
             </h1>
             <p className="mt-4 w-full max-w-none text-[0.98rem] leading-[1.62] text-[color:var(--muted-ink)] md:mt-5 md:max-w-[35rem] md:text-[1rem]">
               Una experiencia rural única, productos de la colmena, historia familiar y turnos de api-inhalación en un entorno natural.

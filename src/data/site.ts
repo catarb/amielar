@@ -132,12 +132,6 @@ export const products: Product[] = [
     whatsappMessage: "¡Hola! Me gustaría recibir información sobre la Miel Pura de AMIELAR.",
   },
   {
-    name: "Propóleos",
-    description: "Extracto noble para acompañar momentos de cuidado y bienestar cotidiano.",
-    image: "/A_6.jpeg",
-    whatsappMessage: "¡Hola! Me gustaría recibir información sobre los Propóleos de AMIELAR.",
-  },
-  {
     name: "Panal de miel",
     description: "Textura natural y sabor directo al origen de la colmena.",
     image: "/A_5.jpeg",
@@ -168,7 +162,7 @@ export const galleryItems: GalleryItem[] = [
   },
   {
     title: "Interior de experiencia",
-    image: "/A_11.jpeg",
+    image: "/A_15.jpeg",
     size: "square",
     note: "Calma y ritual",
     imagePosition: "object-[38%_58%] md:object-[40%_56%]",

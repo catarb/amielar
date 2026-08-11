@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { AirPageHeader } from "@/components/AirPageHeader";
+import { AirHeroMedia } from "@/components/AirHeroMedia";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { Footer } from "@/components/Footer";
 import { ReserveLink } from "@/components/ReserveLink";
@@ -88,7 +89,7 @@ const experiences: Experience[] = [
         position: "object-[50%_48%]",
       },
       {
-        src: "/A_5.jpeg",
+        src: "/A_14.jpeg",
         alt: "Propuesta dulce con miel para el cierre de la experiencia",
         position: "object-center",
       },
@@ -346,14 +347,7 @@ export default function AireDeColmenaPage() {
           </div>
 
           <div className="site-photo-frame relative min-h-[440px] overflow-hidden lg:h-full lg:min-h-0">
-            <Image
-              src="/A_13.png"
-              alt="Personas viviendo la experiencia Aire de Colmena dentro de la cabaña"
-              fill
-              priority
-              className="site-photo-image object-cover object-center"
-              sizes="(max-width: 1024px) 100vw, 53vw"
-            />
+            <AirHeroMedia />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(25,22,16,0.02),rgba(25,22,16,0.16))] lg:bg-[linear-gradient(90deg,rgba(244,239,226,0.12),transparent_20%,rgba(25,22,16,0.08))]" />
           </div>
         </div>
@@ -422,7 +416,7 @@ export default function AireDeColmenaPage() {
           >
             <div className="air-practical-lower-image site-photo-frame relative min-h-[180px] overflow-hidden md:min-h-0">
               <Image
-                src="/A_8.png"
+                src="/A_22.png"
                 alt="Persona realizando una sesión segura de aire de colmena"
                 fill
                 className="site-photo-image object-cover object-[53%_42%]"

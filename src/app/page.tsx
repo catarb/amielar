@@ -133,7 +133,7 @@ export default function Home() {
               <p className="api-senses-eyebrow site-eyebrow mx-auto mt-2 text-center text-[var(--olive)]">
                 Una experiencia para todos los sentidos
               </p>
-              <div className="api-benefits-grid mt-2 grid flex-1 auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="api-benefits-grid mt-2 grid flex-1 auto-rows-fr gap-3 md:grid-cols-2 xl:grid-cols-3">
                 {apiBenefits.map((benefit, index) => (
                   <Card
                     key={benefit.title}
@@ -184,7 +184,7 @@ export default function Home() {
             </div>
           </div>
           <div className="px-0 pb-3 md:mx-0 md:overflow-visible md:px-0 md:pb-0">
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-3">
               {products.map((product) => (
                 <div key={product.name} className="w-full">
                   <ProductCard {...product} className="h-full" />

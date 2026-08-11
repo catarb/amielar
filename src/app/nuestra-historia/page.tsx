@@ -91,10 +91,10 @@ export default function NuestraHistoriaPage() {
 
           <div className="history-chapter-image history-editorial-photo history-viewport-image relative order-1 min-h-[360px] overflow-hidden rounded-[clamp(1.75rem,3vw,2.5rem)] border border-[rgba(67,59,38,0.1)] shadow-[0_24px_60px_rgba(67,59,38,0.1)] sm:min-h-[460px] md:order-2 lg:min-h-[580px]">
             <Image
-              src="/A_2.png"
+              src="/A_17.png"
               alt="Cabaña de AMIELAR integrada al entorno rural"
               fill
-              className="history-editorial-photo-image object-cover object-[54%_42%]"
+              className="history-editorial-photo-image object-cover object-[50%_70%] sm:object-[50%_76%] md:object-[50%_70%]"
               sizes="(max-width: 1024px) 100vw, 54vw"
             />
           </div>
@@ -113,7 +113,7 @@ export default function NuestraHistoriaPage() {
         >
           <div className="history-chapter-image history-editorial-photo history-viewport-image relative min-h-[360px] overflow-hidden rounded-[clamp(1.75rem,3vw,2.5rem)] border border-[rgba(67,59,38,0.1)] shadow-[0_24px_60px_rgba(67,59,38,0.1)] sm:min-h-[460px] lg:min-h-[580px]">
             <Image
-              src="/A_12.png"
+              src="/A_18.png"
               alt="Abejas sobre un panal de la colmena"
               fill
               className="history-editorial-photo-image object-cover object-[52%_48%]"
@@ -186,7 +186,7 @@ export default function NuestraHistoriaPage() {
 
             <div className="history-editorial-photo history-featured-image relative order-1 min-h-[420px] md:order-2 md:min-h-[720px] lg:min-h-[780px]">
               <Image
-                src="/A_5.jpeg"
+                src="/A_20.png"
                 alt="Panal de miel como resultado del proceso apícola"
                 fill
                 className="history-editorial-photo-image object-cover object-center"
@@ -210,7 +210,7 @@ export default function NuestraHistoriaPage() {
         >
           <div className="history-chapter-image history-editorial-photo history-viewport-image relative min-h-[360px] overflow-hidden rounded-[clamp(1.75rem,3vw,2.5rem)] border border-[rgba(67,59,38,0.1)] shadow-[0_24px_60px_rgba(67,59,38,0.1)] sm:min-h-[460px] lg:min-h-[580px]">
             <Image
-              src="/A_13.png"
+              src="/A_19.png"
               alt="Personas viviendo la experiencia actual de AMIELAR"
               fill
               className="history-editorial-photo-image object-cover object-center"
@@ -250,7 +250,7 @@ export default function NuestraHistoriaPage() {
 
           <div className="history-editorial-photo history-today-cta relative min-h-[540px] overflow-hidden rounded-[clamp(2rem,4vw,3rem)] shadow-[0_28px_72px_rgba(67,59,38,0.16)]">
             <Image
-              src="/A_9.png"
+              src="/A_21.png"
               alt="Cabaña de AMIELAR entre el paisaje pampeano al atardecer"
               fill
               className="history-editorial-photo-image object-cover object-[50%_48%]"
