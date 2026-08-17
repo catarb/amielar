@@ -23,7 +23,6 @@ export type Product = {
   description: string;
   image: string;
   imagePosition?: string;
-  whatsappMessage: string;
 };
 
 export type GalleryItem = {
@@ -131,19 +130,16 @@ export const products: Product[] = [
     description: "Cosecha dorada, floral y transparente, pensada para una mesa simple y ritual.",
     image: "/A_4.jpeg",
     imagePosition: "object-[50%_72%] md:object-[50%_48%]",
-    whatsappMessage: "¡Hola! Me gustaría recibir información sobre la Miel Pura de AMIELAR.",
   },
   {
     name: "Panal de miel",
     description: "Textura natural y sabor directo al origen de la colmena.",
     image: "/A_5.jpeg",
-    whatsappMessage: "¡Hola! Me gustaría recibir información sobre el Panal de Miel de AMIELAR.",
   },
   {
     name: "Bálsamo labial",
     description: "Cera de abejas y terminación artesanal en una pieza pequeña y premium.",
     image: "/A_7.png",
-    whatsappMessage: "¡Hola! Me gustaría recibir información sobre el Bálsamo Labial de AMIELAR.",
   },
 ];
 

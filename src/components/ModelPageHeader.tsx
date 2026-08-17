@@ -13,9 +13,6 @@ const links = [
   { id: "que-incluye", label: "Qué incluye" },
 ] as const;
 
-const whatsappMessage =
-  "Hola, quisiera recibir información sobre el modelo para instalar un centro Aire de Colmena AMIELAR.";
-
 export function ModelPageHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -143,7 +140,6 @@ export function ModelPageHeader() {
           <InternalHeaderActions
             homeHref="/"
             primaryLabel="Reservar turno"
-            primaryMessage={whatsappMessage}
           />
 
           <button
@@ -187,7 +183,6 @@ export function ModelPageHeader() {
             <InternalHeaderActions
               homeHref="/"
               primaryLabel="Reservar turno"
-              primaryMessage={whatsappMessage}
               mobile
               onNavigate={() => closeMenu()}
             />

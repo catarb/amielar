@@ -14,8 +14,11 @@ import { ProductCard } from "@/components/ProductCard";
 import { ReserveLink } from "@/components/ReserveLink";
 import { SectionLink } from "@/components/SectionLink";
 import { SectionTitle } from "@/components/SectionTitle";
+import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { featuredAireDeColmenaFaqs } from "@/data/aireDeColmenaFaqs";
 import { apiBenefits, featureCards, galleryItems, products } from "@/data/site";
+
+const productsWhatsappMessage = "Hola, quisiera consultar por los productos de la colmena de AMIELAR.";
 
 export default function Home() {
   return (
@@ -176,13 +179,13 @@ export default function Home() {
                 align="center"
                 className="w-full gap-3 [&_h2]:max-w-none [&_p]:mx-auto [&_p]:max-w-none"
               />
-              <a
-                href="#contacto"
-                className="secondary-button justify-center border-[rgba(67,59,38,0.12)] bg-white/76 px-5 py-3 text-[0.88rem] text-[var(--earth)] shadow-[0_10px_22px_rgba(67,59,38,0.05)] hover:bg-white hover:shadow-[0_14px_28px_rgba(67,59,38,0.08)]"
+              <WhatsAppLink
+                message={productsWhatsappMessage}
+                className="primary-button justify-center px-5 text-center text-[0.88rem]"
               >
-                Ver todos los productos
-                <MoveRight className="h-4 w-4" />
-              </a>
+                Consultar productos
+                <MessageCircleMore className="h-4 w-4" aria-hidden="true" />
+              </WhatsAppLink>
             </div>
           </div>
           <div className="px-0 pb-3 md:mx-0 md:overflow-visible md:px-0 md:pb-0">
