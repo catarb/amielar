@@ -3,6 +3,7 @@
 const RESERVATION_ID = "reserva";
 const HISTORY_ID = "historia";
 const QUESTIONS_ID = "preguntas";
+const MODEL_ID = "modelo-amielar";
 const DESKTOP_MIN_WIDTH = 1024;
 const MOBILE_MAX_WIDTH = 767;
 const DESKTOP_TOP_GAP = 24;
@@ -56,6 +57,8 @@ export function scrollToSection(
       topGap = HISTORY_TOP_GAP;
     } else if (targetId === QUESTIONS_ID) {
       topGap = HISTORY_TOP_GAP;
+    } else if (targetId === MODEL_ID) {
+      topGap = DESKTOP_TOP_GAP;
     } else {
       const availableHeight = viewportHeight - headerHeight;
       const centeredGap = Math.max((availableHeight - sectionHeight) / 2, DESKTOP_TOP_GAP);
@@ -90,7 +93,9 @@ export function scrollToSectionAfterLayout(
   if (typeof window === "undefined") return;
 
   window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => scrollToSection(targetHash, undefined, options));
+    window.requestAnimationFrame(() => {
+      window.setTimeout(() => scrollToSection(targetHash, undefined, options), 360);
+    });
   });
 }
 

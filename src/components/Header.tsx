@@ -103,7 +103,7 @@ export function Header() {
 
   useEffect(() => {
     const closeMenuOnDesktop = () => {
-      if (window.innerWidth >= 1024) {
+      if (window.innerWidth >= 1280) {
         setOpen(false);
       }
     };
@@ -150,7 +150,7 @@ export function Header() {
             />
           </SectionLink>
 
-          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 lg:flex">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1.5 xl:flex">
             {primaryNavLinks.map((link) => {
               const active =
                 pathname === "/" &&
@@ -174,7 +174,7 @@ export function Header() {
             })}
           </nav>
 
-          <div className="hidden shrink-0 items-center gap-2 lg:flex">
+          <div className="hidden shrink-0 items-center gap-2 xl:flex">
             <a
               aria-label="Abrir Instagram de AMIELAR"
               className={SOCIAL_BUTTON_CLASS}
@@ -200,7 +200,7 @@ export function Header() {
             </ReserveLink>
           </div>
 
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-2 xl:hidden">
             <ReserveLink
               className="site-header-action site-header-action-primary !hidden whitespace-nowrap sm:!inline-flex"
             >
@@ -222,7 +222,7 @@ export function Header() {
 
         <div
           id="landing-mobile-menu"
-          className={`site-header-shell mx-auto mt-2 w-[calc(100%-24px)] max-w-[1440px] overflow-hidden border border-[rgba(67,59,38,0.08)] bg-[rgba(251,248,241,0.94)] shadow-[0_18px_40px_rgba(67,59,38,0.06)] backdrop-blur-md transition-all duration-300 ease-out sm:w-[calc(100%-32px)] md:w-[calc(100%-48px)] lg:hidden ${
+          className={`site-header-shell mx-auto mt-2 w-[calc(100%-24px)] max-w-[1440px] overflow-hidden border border-[rgba(67,59,38,0.08)] bg-[rgba(251,248,241,0.94)] shadow-[0_18px_40px_rgba(67,59,38,0.06)] backdrop-blur-md transition-all duration-300 ease-out sm:w-[calc(100%-32px)] md:w-[calc(100%-48px)] xl:hidden ${
             open ? "max-h-[calc(100dvh-7rem)] opacity-100" : "max-h-0 border-transparent opacity-0"
           }`}
           aria-hidden={!open}
@@ -240,6 +240,7 @@ export function Header() {
                   <SectionLink
                     key={`${link.label}-${link.href}`}
                     href={link.href}
+                    afterLayout
                     onNavigate={() => {
                       setActiveHash(link.href);
                       closeMenu();

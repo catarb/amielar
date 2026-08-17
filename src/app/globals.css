@@ -477,6 +477,68 @@ textarea {
   box-shadow: var(--shadow-hover);
 }
 
+.air-gift-section {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(205, 179, 93, 0.055));
+}
+
+.air-gift-shell {
+  isolation: isolate;
+  border: 1px solid rgba(95, 90, 72, 0.12);
+  border-radius: clamp(1.75rem, 3vw, 2.5rem);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 254, 250, 0.98),
+    rgba(247, 243, 233, 0.96)
+  );
+  box-shadow: var(--shadow-md);
+}
+
+.air-gift-visual {
+  border-right: 1px solid rgba(127, 136, 93, 0.16);
+}
+
+.air-gift-image {
+  object-position: 50% 42%;
+}
+
+.air-gift-emblem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(7.5rem, 12vw, 9rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  color: var(--honey-ink);
+  filter: drop-shadow(0 16px 24px rgba(67, 59, 38, 0.1));
+}
+
+.air-gift-emblem::before,
+.air-gift-emblem::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0 50%);
+}
+
+.air-gift-emblem::before {
+  background: linear-gradient(145deg, rgba(215, 183, 75, 0.9), rgba(183, 147, 67, 0.92));
+}
+
+.air-gift-emblem::after {
+  inset: 0.32rem;
+  background: linear-gradient(145deg, rgba(255, 253, 246, 0.98), rgba(244, 239, 226, 0.96));
+}
+
+.air-gift-content {
+  min-width: 0;
+}
+
+.air-gift-copy {
+  text-wrap: pretty;
+}
+
 .air-testimonial-card {
   cursor: default;
   border-radius: var(--radius-card);
@@ -521,13 +583,27 @@ textarea {
 }
 
 #testimonios .air-testimonial-body {
+  align-items: center;
   gap: 0;
+  text-align: center;
 }
 
 #testimonios .air-testimonial-signature {
+  align-items: center;
   margin-top: auto;
   padding-top: 1rem;
   gap: 0.6rem;
+  text-align: center;
+}
+
+#testimonios .air-testimonial-quote-mark {
+  align-self: center;
+}
+
+#testimonios .air-testimonial-quote,
+#testimonios .air-testimonial-author {
+  margin-inline: auto;
+  text-align: center;
 }
 
 .air-testimonial-divider {
@@ -593,23 +669,29 @@ textarea {
 }
 
 .air-faq-trigger {
-  display: flex;
+  display: grid;
   width: 100%;
   min-height: 3.25rem;
   cursor: pointer;
+  grid-template-columns: 1.75rem minmax(0, 1fr) 1.75rem;
   align-items: center;
-  justify-content: space-between;
   gap: 0.9rem;
   border: 0;
   background: transparent;
   padding: 0.7rem 0.9rem 0.7rem 1.05rem;
   color: var(--ink);
-  text-align: left;
+  text-align: center;
   font-size: 0.9rem;
   font-weight: 600;
   line-height: 1.3;
   outline: none;
   transition: color var(--motion-base) ease-out;
+}
+
+.air-faq-trigger::before {
+  content: "";
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .air-faq-trigger:hover {
@@ -675,10 +757,12 @@ textarea {
 
 .air-faq-answer {
   max-width: 62ch;
+  margin-inline: auto;
   padding: 0 1.05rem 1rem;
   color: var(--muted-ink);
   font-size: 0.88rem;
   line-height: 1.55;
+  text-align: center;
 }
 
 @media (min-width: 768px) {
@@ -788,6 +872,19 @@ textarea {
   }
 }
 
+@media (max-width: 1023px) {
+  .air-gift-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .air-gift-visual {
+    height: clamp(16.25rem, 45vw, 21.25rem);
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(127, 136, 93, 0.16);
+  }
+}
+
 .primary-button,
 .secondary-button {
   cursor: pointer;
@@ -835,6 +932,15 @@ textarea {
 
 .secondary-button svg {
   color: var(--olive);
+}
+
+.air-card-action.primary-button {
+  width: 100%;
+  min-height: 3.4rem;
+  justify-content: center;
+  padding-inline: 1rem;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .product-card-action {
@@ -1777,6 +1883,44 @@ textarea {
     margin-inline: auto;
   }
 
+  .model-inclusion-grid {
+    grid-auto-rows: auto;
+    row-gap: 1.25rem;
+  }
+
+  .model-inclusion-card {
+    height: auto;
+    min-height: 0;
+    padding-block: 1rem;
+  }
+
+  .model-inclusion-card > div:first-child {
+    gap: 0.5rem;
+  }
+
+  .model-inclusion-card > h3 {
+    margin-top: 0.875rem;
+  }
+
+  .model-inclusion-card > span {
+    margin-top: 0.625rem;
+  }
+
+  .model-inclusion-card > p {
+    margin-top: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .model-inclusion-card > div:last-child {
+    row-gap: 0.25rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+  }
+
+  .model-inclusion-card > div:last-child > span {
+    padding-block: 0.125rem;
+  }
+
   .gallery-shell .gallery-copy,
   .gallery-shell .gallery-copy-column,
   .gallery-shell .gallery-collage-column,
@@ -2005,16 +2149,17 @@ textarea {
 }
 
 @media (max-width: 767px) {
-  .air-page :is(#introduccion, #experiencias, #informacion-practica, #testimonios, #preguntas, #reservar),
+  .air-page :is(#introduccion, #experiencias, #tarjeta-regalo, #informacion-practica, #testimonios, #preguntas, #reservar),
   .history-page :is(#los-comienzos, #el-legado, #nace-amielar, #hoy) {
     scroll-margin-top: calc(var(--header-offset, 0px) + 1rem);
   }
 
-  .air-page :is(#introduccion, #experiencias, #informacion-practica, #testimonios, #preguntas, #reservar) {
+  .air-page :is(#introduccion, #experiencias, #tarjeta-regalo, #informacion-practica, #testimonios, #preguntas, #reservar) {
     text-align: center;
   }
 
   .air-page #introduccion,
+  .air-page #tarjeta-regalo,
   .air-page #informacion-practica,
   .air-page #preguntas,
   .air-page #reservar,
@@ -2031,6 +2176,7 @@ textarea {
   }
 
   .air-page .air-page-card,
+  .air-page .air-gift-shell,
   .air-page .air-practical-card,
   .air-page .air-practical-lower-card,
   .air-page .air-testimonial-card,
@@ -2043,6 +2189,45 @@ textarea {
   .air-page .air-experience-content {
     align-items: center;
     text-align: center;
+  }
+
+  .air-page .air-gift-section {
+    padding-block: 3.75rem;
+  }
+
+  .air-page .air-gift-content {
+    align-items: center;
+    padding: 2rem 1.25rem 2.25rem;
+    text-align: center;
+  }
+
+  .air-page .air-gift-emblem {
+    width: 6.75rem;
+  }
+
+  .air-page .air-gift-label {
+    justify-content: center;
+    line-height: 1.45;
+  }
+
+  .air-page .air-gift-title,
+  .air-page .air-gift-intro,
+  .air-page .air-gift-copy {
+    width: 100%;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .air-page .air-gift-copy {
+    border-top: 1px solid rgba(190, 153, 52, 0.34);
+    border-left: 0;
+    padding-top: 1rem;
+    padding-left: 0;
+  }
+
+  .air-page .air-gift-action {
+    width: 100%;
+    max-width: 26.25rem;
   }
 
   .air-page .air-experience-media[data-image-count="2"] {
@@ -2066,26 +2251,8 @@ textarea {
     align-items: center;
   }
 
-  .air-page .air-experience-item {
-    width: 100%;
-    max-width: 24rem;
-    grid-template-columns: 1.25rem minmax(0, 1fr) 1.25rem;
-    align-items: start;
-    gap: 0.55rem;
-    text-align: center;
-  }
-
-  .air-page .air-experience-item::after {
-    content: "";
-    width: 1.25rem;
-  }
-
-  .air-page .air-experience-item-icon {
-    margin-top: 0;
-  }
-
-  .air-page .air-experience-item-copy {
-    min-width: 0;
+  .air-page .air-experience-item-heading {
+    max-width: 100%;
   }
 
   .air-page .air-testimonial-body,
@@ -2106,8 +2273,7 @@ textarea {
   }
 
   .air-page .air-faq-trigger {
-    flex-direction: column;
-    justify-content: center;
+    grid-template-columns: 1.75rem minmax(0, 1fr) 1.75rem;
     gap: 0.65rem;
     padding-inline: 1rem;
     text-align: center;
@@ -2220,6 +2386,7 @@ textarea {
 
 @media (max-width: 340px) {
   .air-page #introduccion,
+  .air-page #tarjeta-regalo,
   .air-page #informacion-practica,
   .air-page #preguntas,
   .air-page #reservar,

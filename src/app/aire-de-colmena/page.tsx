@@ -4,6 +4,7 @@ import {
   CalendarDays,
   Check,
   Clock3,
+  Gift,
   Leaf,
   MapPin,
   MessageCircleMore,
@@ -76,7 +77,7 @@ const experiences: Experience[] = [
       },
     ],
     note: "Una experiencia íntima, con cupos reducidos y sin contacto directo con las abejas.",
-    actionLabel: "Reservar esta experiencia",
+    actionLabel: "Consultar disponibilidad",
     action: "reserve",
   },
   {
@@ -127,7 +128,7 @@ const experiences: Experience[] = [
       },
     ],
     note: "La opción al amanecer se ofrece en fechas seleccionadas.",
-    actionLabel: "Consultar fechas",
+    actionLabel: "Consultar disponibilidad",
     action: "whatsapp",
     whatsappMessage:
       "¡Hola! Quisiera consultar las próximas fechas disponibles para la Experiencia Amanecer de AMIELAR.",
@@ -252,28 +253,28 @@ function ExperienceCard({ experience }: { experience: Experience }) {
         ))}
       </div>
 
-      <div className="air-experience-content flex flex-1 flex-col p-[clamp(1.25rem,2.4vw,2rem)] lg:px-6 lg:py-5">
-        <p className="air-experience-duration text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[var(--olive)]">
+      <div className="air-experience-content flex flex-1 flex-col items-center p-[clamp(1.25rem,2.4vw,2rem)] text-center lg:px-6 lg:py-5">
+        <p className="air-experience-duration w-full text-center text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[var(--olive)]">
           {experience.duration}
         </p>
-        <h3 className="air-experience-title site-card-title mt-2 text-[var(--earth)] lg:min-h-10">
+        <h3 className="air-experience-title site-card-title mt-2 flex w-full items-center justify-center text-center text-[var(--earth)] lg:min-h-[3.75rem]">
           {experience.title}
         </h3>
 
-        <div className="air-experience-items mt-6 flex flex-1 flex-col gap-5">
+        <div className="air-experience-items mt-6 flex w-full flex-1 flex-col items-center gap-5">
           {experience.items.map((item) => (
-            <div key={item.title} className="air-experience-item grid grid-cols-[1.25rem_1fr] gap-3">
-              <span className="air-experience-item-icon mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(205,179,93,0.16)] text-[var(--gold-deep)]">
-                <Check className="h-3 w-3" />
-              </span>
-              <div className="air-experience-item-copy">
+            <div key={item.title} className="air-experience-item flex w-full max-w-[24rem] flex-col items-center text-center">
+              <div className="air-experience-item-heading flex items-start justify-center gap-2.5">
+                <span className="air-experience-item-icon mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(205,179,93,0.16)] text-[var(--gold-deep)]">
+                  <Check className="h-3 w-3" />
+                </span>
                 <h4 className="text-[0.92rem] font-semibold leading-6 text-[var(--ink)]">
                   {item.title}
                 </h4>
-                <p className="mt-1 text-[0.84rem] leading-6 text-[color:var(--muted-ink)]">
-                  {item.description}
-                </p>
               </div>
+              <p className="mt-1 text-center text-[0.84rem] leading-6 text-[color:var(--muted-ink)]">
+                {item.description}
+              </p>
             </div>
           ))}
         </div>
@@ -281,7 +282,7 @@ function ExperienceCard({ experience }: { experience: Experience }) {
         <div className="mt-auto pt-6">
           <div className="flex items-end lg:min-h-[6.125rem]">
             {experience.note ? (
-              <p className="air-experience-note w-full rounded-[18px] border border-[rgba(156,160,122,0.18)] bg-[rgba(156,160,122,0.09)] px-4 py-3 text-[0.78rem] leading-6 text-[var(--earth)]">
+              <p className="air-experience-note w-full rounded-[18px] border border-[rgba(156,160,122,0.18)] bg-[rgba(156,160,122,0.09)] px-4 py-3 text-center text-[0.78rem] leading-6 text-[var(--earth)]">
                 {experience.note}
               </p>
             ) : null}
@@ -291,7 +292,7 @@ function ExperienceCard({ experience }: { experience: Experience }) {
             {experience.action === "reserve" ? (
               <ReserveLink className="air-card-action primary-button w-full justify-center text-center">
                 {experience.actionLabel}
-                <MoveRight className="h-4 w-4" />
+                <MessageCircleMore className="h-4 w-4" />
               </ReserveLink>
             ) : (
               <a
@@ -371,6 +372,53 @@ export default function AireDeColmenaPage() {
             {experiences.map((experience) => (
               <ExperienceCard key={experience.title} experience={experience} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="tarjeta-regalo"
+        className="air-gift-section relative z-10 scroll-mt-4 px-6 py-[clamp(3.5rem,7vw,5.5rem)] md:px-8 lg:px-10 xl:px-12"
+      >
+        <div className="air-gift-shell mx-auto grid max-w-[1180px] overflow-hidden lg:grid-cols-[0.82fr_1.18fr]">
+          <div className="air-gift-visual relative min-h-[320px] overflow-hidden">
+            <Image
+              src="/A_22.png"
+              alt="Abejas de la colmena de AMIELAR"
+              fill
+              className="air-gift-image object-cover"
+              sizes="(max-width: 1023px) 100vw, (max-width: 1440px) 41vw, 484px"
+            />
+            <span className="air-gift-emblem z-10 flex items-center justify-center" aria-hidden="true">
+              <Gift className="h-11 w-11" strokeWidth={1.45} />
+            </span>
+          </div>
+
+          <div className="air-gift-content flex flex-col items-center justify-center p-[clamp(2rem,4.5vw,4.25rem)] text-center">
+            <span className="air-gift-label inline-flex items-center gap-2 rounded-full border border-[rgba(205,179,93,0.3)] bg-[rgba(252,247,237,0.92)] px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.19em] text-[var(--honey-ink)]">
+              <Gift className="h-3.5 w-3.5" aria-hidden="true" />
+              Tarjeta de regalo AMIELAR
+            </span>
+            <h2 className="air-gift-title site-section-title mx-auto mt-5 max-w-[13ch] text-center text-[var(--earth)]">
+              Regalá una experiencia diferente
+            </h2>
+            <p className="air-gift-intro mx-auto mt-5 max-w-[43rem] text-center text-[clamp(0.96rem,1.3vw,1.08rem)] leading-[1.72] text-[color:var(--muted-ink)]">
+              Una pausa, un momento de conexión y una experiencia para disfrutar con todos los sentidos. También podés regalar una sesión de Aire de Colmena en AMIELAR.
+            </p>
+            <p className="air-gift-copy mx-auto mt-4 max-w-[40rem] border-t border-[rgba(190,153,52,0.34)] pt-4 text-center text-[0.88rem] leading-6 text-[var(--earth)]">
+              Elegí regalar bienestar, naturaleza y una experiencia fuera de lo cotidiano. Consultanos para preparar tu tarjeta de regalo.
+            </p>
+            <a
+              href={whatsappLink(
+                "Hola, quisiera consultar por una tarjeta de regalo para una experiencia de Aire de Colmena en AMIELAR.",
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="air-gift-action primary-button mx-auto mt-7 justify-center text-center"
+            >
+              Quiero regalar una experiencia
+              <MessageCircleMore className="h-4 w-4" />
+            </a>
           </div>
         </div>
       </section>
@@ -537,10 +585,10 @@ export default function AireDeColmenaPage() {
       >
         <div className="site-photo-frame relative min-h-[540px] overflow-hidden">
           <Image
-            src="/A_2.png"
+            src="/A_19.png"
             alt="Cabaña de AMIELAR en el entorno natural de Arata"
             fill
-            className="site-photo-image object-cover object-[54%_42%]"
+            className="site-photo-image object-cover object-[50%_32%]"
             sizes="(max-width: 1440px) 100vw, 1344px"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(36,33,25,0.78),rgba(36,33,25,0.44)_58%,rgba(36,33,25,0.1))]" />

@@ -3,16 +3,21 @@
 import { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { PENDING_SECTION_KEY, scrollToSection } from "@/lib/scroll-to-reservation";
+import {
+  PENDING_SECTION_KEY,
+  scrollToSection,
+  scrollToSectionAfterLayout,
+} from "@/lib/scroll-to-reservation";
 
 type SectionLinkProps = {
   children: ReactNode;
   className?: string;
   href: string;
+  afterLayout?: boolean;
   onNavigate?: () => void;
 };
 
-export function SectionLink({ children, className, href, onNavigate }: SectionLinkProps) {
+export function SectionLink({ children, className, href, afterLayout = false, onNavigate }: SectionLinkProps) {
   const pathname = usePathname();
   const router = useRouter();
   const isLandingAnchor = href.startsWith("#");
@@ -48,7 +53,11 @@ export function SectionLink({ children, className, href, onNavigate }: SectionLi
           return;
         }
 
-        scrollToSection(targetHash, event);
+        if (afterLayout) {
+          scrollToSectionAfterLayout(targetHash, event);
+        } else {
+          scrollToSection(targetHash, event);
+        }
       }}
     >
       {children}

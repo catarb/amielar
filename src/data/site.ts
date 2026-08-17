@@ -49,6 +49,7 @@ export const primaryNavLinks = [
   { label: "Productos", href: "#productos" },
   { label: "Galería", href: "#galeria" },
   { label: "Preguntas frecuentes", href: "#faq" },
+  { label: "Modelo AMIELAR", href: "#modelo-amielar" },
   { label: "Visítanos", href: "#visitanos" },
 ];
 
@@ -58,6 +59,7 @@ export const mobileNavLinks = [
   { label: "Productos de la colmena", href: "#productos" },
   { label: "Galería", href: "#galeria" },
   { label: "Preguntas frecuentes", href: "#faq" },
+  { label: "Modelo AMIELAR", href: "#modelo-amielar" },
   { label: "Visítanos en Arata", href: "#visitanos" },
 ];
 

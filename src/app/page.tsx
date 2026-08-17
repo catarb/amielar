@@ -1,5 +1,7 @@
 import Image from "next/image";
-import { Mail, MapPin, MessageCircleMore, MoveRight } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, Mail, MapPin, MessageCircleMore, MoveRight } from "lucide-react";
+import { FaInstagram } from "react-icons/fa";
 
 import { BookingForm } from "@/components/BookingForm";
 import { Card } from "@/components/Card";
@@ -198,7 +200,7 @@ export default function Home() {
       <section id="galeria" className="section-shell gallery-shell !py-4 md:!py-5">
         <div className="gallery-balance grid h-full gap-8 xl:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] xl:gap-10">
           <div className="gallery-copy-column flex h-full items-center">
-            <div className="flex w-full justify-center">
+            <div className="flex w-full flex-col items-center justify-center">
               <SectionTitle
                 eyebrow="Galería y experiencia"
                 title="Una atmósfera visual más cercana a la maqueta: noble, aireada y serena."
@@ -206,6 +208,17 @@ export default function Home() {
                 align="left"
                 className="gallery-copy mx-auto w-full max-w-[560px] gap-3 !items-center !text-center [&_h2]:mx-auto [&_h2]:max-w-none [&_p]:mx-auto [&_p]:max-w-none xl:!items-start xl:!text-left xl:[&_h2]:mx-0 xl:[&_h2]:max-w-none xl:[&_p]:mx-0"
               />
+              <a
+                href="https://www.instagram.com/stories/highlights/18472447456098319/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ver AMIELAR por el mundo en Instagram"
+                className="group mt-8 inline-flex max-w-full items-center justify-center gap-2 self-center rounded-full border border-[rgba(67,59,38,0.1)] bg-[rgba(255,255,255,0.58)] px-4 py-2.5 text-center text-[0.82rem] font-semibold text-[var(--olive)] shadow-[0_6px_16px_rgba(67,59,38,0.035)] transition-[transform,color,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:border-[rgba(205,179,93,0.24)] hover:bg-[rgba(255,255,255,0.78)] hover:text-[var(--earth)] hover:shadow-[0_10px_20px_rgba(67,59,38,0.06)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#be9934]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
+              >
+                <FaInstagram className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="whitespace-nowrap">AMIELAR por el mundo</span>
+                <ArrowUpRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+              </a>
             </div>
           </div>
           <div className="gallery-collage-column flex h-full items-center justify-center">
@@ -238,6 +251,42 @@ export default function Home() {
                 <MoveRight className="h-4 w-4" />
               </SectionLink>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="modelo-amielar"
+        aria-labelledby="home-model-title"
+        className="anchor-offset relative z-10 mx-auto max-w-[1440px] px-5 py-[clamp(2.75rem,5vw,4.5rem)] md:px-8 lg:px-10 xl:px-12"
+      >
+        <div className="grid overflow-hidden rounded-[clamp(1.75rem,3vw,2.5rem)] border border-[rgba(67,59,38,0.1)] bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(244,239,226,0.94))] shadow-[0_24px_64px_rgba(67,59,38,0.1)] lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="order-2 flex flex-col items-center justify-center px-6 py-10 text-center sm:px-10 md:py-12 lg:order-1 lg:px-14 lg:py-14">
+            <span className="site-eyebrow text-[var(--olive)]">MODELO AMIELAR</span>
+            <h2 id="home-model-title" className="mt-3 max-w-[17ch] font-serif text-[clamp(2rem,4vw,3.25rem)] leading-[0.98] tracking-[-0.03em] text-[var(--earth)]">
+              ¿Imaginás un centro Aire de Colmena en tu espacio?
+            </h2>
+            <p className="mx-auto mt-5 max-w-[38rem] text-[clamp(0.95rem,1.3vw,1.08rem)] leading-7 text-[color:var(--muted-ink)]">
+              AMIELAR acompaña la creación y puesta en marcha de nuevos centros, integrando infraestructura, equipamiento, capacitación y acompañamiento.
+            </p>
+            <Link
+              href="/tu-centro-amielar"
+              className="secondary-button mt-7 justify-center px-5 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#be9934]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4efdf]"
+            >
+              Conocé el modelo AMIELAR
+              <MoveRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="site-photo-frame relative order-1 min-h-[240px] overflow-hidden border-b border-[rgba(67,59,38,0.1)] lg:order-2 lg:min-h-[360px] lg:border-b-0 lg:border-l">
+            <Image
+              src="/A_2.png"
+              alt="Cabina Aire de Colmena de AMIELAR entre árboles"
+              fill
+              className="site-photo-image object-cover object-[54%_42%]"
+              sizes="(max-width: 1023px) 100vw, 46vw"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,21,23,0.02)_30%,rgba(18,21,23,0.22)_100%)]" />
           </div>
         </div>
       </section>
