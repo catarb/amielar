@@ -9,7 +9,7 @@ const availability = (slots: Array<{ startTime: string; endTime: string }>) =>
   new Response(JSON.stringify({ date: "2026-12-15", timezone: "America/Argentina/Buenos_Aires", experience: "aire-de-colmena", slots }), { status: 200 });
 
 const errorResponse = (code: string, fields?: Record<string, string>) =>
-  new Response(JSON.stringify({ error: { code, fields } }), { status: code === "VALIDATION_ERROR" ? 422 : 409 });
+  new Response(JSON.stringify({ error: { code, fields } }), { status: code === "VALIDATION_ERROR" ? 422 : code === "RATE_LIMITED" ? 429 : 409 });
 
 function chooseDate() {
   fireEvent.change(screen.getByLabelText("Fecha preferida"), { target: { value: "2026-12-15" } });
@@ -90,6 +90,26 @@ describe("BookingForm", () => {
     expect(screen.getByText(/reservado de manera provisoria/)).toBeInTheDocument();
     expect(screen.queryByText("Reserva confirmada")).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenLastCalledWith("/api/reservas", expect.objectContaining({ method: "POST" }));
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body as string).website).toBe("");
+  });
+
+  it("incluye honeypot invisible y muestra RATE_LIMITED sin refrescar disponibilidad", async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(availability([{ startTime: "18:00", endTime: "19:00" }]))
+      .mockResolvedValueOnce(errorResponse("RATE_LIMITED"));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<BookingForm />);
+    const honeypot = document.querySelector('input[name="website"]');
+    expect(honeypot).toHaveValue("");
+    expect(honeypot).toHaveAttribute("aria-hidden", "true");
+    chooseDate();
+    fireEvent.click(await screen.findByRole("button", { name: "18:00" }));
+    fillRequiredFields();
+    fireEvent.click(screen.getByRole("button", { name: "Enviar solicitud" }));
+    expect(await screen.findByText("Hiciste varios intentos seguidos. Esperá unos minutos antes de volver a intentar.")).toBeInTheDocument();
+    expect(screen.getByLabelText("Nombre completo")).toHaveValue("Mar\u00eda P\u00e9rez");
+    expect(screen.getByRole("button", { name: "18:00" })).toHaveAttribute("aria-pressed", "true");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it.each(["SLOT_UNAVAILABLE", "SLOT_BLOCKED", "BOOKING_WINDOW_CLOSED"])("refresca horarios para %s y conserva datos", async (code) => {

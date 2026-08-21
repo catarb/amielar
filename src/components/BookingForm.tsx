@@ -115,6 +115,7 @@ export function BookingForm() {
           locality: values.locality,
           peopleCount: Number(values.peopleCount),
           message: values.message || undefined,
+          website: "",
         }),
       });
       const body = (await response.json()) as { error?: { code?: string; fields?: FieldErrors } };
@@ -128,6 +129,8 @@ export function BookingForm() {
         setSubmitError("Ese horario acaba de dejar de estar disponible. Elegí otro horario.");
         setValues((current) => ({ ...current, startTime: "" }));
         await loadAvailability(values.date);
+      } else if (body.error?.code === "RATE_LIMITED") {
+        setSubmitError("Hiciste varios intentos seguidos. Esperá unos minutos antes de volver a intentar.");
       } else if (body.error?.code === "SLOT_BLOCKED") {
         setSubmitError("Ese horario ya no está disponible. Elegí otro horario.");
         setValues((current) => ({ ...current, startTime: "" }));
@@ -180,6 +183,7 @@ export function BookingForm() {
 
   return (
     <form className="mx-auto flex w-full max-w-[500px] flex-col justify-center space-y-3 lg:space-y-2.25" onSubmit={handleSubmit} noValidate>
+      <input name="website" type="text" value="" readOnly tabIndex={-1} aria-hidden="true" autoComplete="off" className="absolute h-px w-px overflow-hidden opacity-0" />
       <div className="flex flex-col items-center space-y-1 text-center lg:space-y-0.5">
         <h2 className="font-serif text-[1.9rem] italic leading-tight text-[var(--earth)] md:text-[2.05rem] lg:text-[1.95rem]">Reserva de turnos</h2>
         <p className="mx-auto max-w-[32ch] text-[0.88rem] leading-[1.42] text-[color:var(--muted-ink)] md:text-[0.9rem] lg:max-w-[31ch]">

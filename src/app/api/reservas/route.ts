@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 import { ReservationDomainError } from "@/server/domain/reservations/errors";
+import { getClientIp } from "@/server/security/client-ip";
+import {
+  reservationRateLimiter,
+  type RateLimiter,
+} from "@/server/security/rate-limit";
 import { ReservationServiceError } from "@/server/services/reservation-errors";
 import {
   createReservation,
@@ -20,6 +25,23 @@ const INTERNAL_ERROR_RESPONSE = {
   error: { code: "INTERNAL_ERROR", message: "No se pudo procesar la reserva." },
 };
 
+const INVALID_REQUEST_RESPONSE = {
+  error: { code: "INVALID_REQUEST", message: "La solicitud no es válida." },
+};
+
+const PAYLOAD_TOO_LARGE_RESPONSE = {
+  error: { code: "PAYLOAD_TOO_LARGE", message: "La solicitud es demasiado grande." },
+};
+
+const RATE_LIMITED_RESPONSE = {
+  error: {
+    code: "RATE_LIMITED",
+    message: "Se realizaron varios intentos seguidos. Esperá unos minutos antes de volver a intentar.",
+  },
+};
+
+export const MAX_RESERVATION_BODY_BYTES = 16 * 1024;
+
 export async function POST(request: Request): Promise<Response> {
   return handleReservationRequest(request, createReservation);
 }
@@ -27,10 +49,31 @@ export async function POST(request: Request): Promise<Response> {
 export async function handleReservationRequest(
   request: Request,
   saveReservation: (input: CreateReservationInput) => Promise<PublicReservation> = createReservation,
+  limiter: RateLimiter = reservationRateLimiter,
 ): Promise<Response> {
+  const clientIp = getClientIp(request);
+  if (clientIp) {
+    const rateLimit = limiter.check(clientIp);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(RATE_LIMITED_RESPONSE, {
+        status: 429,
+        headers: { "Retry-After": String(rateLimit.retryAfterSeconds) },
+      });
+    }
+  }
+
+  const contentLength = request.headers.get("content-length");
+  if (contentLength && Number.isFinite(Number(contentLength)) && Number(contentLength) > MAX_RESERVATION_BODY_BYTES) {
+    return NextResponse.json(PAYLOAD_TOO_LARGE_RESPONSE, { status: 413 });
+  }
+
   let body: unknown;
   try {
-    body = await request.json();
+    const rawBody = await request.arrayBuffer();
+    if (rawBody.byteLength > MAX_RESERVATION_BODY_BYTES) {
+      return NextResponse.json(PAYLOAD_TOO_LARGE_RESPONSE, { status: 413 });
+    }
+    body = JSON.parse(new TextDecoder().decode(rawBody)) as unknown;
   } catch {
     return NextResponse.json(INVALID_JSON_RESPONSE, { status: 400 });
   }
@@ -41,6 +84,10 @@ export async function handleReservationRequest(
       { error: { code: "VALIDATION_ERROR", fields: toPublicValidationFields(parsed.error) } },
       { status: 422 },
     );
+  }
+
+  if (parsed.data.website?.trim() !== undefined && parsed.data.website.trim() !== "") {
+    return NextResponse.json(INVALID_REQUEST_RESPONSE, { status: 400 });
   }
 
   try {

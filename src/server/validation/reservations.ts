@@ -73,5 +73,6 @@ export const createReservationSchema = z
     locality: normalizedLocality,
     peopleCount: z.number().int().min(1).max(2),
     message: normalizedMessage,
+    website: z.string().max(100).optional(),
   })
   .strict();

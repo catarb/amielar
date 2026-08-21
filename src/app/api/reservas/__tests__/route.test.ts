@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { ReservationDomainError } from "@/server/domain/reservations/errors";
+import { createRateLimiter } from "@/server/security/rate-limit";
 import { ReservationServiceError } from "@/server/services/reservation-errors";
 import { handleReservationRequest } from "../route";
 
@@ -15,6 +16,61 @@ const validBody = {
 };
 
 describe("POST /api/reservas", () => {
+  it("acepta honeypot vacío u omitido y rechaza honeypot completo sin llamar al service", async () => {
+    const save = vi.fn().mockResolvedValue({ reservationId: "id" });
+    const empty = await handleReservationRequest(
+      new Request("http://localhost/api/reservas", { method: "POST", body: JSON.stringify({ ...validBody, website: "" }) }),
+      save,
+    );
+    expect(empty.status).toBe(201);
+
+    const filled = await handleReservationRequest(
+      new Request("http://localhost/api/reservas", { method: "POST", body: JSON.stringify({ ...validBody, website: "https://spam.example" }) }),
+      save,
+    );
+    expect(filled.status).toBe(400);
+    expect(await filled.json()).toEqual({ error: { code: "INVALID_REQUEST", message: "La solicitud no es válida." } });
+    expect(save).toHaveBeenCalledTimes(1);
+  });
+
+  it("rechaza body mayor a 16 KiB sin llamar al service", async () => {
+    const save = vi.fn();
+    const response = await handleReservationRequest(
+      new Request("http://localhost/api/reservas", { method: "POST", body: JSON.stringify({ ...validBody, message: "x".repeat(20_000) }) }),
+      save,
+    );
+    expect(response.status).toBe(413);
+    expect(await response.json()).toEqual({ error: { code: "PAYLOAD_TOO_LARGE", message: "La solicitud es demasiado grande." } });
+    expect(save).not.toHaveBeenCalled();
+  });
+
+  it("rechaza Content-Length excesivo temprano", async () => {
+    const save = vi.fn();
+    const response = await handleReservationRequest(
+      new Request("http://localhost/api/reservas", { method: "POST", headers: { "content-length": "20000" }, body: JSON.stringify(validBody) }),
+      save,
+    );
+    expect(response.status).toBe(413);
+    expect(save).not.toHaveBeenCalled();
+  });
+
+  it("devuelve 429 y Retry-After después del décimo intento por IP", async () => {
+    const limiter = createRateLimiter({ max: 10, now: () => 1000, windowMs: 60_000 });
+    const save = vi.fn().mockResolvedValue({ reservationId: "id" });
+    const request = () => new Request("http://localhost/api/reservas", {
+      method: "POST",
+      headers: { "x-forwarded-for": "203.0.113.10" },
+      body: JSON.stringify(validBody),
+    });
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      expect((await handleReservationRequest(request(), save, limiter)).status).toBe(201);
+    }
+    const response = await handleReservationRequest(request(), save, limiter);
+    expect(response.status).toBe(429);
+    expect(response.headers.get("Retry-After")).toBe("60");
+    expect((await response.json()).error.code).toBe("RATE_LIMITED");
+  });
+
   it("devuelve 400 para JSON inválido", async () => {
     const response = await handleReservationRequest(
       new Request("http://localhost/api/reservas", { method: "POST", body: "{" }),
