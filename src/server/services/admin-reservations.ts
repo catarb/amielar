@@ -91,7 +91,7 @@ function toListItem(row: AdminReservationRow): AdminReservationListItem {
   };
 }
 
-function toDetail(row: AdminReservationRow): AdminReservationDetail {
+export function adminReservationRowToDetail(row: AdminReservationRow): AdminReservationDetail {
   return {
     ...toListItem(row),
     message: row.message,
@@ -131,5 +131,5 @@ export async function getAdminReservationById(
 ): Promise<AdminReservationDetail | null> {
   const dataSource = repository ?? (await getPostgresAdminReservationRepository());
   const row = await dataSource.findById(id);
-  return row ? toDetail(row) : null;
+  return row ? adminReservationRowToDetail(row) : null;
 }

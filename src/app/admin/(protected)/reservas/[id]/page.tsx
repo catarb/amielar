@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { getAdminReservationById } from "@/server/services/admin-reservations";
 import { TIMEZONE, type ReservationStatus } from "@/server/domain/reservations/constants";
+import { AdminReservationActions } from "@/components/AdminReservationActions";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function AdminReservationDetailPage({ params }: Props) {
         <div><dt className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted-ink)]">Recibida</dt><dd className="mt-2 text-lg text-[var(--earth)]">{formatInTimeZone(new Date(reservation.createdAt), TIMEZONE, "dd/MM/yyyy HH:mm")}</dd></div>
       </dl>
       <div className="mt-10 border-t border-[var(--line)] pt-7"><h2 className="font-serif text-3xl text-[var(--ink)]">Mensaje</h2><p className="mt-3 whitespace-pre-wrap text-base leading-7 text-[var(--muted-ink)]">{reservation.message || "Sin mensaje adicional."}</p></div>
+      <AdminReservationActions id={reservation.id} status={reservation.status} />
     </section>
   );
 }

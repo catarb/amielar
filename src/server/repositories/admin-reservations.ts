@@ -1,8 +1,8 @@
-import { and, asc, count, eq, gte, ilike, isNull, lt, or } from "drizzle-orm";
+import { and, asc, count, eq, gte, ilike, isNull, lt, or, sql } from "drizzle-orm";
 
 import { EXPERIENCE_SLUG, RESERVATION_STATUSES, type ReservationStatus } from "@/server/domain/reservations/constants";
 import { reservations } from "@/server/db/schema";
-import type { Database } from "./reservations";
+import type { CreateReservationTransaction, Database } from "./reservations";
 
 export type AdminReservationFilters = {
   status?: ReservationStatus;
@@ -25,6 +25,8 @@ export type AdminReservationRow = {
   confirmedAt: Date | null;
   cancelledAt: Date | null;
 };
+
+export type AdminReservationMutationRow = AdminReservationRow & { deletedAt: Date | null };
 
 export type AdminReservationListResult = {
   rows: AdminReservationRow[];
@@ -63,6 +65,8 @@ const reservationSelection = {
   cancelledAt: reservations.cancelledAt,
 };
 
+const mutationSelection = { ...reservationSelection, deletedAt: reservations.deletedAt };
+
 export function createAdminReservationRepository(database: Database) {
   return {
     async list(filters: AdminReservationFilters): Promise<AdminReservationListResult> {
@@ -94,9 +98,46 @@ export function createAdminReservationRepository(database: Database) {
 
 export type AdminReservationRepository = ReturnType<typeof createAdminReservationRepository>;
 
+export type AdminReservationTransaction = CreateReservationTransaction;
+
+export function createAdminReservationMutationRepository(database: Database) {
+  const readMutation = async (source: Database | AdminReservationTransaction, id: string): Promise<AdminReservationMutationRow | null> => {
+    const [row] = await source
+      .select(mutationSelection)
+      .from(reservations)
+      .where(and(eq(reservations.id, id), eq(reservations.experienceSlug, EXPERIENCE_SLUG)))
+      .limit(1);
+    return (row as AdminReservationMutationRow | undefined) ?? null;
+  };
+
+  return {
+    findMutationById(id: string) { return readMutation(database, id); },
+    findMutationInTransaction(transaction: AdminReservationTransaction, id: string) { return readMutation(transaction, id); },
+    transaction<T>(callback: (transaction: AdminReservationTransaction) => Promise<T>) { return database.transaction(callback); },
+    async updateStatus(transaction: AdminReservationTransaction, id: string, status: ReservationStatus) {
+      const values = status === "CONFIRMADA"
+        ? { status, confirmedAt: sql`now()`, updatedAt: sql`now()` }
+        : { status, cancelledAt: sql`now()`, updatedAt: sql`now()` };
+      const [row] = await transaction.update(reservations).set(values).where(and(eq(reservations.id, id), isNull(reservations.deletedAt))).returning(mutationSelection);
+      return (row as AdminReservationMutationRow | undefined) ?? null;
+    },
+    async softDelete(transaction: AdminReservationTransaction, id: string) {
+      const [row] = await transaction.update(reservations).set({ deletedAt: sql`now()`, updatedAt: sql`now()` }).where(and(eq(reservations.id, id), isNull(reservations.deletedAt))).returning(mutationSelection);
+      return (row as AdminReservationMutationRow | undefined) ?? null;
+    },
+  };
+}
+
+export type AdminReservationMutationRepository = ReturnType<typeof createAdminReservationMutationRepository>;
+
 export async function getPostgresAdminReservationRepository(): Promise<AdminReservationRepository> {
   const { db } = await import("@/server/db/client");
   return createAdminReservationRepository(db);
+}
+
+export async function getPostgresAdminReservationMutationRepository(): Promise<AdminReservationMutationRepository> {
+  const { db } = await import("@/server/db/client");
+  return createAdminReservationMutationRepository(db);
 }
 
 export { RESERVATION_STATUSES };
