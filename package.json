@@ -7,23 +7,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.23.0",
     "next": "^16.2.10",
+    "pg": "^8.23.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-icons": "^5.7.0"
+    "react-icons": "^5.7.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.2",
     "@types/node": "^26.1.0",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.10",
     "tailwindcss": "^4.3.2",
