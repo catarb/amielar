@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 import { AdminLogoutButton } from "@/components/AdminLogoutButton";
 import { getAdminSession } from "@/server/auth/admin-auth";
@@ -19,6 +20,11 @@ export default async function AdminProtectedLayout({ children }: Readonly<{ chil
           </div>
           <AdminLogoutButton />
         </header>
+        <nav aria-label="NavegaciÃ³n administrativa" className="mt-4 flex flex-wrap items-center gap-2 px-1 text-sm font-semibold">
+          <Link href="/admin" className="rounded-full px-4 py-2 text-[var(--earth)] transition hover:bg-white/70">Inicio</Link>
+          <Link href="/admin/reservas" className="rounded-full bg-[rgba(212,162,59,0.14)] px-4 py-2 text-[var(--gold-deep)] transition hover:bg-[rgba(212,162,59,0.22)]">Reservas</Link>
+          <span aria-disabled="true" className="rounded-full px-4 py-2 text-[var(--muted-ink)]/60">Disponibilidad · PrÃ³ximamente</span>
+        </nav>
         <div className="mt-6">{children}</div>
       </div>
     </main>
