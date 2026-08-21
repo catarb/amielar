@@ -59,6 +59,17 @@ export function localSlotToInstant(date: string, startTime: string): Date {
   return instant;
 }
 
+export function localDateToDayRange(date: string): { start: Date; end: Date } {
+  assertValidDate(date);
+  const [year, month, day] = date.split("-").map(Number);
+  const nextDate = new Date(Date.UTC(year, month - 1, day + 1)).toISOString().slice(0, 10);
+
+  return {
+    start: fromZonedTime(`${date} 00:00:00`, TIMEZONE),
+    end: fromZonedTime(`${nextDate} 00:00:00`, TIMEZONE),
+  };
+}
+
 export function instantToLocalSlot(instant: Date): LocalSlot {
   if (!(instant instanceof Date) || Number.isNaN(instant.getTime())) {
     throw new ReservationDomainError("INVALID_DATE", "Invalid instant");
