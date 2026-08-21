@@ -1,6 +1,9 @@
 export const RESERVATION_RATE_LIMIT_MAX = 10;
 export const RESERVATION_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
+export const ADMIN_LOGIN_RATE_LIMIT_MAX = 5;
+export const ADMIN_LOGIN_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+
 type RateLimitEntry = { count: number; resetAt: number };
 
 export type RateLimitResult = {
@@ -59,3 +62,8 @@ export function createRateLimiter(options: {
 // This limiter is intentionally process-local for the current single-instance deployment.
 // It resets on process restart; multiple instances will require shared storage later.
 export const reservationRateLimiter = createRateLimiter();
+
+export const adminLoginRateLimiter = createRateLimiter({
+  max: ADMIN_LOGIN_RATE_LIMIT_MAX,
+  windowMs: ADMIN_LOGIN_RATE_LIMIT_WINDOW_MS,
+});
