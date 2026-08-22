@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { handleAdminReservationDeleteRequest, handleAdminReservationPatchRequest } from "../route";
 import { AdminReservationActionError } from "@/server/services/admin-reservation-actions";
@@ -34,5 +34,12 @@ describe("admin mutation routes", () => {
     expect(patch.status).toBe(200);
     const del = await handleAdminReservationDeleteRequest(new Request(`http://localhost/api/admin/reservas/${id}`, { method: "DELETE", headers: { origin: "https://localhost:3000" } }), id, async () => true, () => true, async () => undefined);
     expect(del.status).toBe(200);
+  });
+  it("rechaza un PATCH sobredimensionado antes del service", async () => {
+    const actionRunner = vi.fn();
+    const response = await handleAdminReservationPatchRequest(request("x".repeat(5000), "https://localhost:3000"), id, async () => true, () => true, actionRunner);
+    expect(response.status).toBe(413);
+    expect((await response.json()).error.code).toBe("PAYLOAD_TOO_LARGE");
+    expect(actionRunner).not.toHaveBeenCalled();
   });
 });

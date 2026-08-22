@@ -8,6 +8,7 @@ import {
   type RateLimiter,
 } from "@/server/security/rate-limit";
 import { ReservationServiceError } from "@/server/services/reservation-errors";
+import { PUBLIC_RESERVATION_BODY_BYTES, readLimitedJson } from "@/server/security/request-body";
 import {
   createReservation,
   type PublicReservation,
@@ -40,7 +41,7 @@ const RATE_LIMITED_RESPONSE = {
   },
 };
 
-export const MAX_RESERVATION_BODY_BYTES = 16 * 1024;
+export const MAX_RESERVATION_BODY_BYTES = PUBLIC_RESERVATION_BODY_BYTES;
 
 export async function POST(request: Request): Promise<Response> {
   return handleReservationRequest(request, createReservation);
@@ -62,21 +63,12 @@ export async function handleReservationRequest(
     }
   }
 
-  const contentLength = request.headers.get("content-length");
-  if (contentLength && Number.isFinite(Number(contentLength)) && Number(contentLength) > MAX_RESERVATION_BODY_BYTES) {
-    return NextResponse.json(PAYLOAD_TOO_LARGE_RESPONSE, { status: 413 });
-  }
-
-  let body: unknown;
-  try {
-    const rawBody = await request.arrayBuffer();
-    if (rawBody.byteLength > MAX_RESERVATION_BODY_BYTES) {
-      return NextResponse.json(PAYLOAD_TOO_LARGE_RESPONSE, { status: 413 });
-    }
-    body = JSON.parse(new TextDecoder().decode(rawBody)) as unknown;
-  } catch {
+  const bodyResult = await readLimitedJson(request, MAX_RESERVATION_BODY_BYTES);
+  if (!bodyResult.ok) {
+    if (bodyResult.reason === "too_large") return NextResponse.json(PAYLOAD_TOO_LARGE_RESPONSE, { status: 413 });
     return NextResponse.json(INVALID_JSON_RESPONSE, { status: 400 });
   }
+  const body = bodyResult.value;
 
   const parsed = createReservationSchema.safeParse(body);
   if (!parsed.success) {

@@ -7,6 +7,7 @@ import { ReservationDomainError } from "@/server/domain/reservations/errors";
 import { isAllowedOrigin } from "@/server/security/origin";
 import { AdminAvailabilityError, createAdminAvailabilityBlock } from "@/server/services/admin-availability";
 import { TIMEZONE } from "@/server/domain/reservations/constants";
+import { ADMIN_BLOCK_BODY_BYTES, readLimitedJson } from "@/server/security/request-body";
 
 const HEADERS = { "Cache-Control": "private, no-store" };
 const schema = z.object({ date: z.string(), startTime: z.string(), endTime: z.string(), reason: z.string().max(200).nullable().optional(), confirmImpact: z.boolean().default(false) }).strict();
@@ -22,8 +23,12 @@ export async function handleAdminBlockCreateRequest(
 ): Promise<Response> {
   if (!(await authenticate())) return errorResponse("UNAUTHORIZED", "No autorizado.", 401);
   if (!originCheck(request)) return errorResponse("CSRF_VALIDATION_FAILED", "La solicitud no es válida.", 403);
-  let body: unknown;
-  try { body = await request.json(); } catch { return errorResponse("INVALID_JSON", "La solicitud no es válida.", 400); }
+  const bodyResult = await readLimitedJson(request, ADMIN_BLOCK_BODY_BYTES);
+  if (!bodyResult.ok) {
+    if (bodyResult.reason === "too_large") return errorResponse("PAYLOAD_TOO_LARGE", "La solicitud es demasiado grande.", 413);
+    return errorResponse("INVALID_JSON", "La solicitud no es válida.", 400);
+  }
+  const body = bodyResult.value;
   const parsed = schema.safeParse(body);
   if (!parsed.success) return errorResponse("VALIDATION_ERROR", "La solicitud no es válida.", 422);
   try {

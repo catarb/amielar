@@ -24,4 +24,12 @@ describe("POST admin bloqueos", () => {
     expect(response.status).toBe(201);
     expect(create).toHaveBeenCalledWith({ date: "2026-12-15", startTime: "18:00", endTime: "19:00", reason: null, confirmImpact: false });
   });
+
+  it("rechaza un body sobredimensionado antes del service", async () => {
+    const create = vi.fn();
+    const response = await handleAdminBlockCreateRequest(bodyRequest("x".repeat(9000)), async () => true, () => true, create);
+    expect(response.status).toBe(413);
+    expect((await response.json()).error.code).toBe("PAYLOAD_TOO_LARGE");
+    expect(create).not.toHaveBeenCalled();
+  });
 });

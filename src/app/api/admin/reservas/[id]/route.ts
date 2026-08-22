@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { isAdminAuthenticated } from "@/server/auth/admin-auth";
 import { isAllowedOrigin } from "@/server/security/origin";
+import { ADMIN_RESERVATION_ACTION_BODY_BYTES, readLimitedJson } from "@/server/security/request-body";
 import { z } from "zod";
 import {
   AdminReservationActionError,
@@ -15,7 +16,7 @@ const NO_STORE_HEADERS = { "Cache-Control": "private, no-store" };
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const actionSchema = z.object({ action: z.enum(["confirm", "cancel"]) }).strict();
 
-const csrfResponse = () => NextResponse.json({ error: { code: "CSRF_VALIDATION_FAILED", message: "La solicitud no es vÃ¡lida." } }, { status: 403, headers: NO_STORE_HEADERS });
+const csrfResponse = () => NextResponse.json({ error: { code: "CSRF_VALIDATION_FAILED", message: "La solicitud no es válida." } }, { status: 403, headers: NO_STORE_HEADERS });
 const notFoundResponse = () => NextResponse.json({ error: { code: "RESERVATION_NOT_FOUND", message: "La reserva no existe." } }, { status: 404, headers: NO_STORE_HEADERS });
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }): Promise<Response> {
@@ -43,12 +44,15 @@ export async function handleAdminReservationPatchRequest(
 ): Promise<Response> {
   if (!(await authenticate())) return NextResponse.json({ error: { code: "UNAUTHORIZED", message: "No autorizado." } }, { status: 401, headers: NO_STORE_HEADERS });
   if (!originCheck(request)) return csrfResponse();
-  if (!UUID_PATTERN.test(id)) return NextResponse.json({ error: { code: "INVALID_RESERVATION_ID", message: "El identificador no es vÃ¡lido." } }, { status: 400, headers: NO_STORE_HEADERS });
+  if (!UUID_PATTERN.test(id)) return NextResponse.json({ error: { code: "INVALID_RESERVATION_ID", message: "El identificador no es válido." } }, { status: 400, headers: NO_STORE_HEADERS });
 
-  let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: { code: "INVALID_JSON", message: "La solicitud no es vÃ¡lida." } }, { status: 400, headers: NO_STORE_HEADERS }); }
-  const parsed = actionSchema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: { code: "VALIDATION_ERROR", message: "La solicitud no es vÃ¡lida." } }, { status: 422, headers: NO_STORE_HEADERS });
+  const bodyResult = await readLimitedJson(request, ADMIN_RESERVATION_ACTION_BODY_BYTES);
+  if (!bodyResult.ok) {
+    if (bodyResult.reason === "too_large") return NextResponse.json({ error: { code: "PAYLOAD_TOO_LARGE", message: "La solicitud es demasiado grande." } }, { status: 413, headers: NO_STORE_HEADERS });
+    return NextResponse.json({ error: { code: "INVALID_JSON", message: "La solicitud no es válida." } }, { status: 400, headers: NO_STORE_HEADERS });
+  }
+  const parsed = actionSchema.safeParse(bodyResult.value);
+  if (!parsed.success) return NextResponse.json({ error: { code: "VALIDATION_ERROR", message: "La solicitud no es válida." } }, { status: 422, headers: NO_STORE_HEADERS });
 
   try {
     const result = parsed.data.action === "confirm" ? await actionRunner(id) : await cancelRunner(id);
@@ -72,7 +76,7 @@ export async function handleAdminReservationDeleteRequest(
 ): Promise<Response> {
   if (!(await authenticate())) return NextResponse.json({ error: { code: "UNAUTHORIZED", message: "No autorizado." } }, { status: 401, headers: NO_STORE_HEADERS });
   if (!originCheck(request)) return csrfResponse();
-  if (!UUID_PATTERN.test(id)) return NextResponse.json({ error: { code: "INVALID_RESERVATION_ID", message: "El identificador no es vÃ¡lido." } }, { status: 400, headers: NO_STORE_HEADERS });
+  if (!UUID_PATTERN.test(id)) return NextResponse.json({ error: { code: "INVALID_RESERVATION_ID", message: "El identificador no es válido." } }, { status: 400, headers: NO_STORE_HEADERS });
 
   try {
     await deleteRunner(id);
@@ -91,7 +95,7 @@ export async function handleAdminReservationDetailRequest(
   findById: typeof getAdminReservationById = getAdminReservationById,
 ): Promise<Response> {
   if (!(await authenticate())) return NextResponse.json({ error: { code: "UNAUTHORIZED", message: "No autorizado." } }, { status: 401, headers: NO_STORE_HEADERS });
-  if (!UUID_PATTERN.test(id)) return NextResponse.json({ error: { code: "INVALID_RESERVATION_ID", message: "El identificador no es vÃ¡lido." } }, { status: 400, headers: NO_STORE_HEADERS });
+  if (!UUID_PATTERN.test(id)) return NextResponse.json({ error: { code: "INVALID_RESERVATION_ID", message: "El identificador no es válido." } }, { status: 400, headers: NO_STORE_HEADERS });
 
   try {
     const reservation = await findById(id);

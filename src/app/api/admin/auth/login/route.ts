@@ -8,6 +8,7 @@ import {
   adminLoginRateLimiter,
   type RateLimiter,
 } from "@/server/security/rate-limit";
+import { ADMIN_LOGIN_BODY_BYTES, readLimitedJson } from "@/server/security/request-body";
 
 const loginSchema = z.object({
   username: z.string().min(1).max(100),
@@ -38,12 +39,14 @@ export async function handleAdminLoginRequest(
     }
   }
 
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
+  const bodyResult = await readLimitedJson(request, ADMIN_LOGIN_BODY_BYTES);
+  if (!bodyResult.ok) {
+    if (bodyResult.reason === "too_large") {
+      return NextResponse.json({ error: { code: "PAYLOAD_TOO_LARGE", message: "La solicitud es demasiado grande." } }, { status: 413 });
+    }
     return NextResponse.json({ error: { code: "INVALID_JSON", message: "La solicitud no es vÃ¡lida." } }, { status: 400 });
   }
+  const body = bodyResult.value;
 
   const parsed = loginSchema.safeParse(body);
   if (!parsed.success) {

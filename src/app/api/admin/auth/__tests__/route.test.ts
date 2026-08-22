@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { handleAdminLoginRequest } from "../login/route";
 import { POST as logout } from "../logout/route";
@@ -50,6 +50,15 @@ describe("admin auth routes", () => {
     const response = await handleAdminLoginRequest(request({ username: "admin-test", password: "wrong" }), authenticate, limiter);
     expect(response.status).toBe(429);
     expect(response.headers.get("retry-after")).toBeTruthy();
+  });
+
+  it("rechaza cuerpos sobredimensionados antes de autenticar", async () => {
+    const authenticate = vi.fn().mockResolvedValue("token");
+    const oversizedByHeader = new Request("http://localhost/api/admin/auth/login", { method: "POST", headers: { "content-length": "5000" }, body: "{}" });
+    const oversizedInBytes = new Request("http://localhost/api/admin/auth/login", { method: "POST", body: "x".repeat(5000) });
+    expect((await handleAdminLoginRequest(oversizedByHeader, authenticate)).status).toBe(413);
+    expect((await handleAdminLoginRequest(oversizedInBytes, authenticate)).status).toBe(413);
+    expect(authenticate).not.toHaveBeenCalled();
   });
 
   it("falla cerradamente cuando falta configuraciÃ³n", async () => {
