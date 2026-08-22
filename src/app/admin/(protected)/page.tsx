@@ -15,10 +15,10 @@ export default function AdminPage() {
           <p className="text-sm font-semibold text-[var(--earth)]">Reservas</p>
           <p className="mt-2 text-sm leading-6 text-[var(--muted-ink)]">Gestionar reservas reales.</p>
         </Link>
-        <div className="rounded-3xl border border-[rgba(67,59,38,0.1)] bg-white/55 p-5">
+        <Link href="/admin/disponibilidad" className="rounded-3xl border border-[rgba(67,59,38,0.1)] bg-white/55 p-5 transition hover:border-[rgba(190,153,52,0.4)] hover:bg-white/80">
           <p className="text-sm font-semibold text-[var(--earth)]">Disponibilidad</p>
-          <p className="mt-2 text-sm leading-6 text-[var(--muted-ink)]">PrÃ³ximamente.</p>
-        </div>
+          <p className="mt-2 text-sm leading-6 text-[var(--muted-ink)]">Consultar y gestionar bloqueos de horarios.</p>
+        </Link>
       </div>
     </section>
   );

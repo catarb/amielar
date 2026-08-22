@@ -19,3 +19,13 @@ export async function acquireSlotAdvisoryLock(
     sql`select pg_advisory_xact_lock(hashtextextended(${lockKey}, 0))`,
   );
 }
+
+export async function acquireSlotAdvisoryLocks(
+  transaction: CreateReservationTransaction,
+  experienceSlug: string,
+  slotStarts: readonly Date[],
+): Promise<void> {
+  const ordered = [...new Map(slotStarts.map((slot) => [createReservationLockKey(experienceSlug, slot), slot])).values()]
+    .sort((a, b) => a.getTime() - b.getTime());
+  for (const slotStart of ordered) await acquireSlotAdvisoryLock(transaction, experienceSlug, slotStart);
+}
