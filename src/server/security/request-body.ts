@@ -2,6 +2,7 @@ export const PUBLIC_RESERVATION_BODY_BYTES = 16 * 1024;
 export const ADMIN_LOGIN_BODY_BYTES = 4 * 1024;
 export const ADMIN_RESERVATION_ACTION_BODY_BYTES = 4 * 1024;
 export const ADMIN_BLOCK_BODY_BYTES = 8 * 1024;
+export const ADMIN_RESERVATION_CREATE_BODY_BYTES = 8 * 1024;
 
 export type LimitedJsonResult<T> =
   | { ok: true; value: T }

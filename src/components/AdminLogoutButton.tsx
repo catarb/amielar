@@ -27,7 +27,7 @@ export function AdminLogoutButton() {
       className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[rgba(67,59,38,0.13)] bg-white/70 px-5 text-sm font-semibold text-[var(--earth)] transition hover:bg-white disabled:cursor-wait disabled:opacity-60"
     >
       <LogOut className="h-4 w-4" />
-      {isLoggingOut ? "Cerrando..." : "Cerrar sesiÃ³n"}
+      {isLoggingOut ? "Cerrando..." : "Cerrar sesión"}
     </button>
   );
 }

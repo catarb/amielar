@@ -350,7 +350,7 @@ export default function Home() {
           data-reservation-card="true"
           className="reservation-composition mx-auto grid w-full max-w-[1320px] overflow-hidden lg:grid-cols-[0.45fr_0.55fr]"
         >
-            <div className="reservation-image-block site-photo-frame order-1 relative min-h-[260px] lg:order-1 lg:min-h-0">
+            <div className="reservation-image-block site-photo-frame order-1 relative min-h-[260px] lg:order-1 lg:h-full lg:min-h-0">
             <Image
               src="/A_13.png"
               alt="Campo pampeano dorado"
@@ -376,7 +376,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="reservation-form-wrap order-2 flex items-center justify-center px-5 py-6 md:px-7 md:py-6 lg:order-2 lg:px-8 lg:py-5 xl:px-9">
+          <div className="reservation-form-wrap order-2 flex items-center justify-center px-5 py-6 md:px-7 md:py-6 lg:order-2 lg:px-8 lg:py-3 xl:px-9">
             <BookingForm />
           </div>
         </div>

@@ -1,26 +1,27 @@
 import { and, eq, gt, isNull, lt } from "drizzle-orm";
 
-import { ACTIVE_RESERVATION_STATUSES, EXPERIENCE_SLUG } from "@/server/domain/reservations/constants";
+import { ACTIVE_RESERVATION_STATUSES } from "@/server/domain/reservations/constants";
+import type { ExperienceSlug } from "@/server/domain/reservations/experiences";
 import { availabilityBlocks, reservations } from "@/server/db/schema";
 
 export type Database = typeof import("@/server/db/client").db;
 export type CreateReservationTransaction = Parameters<Parameters<Database["transaction"]>[0]>[0];
 
 export type ReservationInsert = {
-  experienceSlug: typeof EXPERIENCE_SLUG;
+  experienceSlug: ExperienceSlug;
   slotStart: Date;
   fullName: string;
   phone: string;
   locality: string;
   peopleCount: number;
   message: string | null;
-  status: "PENDIENTE_PAGO";
+  status: "PENDIENTE_PAGO" | "CONFIRMADA";
+  confirmedAt?: Date | null;
 };
 
 export type ReservationWriteRepository = {
   hasActiveReservationForSlot: (
     transaction: CreateReservationTransaction,
-    experienceSlug: typeof EXPERIENCE_SLUG,
     slotStart: Date,
   ) => Promise<boolean>;
   hasBlockingAvailabilityBlock: (
@@ -36,13 +37,12 @@ export type ReservationWriteRepository = {
 
 export function createReservationWriteRepository(): ReservationWriteRepository {
   return {
-    async hasActiveReservationForSlot(transaction, experienceSlug, slotStart) {
+    async hasActiveReservationForSlot(transaction, slotStart) {
       const rows = await transaction
         .select({ id: reservations.id })
         .from(reservations)
         .where(
           and(
-            eq(reservations.experienceSlug, experienceSlug),
             eq(reservations.slotStart, slotStart),
             isNull(reservations.deletedAt),
             eq(reservations.status, ACTIVE_RESERVATION_STATUSES[0]),
@@ -57,7 +57,6 @@ export function createReservationWriteRepository(): ReservationWriteRepository {
         .from(reservations)
         .where(
           and(
-            eq(reservations.experienceSlug, experienceSlug),
             eq(reservations.slotStart, slotStart),
             isNull(reservations.deletedAt),
             eq(reservations.status, ACTIVE_RESERVATION_STATUSES[1]),

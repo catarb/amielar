@@ -1,7 +1,4 @@
-import {
-  EXPERIENCE_SLUG,
-  TIMEZONE,
-} from "@/server/domain/reservations/constants";
+import { TIMEZONE } from "@/server/domain/reservations/constants";
 import {
   localDateToDayRange,
   assertValidDate,
@@ -18,7 +15,6 @@ import {
 export type PublicAvailability = {
   date: string;
   timezone: typeof TIMEZONE;
-  experience: typeof EXPERIENCE_SLUG;
   slots: Array<Pick<ReservationSlot, "startTime" | "endTime">>;
 };
 
@@ -43,7 +39,6 @@ export async function getAvailabilityForDate(
   return {
     date,
     timezone: TIMEZONE,
-    experience: EXPERIENCE_SLUG,
     slots: slots.map(({ startTime, endTime }) => ({ startTime, endTime })),
   };
 }

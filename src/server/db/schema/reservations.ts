@@ -37,7 +37,7 @@ export const reservations = pgTable(
     deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
-    check("reservations_experience_slug_check", sql`${table.experienceSlug} = 'aire-de-colmena'`),
+    check("reservations_experience_slug_check", sql`${table.experienceSlug} in ('aire-de-colmena', 'amanecer', 'aire-de-colmena-ninos')`),
     check(
       "reservations_slot_start_hour_check",
       sql`date_trunc('hour', ${table.slotStart} AT TIME ZONE 'America/Argentina/Buenos_Aires') = ${table.slotStart} AT TIME ZONE 'America/Argentina/Buenos_Aires'`,
@@ -50,7 +50,7 @@ export const reservations = pgTable(
     index("reservations_status_idx").on(table.status),
     index("reservations_deleted_at_idx").on(table.deletedAt),
     uniqueIndex("reservations_active_slot_unique_idx")
-      .on(table.experienceSlug, table.slotStart)
+      .on(table.slotStart)
       .where(sql`${table.deletedAt} is null and ${table.status} in ('PENDIENTE_PAGO', 'CONFIRMADA')`),
   ],
 );

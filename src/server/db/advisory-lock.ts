@@ -3,18 +3,19 @@ import { sql } from "drizzle-orm";
 import type { CreateReservationTransaction } from "@/server/repositories/reservations";
 
 export function createReservationLockKey(
-  experienceSlug: string,
   slotStart: Date,
 ): string {
-  return `${experienceSlug}:${slotStart.toISOString()}`;
+  return `amielar-calendar:${slotStart.toISOString()}`;
 }
 
 export async function acquireSlotAdvisoryLock(
   transaction: CreateReservationTransaction,
-  experienceSlug: string,
-  slotStart: Date,
+  slotStartOrExperience: Date | string,
+  maybeSlotStart?: Date,
 ): Promise<void> {
-  const lockKey = createReservationLockKey(experienceSlug, slotStart);
+  const slotStart = maybeSlotStart ?? slotStartOrExperience;
+  if (typeof slotStart === "string") throw new Error("A slot start is required.");
+  const lockKey = createReservationLockKey(slotStart);
   await transaction.execute(
     sql`select pg_advisory_xact_lock(hashtextextended(${lockKey}, 0))`,
   );
@@ -22,10 +23,12 @@ export async function acquireSlotAdvisoryLock(
 
 export async function acquireSlotAdvisoryLocks(
   transaction: CreateReservationTransaction,
-  experienceSlug: string,
-  slotStarts: readonly Date[],
+  slotStartsOrExperience: readonly Date[] | string,
+  maybeSlotStarts?: readonly Date[],
 ): Promise<void> {
-  const ordered = [...new Map(slotStarts.map((slot) => [createReservationLockKey(experienceSlug, slot), slot])).values()]
+  const slotStarts = maybeSlotStarts ?? slotStartsOrExperience;
+  if (typeof slotStarts === "string") throw new Error("Slot starts are required.");
+  const ordered = [...new Map(slotStarts.map((slot) => [createReservationLockKey(slot), slot])).values()]
     .sort((a, b) => a.getTime() - b.getTime());
-  for (const slotStart of ordered) await acquireSlotAdvisoryLock(transaction, experienceSlug, slotStart);
+  for (const slotStart of ordered) await acquireSlotAdvisoryLock(transaction, slotStart);
 }

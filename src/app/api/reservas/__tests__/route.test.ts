@@ -6,6 +6,7 @@ import { ReservationServiceError } from "@/server/services/reservation-errors";
 import { handleReservationRequest } from "../route";
 
 const validBody = {
+  experienceSlug: "aire-de-colmena",
   date: "2026-12-15",
   startTime: "18:00",
   fullName: "María Pérez",
@@ -117,6 +118,7 @@ describe("POST /api/reservas", () => {
       vi.fn().mockResolvedValue({
         reservationId: "uuid",
         status: "PENDIENTE_PAGO",
+        experienceSlug: "aire-de-colmena",
         date: "2026-12-15",
         startTime: "18:00",
         endTime: "19:00",
@@ -128,6 +130,7 @@ describe("POST /api/reservas", () => {
     expect(await response.json()).toEqual({
       reservationId: "uuid",
       status: "PENDIENTE_PAGO",
+      experienceSlug: "aire-de-colmena",
       date: "2026-12-15",
       startTime: "18:00",
       endTime: "19:00",

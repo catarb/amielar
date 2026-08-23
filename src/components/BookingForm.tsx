@@ -2,9 +2,13 @@
 
 import { useCallback, useRef, useState } from "react";
 
+import { WhatsAppLink } from "@/components/WhatsAppLink";
+import { EXPERIENCES, getExperienceLabel } from "@/server/domain/reservations/experiences";
+
 type AvailabilitySlot = { startTime: string; endTime: string };
 type FieldErrors = Record<string, string>;
 type FormValues = {
+  experienceSlug: string;
   date: string;
   startTime: string;
   fullName: string;
@@ -15,6 +19,7 @@ type FormValues = {
 };
 
 const INITIAL_VALUES: FormValues = {
+  experienceSlug: "",
   date: "",
   startTime: "",
   fullName: "",
@@ -82,6 +87,7 @@ export function BookingForm() {
 
   function validateForm(): FieldErrors {
     const errors: FieldErrors = {};
+    if (!values.experienceSlug) errors.experienceSlug = "Elegí una experiencia.";
     if (!values.date) errors.date = "Elegí una fecha.";
     if (!values.startTime) errors.startTime = "Elegí un horario disponible.";
     if (!values.fullName.trim()) errors.fullName = "Ingresá tu nombre completo.";
@@ -108,6 +114,7 @@ export function BookingForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          experienceSlug: values.experienceSlug,
           date: values.date,
           startTime: values.startTime,
           fullName: values.fullName,
@@ -163,26 +170,44 @@ export function BookingForm() {
   }
 
   if (success) {
+    const experienceLabel = getExperienceLabel(values.experienceSlug);
+    const whatsappMessage = [
+      "Hola, quería continuar con mi solicitud de reserva de AMIELAR.",
+      "",
+      `Experiencia: ${experienceLabel}`,
+      `Nombre: ${values.fullName}`,
+      `Fecha: ${values.date}`,
+      `Horario: ${values.startTime}`,
+      `Personas: ${values.peopleCount}`,
+      `Localidad: ${values.locality}`,
+      `Teléfono: ${values.phone}`,
+      values.message ? `Mensaje adicional: ${values.message}` : "",
+      "",
+      "Quisiera coordinar el valor, la forma de pago y los demás detalles.",
+    ].filter(Boolean).join("\n");
+
     return (
-      <section className="mx-auto flex w-full max-w-[500px] flex-col justify-center space-y-3 text-center" aria-live="polite">
+      <section className="reservation-success-state mx-auto flex w-full max-w-[500px] flex-col justify-center space-y-3 text-center" aria-live="polite">
         <div className="rounded-[1.25rem] border border-[rgba(164,131,53,0.2)] bg-[rgba(255,252,244,0.82)] p-5 shadow-[0_10px_25px_rgba(80,58,28,0.06)]">
           <h2 className="font-serif text-[1.9rem] italic leading-tight text-[var(--earth)]">¡Recibimos tu reserva!</h2>
           <p className="mt-3 text-[0.92rem] leading-[1.5] text-[color:var(--muted-ink)]">
-            El horario quedó reservado de manera provisoria. Nos vamos a comunicar con vos para enviarte la información de pago. Una vez acreditado el pago, tu turno quedará confirmado.
+            Tu solicitud quedó registrada. Continuá por WhatsApp para coordinar el valor, la forma de pago y los detalles de la experiencia.
           </p>
-          <dl className="mx-auto mt-4 grid max-w-[280px] grid-cols-3 gap-2 text-left text-[0.78rem] text-[color:var(--muted-ink)]">
+          <dl className="mx-auto mt-4 grid max-w-[360px] grid-cols-2 gap-2 text-left text-[0.78rem] text-[color:var(--muted-ink)] sm:grid-cols-4">
+            <div><dt className="font-semibold text-[var(--earth)]">Experiencia</dt><dd>{experienceLabel}</dd></div>
             <div><dt className="font-semibold text-[var(--earth)]">Fecha</dt><dd>{values.date}</dd></div>
             <div><dt className="font-semibold text-[var(--earth)]">Horario</dt><dd>{values.startTime}</dd></div>
             <div><dt className="font-semibold text-[var(--earth)]">Personas</dt><dd>{values.peopleCount}</dd></div>
           </dl>
         </div>
+        <WhatsAppLink message={whatsappMessage} className="primary-button mx-auto w-full justify-center">Continuar por WhatsApp</WhatsAppLink>
         <button type="button" className="secondary-button mx-auto w-full justify-center" onClick={resetForm}>Hacer otra reserva</button>
       </section>
     );
   }
 
   return (
-    <form className="mx-auto flex w-full max-w-[500px] flex-col justify-center space-y-3 lg:space-y-2.25" onSubmit={handleSubmit} noValidate>
+    <form className="mx-auto flex w-full max-w-[500px] flex-col justify-center space-y-3 lg:space-y-1.5" onSubmit={handleSubmit} noValidate>
       <input name="website" type="text" value="" readOnly tabIndex={-1} aria-hidden="true" autoComplete="off" className="absolute h-px w-px overflow-hidden opacity-0" />
       <div className="flex flex-col items-center space-y-1 text-center lg:space-y-0.5">
         <h2 className="font-serif text-[1.9rem] italic leading-tight text-[var(--earth)] md:text-[2.05rem] lg:text-[1.95rem]">Reserva de turnos</h2>
@@ -191,15 +216,28 @@ export function BookingForm() {
         </p>
       </div>
 
+      <Field label="¿Qué experiencia te interesa?" id="reservation-experience" error={fieldErrors.experienceSlug}>
+        <select id="reservation-experience" value={values.experienceSlug} onChange={(event) => updateValue("experienceSlug", event.target.value)} aria-invalid={Boolean(fieldErrors.experienceSlug)} aria-describedby={fieldErrors.experienceSlug ? "reservation-experience-error" : undefined} required>
+          <option value="">Elegí una experiencia</option>
+          {EXPERIENCES.map((experience) => <option key={experience.slug} value={experience.slug}>{experience.label}</option>)}
+        </select>
+      </Field>
+
       <div className="grid gap-2 md:grid-cols-2 lg:gap-2.25">
         <Field label="Fecha preferida" id="reservation-date" error={fieldErrors.date}>
           <input id="reservation-date" type="date" value={values.date} onChange={(event) => handleDateChange(event.target.value)} aria-invalid={Boolean(fieldErrors.date)} aria-describedby={fieldErrors.date ? "reservation-date-error" : undefined} required />
         </Field>
-        <div className="field-group w-full text-left">
+        <label className="field-group w-full text-left" htmlFor="reservation-time">
           <span id="reservation-time-label">Horario</span>
-          {!values.date ? <p className="pt-2 text-[0.82rem] text-[color:var(--muted-ink)]">Primero elegí una fecha.</p> : loadingAvailability ? <p className="pt-2 text-[0.82rem] text-[color:var(--muted-ink)]" aria-live="polite">Consultando horarios disponibles...</p> : availabilityError ? <div className="pt-1 text-[0.82rem] text-[var(--earth)]" role="alert"><p>{availabilityError}</p><button type="button" className="mt-1 underline" onClick={() => void loadAvailability(values.date)}>Intentar nuevamente</button></div> : slots.length === 0 ? <p className="pt-2 text-[0.82rem] text-[color:var(--muted-ink)]">No quedan horarios disponibles para este día. Elegí otra fecha.</p> : <div className="flex flex-wrap gap-1.5 pt-1" role="group" aria-labelledby="reservation-time-label">{slots.map((slot) => <button key={slot.startTime} type="button" className={`min-h-10 rounded-full border px-3 text-[0.82rem] transition-colors ${values.startTime === slot.startTime ? "border-[var(--earth)] bg-[var(--earth)] text-white" : "border-[rgba(80,58,28,0.18)] bg-white/60 text-[var(--earth)] hover:border-[var(--earth)]"}`} onClick={() => updateValue("startTime", slot.startTime)} aria-pressed={values.startTime === slot.startTime} disabled={submitting}>{slot.startTime}</button>)}</div>}
+          <select id="reservation-time" value={values.startTime} onChange={(event) => updateValue("startTime", event.target.value)} aria-invalid={Boolean(fieldErrors.startTime)} aria-describedby={fieldErrors.startTime ? "reservation-time-error" : undefined} disabled={!values.date || loadingAvailability || Boolean(availabilityError) || slots.length === 0} required>
+            <option value="">
+              {!values.date ? "Elegí una fecha primero" : loadingAvailability ? "Cargando horarios..." : availabilityError ? "No se pudo cargar horarios" : slots.length === 0 ? "No hay horarios disponibles" : "Elegí un horario"}
+            </option>
+            {slots.map((slot) => <option key={slot.startTime} value={slot.startTime}>{slot.startTime}</option>)}
+          </select>
+          {availabilityError && <div className="pt-1 text-[0.82rem] text-[var(--earth)]" role="alert"><p>{availabilityError}</p><button type="button" className="mt-1 underline" onClick={() => void loadAvailability(values.date)}>Intentar nuevamente</button></div>}
           {fieldErrors.startTime && <p id="reservation-time-error" className="mt-1 text-[0.76rem] text-[var(--earth)]" role="alert">{fieldErrors.startTime}</p>}
-        </div>
+        </label>
       </div>
 
       <Field label="Nombre completo" id="reservation-name" error={fieldErrors.fullName}>

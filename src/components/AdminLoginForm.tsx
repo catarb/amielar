@@ -26,9 +26,9 @@ export function AdminLoginForm() {
         router.refresh();
         return;
       }
-      setError(response.status === 429 ? "Demasiados intentos. Esperá unos minutos antes de volver a intentar." : "Usuario o contraseÃ±a incorrectos.");
+      setError(response.status === 429 ? "Demasiados intentos. Esperá unos minutos antes de volver a intentar." : "Usuario o contraseña incorrectos.");
     } catch {
-      setError("No se pudo iniciar sesiÃ³n. Intentá nuevamente.");
+      setError("No se pudo iniciar sesión. Intentá nuevamente.");
     } finally {
       setIsSubmitting(false);
     }
@@ -48,7 +48,7 @@ export function AdminLoginForm() {
         />
       </label>
       <label className="block text-sm font-semibold text-[var(--earth)]">
-        ContraseÃ±a
+        Contraseña
         <input
           name="password"
           type="password"

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { assertValidDate } from "@/server/domain/reservations/datetime";
+import { EXPERIENCE_SLUGS } from "@/server/domain/reservations/experiences";
 
 export type CreateReservationInput = z.output<typeof createReservationSchema>;
 
@@ -21,8 +22,8 @@ export function normalizePhone(value: string): string {
   return `${hasLeadingPlus ? "+" : ""}${digits}`;
 }
 
-export function normalizeMessage(value: string | undefined): string | null {
-  if (value === undefined) return null;
+export function normalizeMessage(value: string | null | undefined): string | null {
+  if (value == null) return null;
   const normalized = value.trim();
   return normalized.length > 0 ? normalized : null;
 }
@@ -51,11 +52,13 @@ const normalizedMessage = z
   .refine((value) => value === null || value.length <= 1000, {
     message: "El mensaje no puede superar 1000 caracteres.",
   })
+  .nullable()
   .optional()
   .default(null);
 
 export const createReservationSchema = z
   .object({
+    experienceSlug: z.enum(EXPERIENCE_SLUGS),
     date: z.string().refine(
       (value) => {
         try {
@@ -76,3 +79,10 @@ export const createReservationSchema = z
     website: z.string().max(100).optional(),
   })
   .strict();
+
+export const createAdminReservationSchema = createReservationSchema
+  .omit({ website: true })
+  .extend({ status: z.enum(["PENDIENTE_PAGO", "CONFIRMADA"]) })
+  .strict();
+
+export type CreateAdminReservationInput = z.output<typeof createAdminReservationSchema>;

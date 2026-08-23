@@ -29,6 +29,7 @@ describe("normalización de reservas", () => {
 
 describe("schema de creación de reservas", () => {
   const valid = {
+    experienceSlug: "aire-de-colmena",
     date: "2026-12-15",
     startTime: "18:00",
     fullName: "  María   Pérez ",
@@ -71,5 +72,13 @@ describe("schema de creación de reservas", () => {
     expect(createReservationSchema.safeParse({ ...valid, date: "2026-02-30" }).success).toBe(false);
     expect(createReservationSchema.safeParse({ ...valid, status: "CONFIRMADA" }).success).toBe(false);
     expect(createReservationSchema.safeParse({ ...valid, experience_slug: "otra" }).success).toBe(false);
+  });
+
+  it.each(["aire-de-colmena", "amanecer", "aire-de-colmena-ninos"])("acepta la experiencia %s", (experienceSlug) => {
+    expect(createReservationSchema.safeParse({ ...valid, experienceSlug }).success).toBe(true);
+  });
+
+  it.each(["", "otra", "aire", "<script>"])("rechaza experienceSlug inválido %s", (experienceSlug) => {
+    expect(createReservationSchema.safeParse({ ...valid, experienceSlug }).success).toBe(false);
   });
 });

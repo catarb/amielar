@@ -1,8 +1,6 @@
 import { isDateInSeason } from "@/server/domain/reservations/season";
-import {
-  EXPERIENCE_SLUG,
-  TIMEZONE,
-} from "@/server/domain/reservations/constants";
+import { TIMEZONE } from "@/server/domain/reservations/constants";
+import { getExperienceLabel } from "@/server/domain/reservations/experiences";
 import {
   getSlotEnd,
   instantToLocalSlot,
@@ -27,6 +25,7 @@ import { ReservationServiceError } from "./reservation-errors";
 export type PublicReservation = {
   reservationId: string;
   status: "PENDIENTE_PAGO";
+  experienceSlug: CreateReservationInput["experienceSlug"];
   date: string;
   startTime: string;
   endTime: string;
@@ -43,7 +42,7 @@ export type ReservationServiceOptions = {
 };
 
 const SUCCESS_MESSAGE =
-  "Recibimos tu reserva. AMIELAR se pondrá en contacto para coordinar el pago y confirmar el turno.";
+  "Tu solicitud quedó registrada. AMIELAR se pondrá en contacto para coordinar el valor, la forma de pago y los detalles de la experiencia.";
 
 export async function createReservation(
   input: CreateReservationInput,
@@ -84,7 +83,7 @@ export async function createReservation(
 
   try {
     const reservationId = await transactionRunner(async (transaction) => {
-      await acquireSlotAdvisoryLock(transaction, EXPERIENCE_SLUG, slotStart);
+      await acquireSlotAdvisoryLock(transaction, slotStart);
 
       if (!isBookingWindowOpen(slotStart, nowProvider())) {
         throw new ReservationServiceError(
@@ -103,7 +102,6 @@ export async function createReservation(
       if (
         await repository.hasActiveReservationForSlot(
           transaction,
-          EXPERIENCE_SLUG,
           slotStart,
         )
       ) {
@@ -115,7 +113,7 @@ export async function createReservation(
 
       try {
         const row = await repository.insertReservation(transaction, {
-          experienceSlug: EXPERIENCE_SLUG,
+          experienceSlug: normalized.experienceSlug,
           slotStart,
           fullName: normalized.fullName,
           phone: normalized.phone,
@@ -139,11 +137,12 @@ export async function createReservation(
     return {
       reservationId,
       status: "PENDIENTE_PAGO",
+      experienceSlug: normalized.experienceSlug,
       date: normalized.date,
       startTime: normalized.startTime,
       endTime: instantToLocalSlot(slotEnd).startTime,
       timezone: TIMEZONE,
-      message: SUCCESS_MESSAGE,
+      message: `${SUCCESS_MESSAGE} (${getExperienceLabel(normalized.experienceSlug)}).`,
     };
   } catch (error) {
     if (isActiveSlotUniqueViolation(error)) {
@@ -156,7 +155,7 @@ export async function createReservation(
   }
 }
 
-function isActiveSlotUniqueViolation(error: unknown): boolean {
+export function isActiveSlotUniqueViolation(error: unknown): boolean {
   if (!error || typeof error !== "object") return false;
   const candidate = error as { code?: unknown; constraint?: unknown; cause?: unknown };
   if (

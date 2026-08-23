@@ -1,4 +1,6 @@
 export const TIMEZONE = "America/Argentina/Buenos_Aires" as const;
+export { EXPERIENCE_SLUGS, EXPERIENCES, getExperienceLabel, isExperienceSlug } from "./experiences";
+export type { ExperienceSlug } from "./experiences";
 export const EXPERIENCE_SLUG = "aire-de-colmena" as const;
 
 export const SEASON_START_MONTH = 9;

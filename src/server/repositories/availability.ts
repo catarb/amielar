@@ -1,6 +1,5 @@
-import { and, eq, gt, gte, lt } from "drizzle-orm";
+import { and, gt, gte, lt } from "drizzle-orm";
 
-import { EXPERIENCE_SLUG } from "@/server/domain/reservations/constants";
 import type {
   AvailabilityBlock,
   DomainReservation,
@@ -27,7 +26,6 @@ export function createAvailabilityRepository(database: Database): AvailabilityRe
         .from(reservations)
         .where(
           and(
-            eq(reservations.experienceSlug, EXPERIENCE_SLUG),
             gte(reservations.slotStart, dayStart),
             lt(reservations.slotStart, dayEnd),
           ),

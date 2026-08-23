@@ -1,10 +1,12 @@
-import { and, asc, count, eq, gte, ilike, isNull, lt, or, sql } from "drizzle-orm";
+import { and, asc, count, eq, gte, gt, ilike, inArray, isNull, lt, or, sql } from "drizzle-orm";
 
-import { EXPERIENCE_SLUG, RESERVATION_STATUSES, type ReservationStatus } from "@/server/domain/reservations/constants";
+import { ACTIVE_RESERVATION_STATUSES, RESERVATION_STATUSES, type ReservationStatus } from "@/server/domain/reservations/constants";
+import type { ExperienceSlug } from "@/server/domain/reservations/experiences";
 import { reservations } from "@/server/db/schema";
 import type { CreateReservationTransaction, Database } from "./reservations";
 
 export type AdminReservationFilters = {
+  experienceSlug?: ExperienceSlug;
   status?: ReservationStatus;
   dateRange?: { start: Date; end: Date };
   query?: string;
@@ -14,6 +16,7 @@ export type AdminReservationFilters = {
 
 export type AdminReservationRow = {
   id: string;
+  experienceSlug: ExperienceSlug;
   status: ReservationStatus;
   slotStart: Date;
   fullName: string;
@@ -33,8 +36,15 @@ export type AdminReservationListResult = {
   total: number;
 };
 
+export type AdminReservationDashboardResult = {
+  rows: AdminReservationRow[];
+  counts: { PENDIENTE_PAGO: number; CONFIRMADA: number };
+  upcomingCount: number;
+};
+
 function buildWhere(filters: AdminReservationFilters) {
-  const conditions = [isNull(reservations.deletedAt), eq(reservations.experienceSlug, EXPERIENCE_SLUG)];
+  const conditions = [isNull(reservations.deletedAt)];
+  if (filters.experienceSlug) conditions.push(eq(reservations.experienceSlug, filters.experienceSlug));
   if (filters.status) conditions.push(eq(reservations.status, filters.status));
   if (filters.dateRange) {
     conditions.push(gte(reservations.slotStart, filters.dateRange.start));
@@ -53,6 +63,7 @@ function buildWhere(filters: AdminReservationFilters) {
 
 const reservationSelection = {
   id: reservations.id,
+  experienceSlug: reservations.experienceSlug,
   status: reservations.status,
   slotStart: reservations.slotStart,
   fullName: reservations.fullName,
@@ -89,7 +100,7 @@ export function createAdminReservationRepository(database: Database) {
       const [row] = await database
         .select(reservationSelection)
         .from(reservations)
-        .where(and(eq(reservations.id, id), isNull(reservations.deletedAt), eq(reservations.experienceSlug, EXPERIENCE_SLUG)))
+        .where(and(eq(reservations.id, id), isNull(reservations.deletedAt)))
         .limit(1);
       return (row as AdminReservationRow | undefined) ?? null;
     },
@@ -98,6 +109,41 @@ export function createAdminReservationRepository(database: Database) {
 
 export type AdminReservationRepository = ReturnType<typeof createAdminReservationRepository>;
 
+export function createAdminReservationDashboardRepository(database: Database) {
+  return {
+    async getSummary(now: Date): Promise<AdminReservationDashboardResult> {
+      const [countRows, upcomingRows, upcomingTotalRows] = await Promise.all([
+        database
+          .select({ status: reservations.status, total: count() })
+          .from(reservations)
+          .where(and(isNull(reservations.deletedAt), inArray(reservations.status, ACTIVE_RESERVATION_STATUSES)))
+          .groupBy(reservations.status),
+        database
+          .select(reservationSelection)
+          .from(reservations)
+          .where(and(isNull(reservations.deletedAt), inArray(reservations.status, ACTIVE_RESERVATION_STATUSES), gt(reservations.slotStart, now)))
+          .orderBy(asc(reservations.slotStart), asc(reservations.createdAt), asc(reservations.id))
+          .limit(3),
+        database
+          .select({ total: count() })
+          .from(reservations)
+          .where(and(isNull(reservations.deletedAt), inArray(reservations.status, ACTIVE_RESERVATION_STATUSES), gt(reservations.slotStart, now))),
+      ]);
+
+      return {
+        counts: {
+          PENDIENTE_PAGO: Number(countRows.find((row) => row.status === "PENDIENTE_PAGO")?.total ?? 0),
+          CONFIRMADA: Number(countRows.find((row) => row.status === "CONFIRMADA")?.total ?? 0),
+        },
+        rows: upcomingRows as AdminReservationRow[],
+        upcomingCount: Number(upcomingTotalRows[0]?.total ?? 0),
+      };
+    },
+  };
+}
+
+export type AdminReservationDashboardRepository = ReturnType<typeof createAdminReservationDashboardRepository>;
+
 export type AdminReservationTransaction = CreateReservationTransaction;
 
 export function createAdminReservationMutationRepository(database: Database) {
@@ -105,7 +151,7 @@ export function createAdminReservationMutationRepository(database: Database) {
     const [row] = await source
       .select(mutationSelection)
       .from(reservations)
-      .where(and(eq(reservations.id, id), eq(reservations.experienceSlug, EXPERIENCE_SLUG)))
+        .where(eq(reservations.id, id))
       .limit(1);
     return (row as AdminReservationMutationRow | undefined) ?? null;
   };
@@ -133,6 +179,11 @@ export type AdminReservationMutationRepository = ReturnType<typeof createAdminRe
 export async function getPostgresAdminReservationRepository(): Promise<AdminReservationRepository> {
   const { db } = await import("@/server/db/client");
   return createAdminReservationRepository(db);
+}
+
+export async function getPostgresAdminReservationDashboardRepository(): Promise<AdminReservationDashboardRepository> {
+  const { db } = await import("@/server/db/client");
+  return createAdminReservationDashboardRepository(db);
 }
 
 export async function getPostgresAdminReservationMutationRepository(): Promise<AdminReservationMutationRepository> {

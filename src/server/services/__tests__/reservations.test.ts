@@ -7,6 +7,7 @@ import { createReservation } from "../reservations";
 import type { ReservationWriteRepository } from "@/server/repositories/reservations";
 
 const input = {
+  experienceSlug: "aire-de-colmena",
   date: "2026-12-15",
   startTime: "18:00",
   fullName: "María Pérez",
@@ -32,6 +33,17 @@ function setupTransaction() {
 }
 
 describe("createReservation", () => {
+  it.each(["aire-de-colmena", "amanecer", "aire-de-colmena-ninos"])("crea reservas para %s", async (experienceSlug) => {
+    const repository = setupRepository();
+    const result = await createReservation({ ...input, experienceSlug: experienceSlug as typeof input.experienceSlug }, {
+      now: new Date("2026-12-15T19:59:59.000Z"),
+      repository,
+      transaction: (callback) => callback(setupTransaction()),
+    });
+    expect(result.experienceSlug).toBe(experienceSlug);
+    expect(repository.insertReservation).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ experienceSlug }));
+  });
+
   it("crea una reserva pública con status PENDIENTE_PAGO", async () => {
     const repository = setupRepository();
     const transaction = setupTransaction();
@@ -45,6 +57,7 @@ describe("createReservation", () => {
     expect(result).toEqual({
       reservationId: "reservation-id",
       status: "PENDIENTE_PAGO",
+      experienceSlug: "aire-de-colmena",
       date: "2026-12-15",
       startTime: "18:00",
       endTime: "19:00",
@@ -68,11 +81,11 @@ describe("createReservation", () => {
 
   it("usa una clave determinista por experiencia e instante absoluto", () => {
     const slot = localSlotToInstant("2026-12-15", "18:00");
-    expect(createReservationLockKey("aire-de-colmena", slot)).toBe(
-      createReservationLockKey("aire-de-colmena", new Date(slot.getTime())),
+    expect(createReservationLockKey(slot)).toBe(
+      createReservationLockKey(new Date(slot.getTime())),
     );
-    expect(createReservationLockKey("aire-de-colmena", slot)).not.toBe(
-      createReservationLockKey("aire-de-colmena", localSlotToInstant("2026-12-15", "19:00")),
+    expect(createReservationLockKey(slot)).not.toBe(
+      createReservationLockKey(localSlotToInstant("2026-12-15", "19:00")),
     );
   });
 

@@ -10,6 +10,7 @@ import type { AdminReservationMutationRepository, AdminReservationMutationRow } 
 
 const base = (status: AdminReservationMutationRow["status"]): AdminReservationMutationRow => ({
   id: "11111111-1111-4111-8111-111111111111",
+  experienceSlug: "aire-de-colmena",
   status,
   slotStart: new Date("2026-12-15T21:00:00.000Z"),
   fullName: "Ana Prueba",
@@ -71,7 +72,7 @@ describe("admin reservation actions", () => {
     expect(result.cancelledAt).toBe(cancelled.cancelledAt?.toISOString());
   });
 
-  it("hace soft delete sin borrar fÃ­sicamente", async () => {
+  it("hace soft delete sin borrar físicamente", async () => {
     const repo = repository(base("CONFIRMADA"));
     await expect(deleteAdminReservation(base("CONFIRMADA").id, repo)).resolves.toBeUndefined();
     expect(repo.softDelete).toHaveBeenCalledTimes(1);

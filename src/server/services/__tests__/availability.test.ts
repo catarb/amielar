@@ -36,7 +36,6 @@ describe("getAvailabilityForDate", () => {
     expect(result).toEqual({
       date,
       timezone: TIMEZONE,
-      experience: EXPERIENCE_SLUG,
       slots: expect.arrayContaining([{ startTime: "06:00", endTime: "07:00" }]),
     });
     expect(Object.keys(result.slots[0])).toEqual(["startTime", "endTime"]);

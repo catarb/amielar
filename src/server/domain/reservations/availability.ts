@@ -1,4 +1,4 @@
-import { ACTIVE_RESERVATION_STATUSES, EXPERIENCE_SLUG } from "./constants";
+import { ACTIVE_RESERVATION_STATUSES } from "./constants";
 import { isBookingWindowOpen, getSlotEnd } from "./datetime";
 import { isDateInSeason } from "./season";
 import { generateSlotsForDate } from "./slots";
@@ -30,7 +30,6 @@ export function isSlotBlocked(slotStart: Date, availabilityBlocks: readonly Avai
 function isSlotReserved(slot: ReservationSlot, reservations: readonly DomainReservation[]): boolean {
   return reservations.some(
     (reservation) =>
-      reservation.experienceSlug === EXPERIENCE_SLUG &&
       isActiveReservation(reservation) &&
       reservation.slotStart.getTime() === slot.startsAt.getTime(),
   );

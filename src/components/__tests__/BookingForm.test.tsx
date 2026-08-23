@@ -16,6 +16,7 @@ function chooseDate() {
 }
 
 function fillRequiredFields() {
+  fireEvent.change(screen.getByLabelText("¿Qué experiencia te interesa?"), { target: { value: "aire-de-colmena" } });
   fireEvent.change(screen.getByLabelText("Nombre completo"), { target: { value: "María Pérez" } });
   fireEvent.change(screen.getByLabelText("Teléfono"), { target: { value: "+5492302123456" } });
   fireEvent.change(screen.getByLabelText("Localidad"), { target: { value: "General Pico" } });
@@ -35,14 +36,25 @@ describe("BookingForm", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<BookingForm />);
 
+    const experienceSelect = screen.getByLabelText("¿Qué experiencia te interesa?");
+    expect(experienceSelect).toBeRequired();
+    expect(screen.getByRole("option", { name: "Aire de Colmena" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Amanecer" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Aire de Colmena para niños" })).toBeInTheDocument();
+
     chooseDate();
-    expect(await screen.findByText("Consultando horarios disponibles...")).toBeInTheDocument();
+    expect(screen.getByLabelText("Horario")).toBeDisabled();
+    expect(screen.getByRole("option", { name: "Cargando horarios..." })).toBeInTheDocument();
     resolveAvailability?.(availability([
       { startTime: "17:00", endTime: "18:00" },
       { startTime: "18:00", endTime: "19:00" },
     ]));
-    expect(await screen.findByRole("button", { name: "17:00" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "18:00" })).toBeInTheDocument();
+    await screen.findByRole("option", { name: "17:00" });
+    const timeSelect = screen.getByLabelText("Horario");
+    expect(timeSelect).toBeEnabled();
+    expect(screen.getByRole("option", { name: "Elegí un horario" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "17:00" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "18:00" })).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledWith("/api/disponibilidad?date=2026-12-15");
   });
 
@@ -54,12 +66,17 @@ describe("BookingForm", () => {
     render(<BookingForm />);
 
     chooseDate();
-    const firstSlot = await screen.findByRole("button", { name: "17:00" });
-    fireEvent.click(firstSlot);
-    expect(firstSlot).toHaveAttribute("aria-pressed", "true");
+    const timeSelect = screen.getByLabelText("Horario");
+    await screen.findByRole("option", { name: "17:00" });
+    fireEvent.change(timeSelect, { target: { value: "17:00" } });
+    expect(timeSelect).toHaveValue("17:00");
+    fireEvent.change(screen.getByLabelText("¿Qué experiencia te interesa?"), { target: { value: "amanecer" } });
+    expect(screen.getByLabelText("Fecha preferida")).toHaveValue("2026-12-15");
+    expect(timeSelect).toHaveValue("17:00");
     fireEvent.change(screen.getByLabelText("Fecha preferida"), { target: { value: "2026-12-16" } });
-    expect(await screen.findByRole("button", { name: "20:00" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "17:00" })).not.toBeInTheDocument();
+    expect(await screen.findByRole("option", { name: "20:00" })).toBeInTheDocument();
+    expect(screen.queryByRole("option", { name: "17:00" })).not.toBeInTheDocument();
+    expect(timeSelect).toHaveValue("");
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
@@ -68,7 +85,8 @@ describe("BookingForm", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<BookingForm />);
     chooseDate();
-    expect(await screen.findByText("No quedan horarios disponibles para este día. Elegí otra fecha.")).toBeInTheDocument();
+    expect(await screen.findByRole("option", { name: "No hay horarios disponibles" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Horario")).toBeDisabled();
 
     fetchMock.mockRejectedValueOnce(new Error("network"));
     fireEvent.change(screen.getByLabelText("Fecha preferida"), { target: { value: "2026-12-16" } });
@@ -82,12 +100,15 @@ describe("BookingForm", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<BookingForm />);
     chooseDate();
-    fireEvent.click(await screen.findByRole("button", { name: "18:00" }));
+    await screen.findByRole("option", { name: "18:00" });
+    fireEvent.change(screen.getByLabelText("Horario"), { target: { value: "18:00" } });
     fillRequiredFields();
     fireEvent.click(screen.getByRole("button", { name: "Enviar solicitud" }));
 
     expect(await screen.findByText("¡Recibimos tu reserva!")).toBeInTheDocument();
-    expect(screen.getByText(/reservado de manera provisoria/)).toBeInTheDocument();
+    expect(screen.getByText(/Tu solicitud quedó registrada/)).toBeInTheDocument();
+    expect(screen.getByText("Experiencia")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Continuar por WhatsApp" })).toHaveAttribute("href", expect.stringContaining("Aire%20de%20Colmena"));
     expect(screen.queryByText("Reserva confirmada")).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenLastCalledWith("/api/reservas", expect.objectContaining({ method: "POST" }));
     expect(JSON.parse(fetchMock.mock.calls[1][1].body as string).website).toBe("");
@@ -103,12 +124,13 @@ describe("BookingForm", () => {
     expect(honeypot).toHaveValue("");
     expect(honeypot).toHaveAttribute("aria-hidden", "true");
     chooseDate();
-    fireEvent.click(await screen.findByRole("button", { name: "18:00" }));
+    await screen.findByRole("option", { name: "18:00" });
+    fireEvent.change(screen.getByLabelText("Horario"), { target: { value: "18:00" } });
     fillRequiredFields();
     fireEvent.click(screen.getByRole("button", { name: "Enviar solicitud" }));
     expect(await screen.findByText("Hiciste varios intentos seguidos. Esperá unos minutos antes de volver a intentar.")).toBeInTheDocument();
     expect(screen.getByLabelText("Nombre completo")).toHaveValue("Mar\u00eda P\u00e9rez");
-    expect(screen.getByRole("button", { name: "18:00" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByLabelText("Horario")).toHaveValue("18:00");
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
@@ -120,15 +142,16 @@ describe("BookingForm", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<BookingForm />);
     chooseDate();
-    fireEvent.click(await screen.findByRole("button", { name: "18:00" }));
+    await screen.findByRole("option", { name: "18:00" });
+    fireEvent.change(screen.getByLabelText("Horario"), { target: { value: "18:00" } });
     fillRequiredFields();
     fireEvent.click(screen.getByRole("button", { name: "Enviar solicitud" }));
 
     expect(await screen.findByText(/Elegí otro horario|Elegí otro disponible/)).toBeInTheDocument();
     expect(screen.getByLabelText("Nombre completo")).toHaveValue("María Pérez");
     expect(screen.getByLabelText("Teléfono")).toHaveValue("+5492302123456");
-    expect(await screen.findByRole("button", { name: "19:00" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "19:00" })).toHaveAttribute("aria-pressed", "false");
+    expect(await screen.findByRole("option", { name: "19:00" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Horario")).toHaveValue("");
   });
 
   it("muestra validación de campo sin enviar si faltan datos", async () => {
@@ -136,7 +159,8 @@ describe("BookingForm", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<BookingForm />);
     chooseDate();
-    fireEvent.click(await screen.findByRole("button", { name: "18:00" }));
+    await screen.findByRole("option", { name: "18:00" });
+    fireEvent.change(screen.getByLabelText("Horario"), { target: { value: "18:00" } });
     fireEvent.click(screen.getByRole("button", { name: "Enviar solicitud" }));
     expect(await screen.findByText("Ingresá tu nombre completo.")).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -151,7 +175,8 @@ describe("BookingForm", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(<BookingForm />);
     chooseDate();
-    fireEvent.click(await screen.findByRole("button", { name: "18:00" }));
+    await screen.findByRole("option", { name: "18:00" });
+    fireEvent.change(screen.getByLabelText("Horario"), { target: { value: "18:00" } });
     fillRequiredFields();
     const submit = screen.getByRole("button", { name: "Enviar solicitud" });
     fireEvent.click(submit);

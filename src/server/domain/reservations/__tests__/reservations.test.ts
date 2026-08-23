@@ -19,6 +19,7 @@ import {
   type AvailabilityBlock,
   type DomainReservation,
 } from "..";
+import type { ExperienceSlug } from "../experiences";
 
 const nowBeforeSlots = new Date("2026-12-14T00:00:00.000Z");
 const instantAt = (date: string, time: string) => localSlotToInstant(date, time);
@@ -30,7 +31,7 @@ function reservation(
   time: string,
   status: string,
   deletedAt: Date | null = null,
-  experienceSlug: string = EXPERIENCE_SLUG,
+  experienceSlug: ExperienceSlug = EXPERIENCE_SLUG,
 ): DomainReservation {
   return { experienceSlug, slotStart: instantAt(date, time), status, deletedAt };
 }
@@ -152,12 +153,12 @@ describe("slots y disponibilidad", () => {
     expect(slots.some((slot) => slot.startTime === "18:00")).toBe(expected);
   });
 
-  it("ignora reservas de otra experiencia", () => {
+  it("comparte el calendario entre experiencias", () => {
     const slots = getAvailableSlots({
       date: "2026-12-15", now: nowBeforeSlots,
-      reservations: [reservation("2026-12-15", "18:00", "CONFIRMADA", null, "otra")], blocks: [],
+      reservations: [reservation("2026-12-15", "18:00", "CONFIRMADA", null, "amanecer")], blocks: [],
     });
-    expect(slots.some((slot) => slot.startTime === "18:00")).toBe(true);
+    expect(slots.some((slot) => slot.startTime === "18:00")).toBe(false);
   });
 
   it("aplica la anticipación y rechaza fuera de temporada", () => {

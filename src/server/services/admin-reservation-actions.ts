@@ -1,5 +1,5 @@
 import { acquireSlotAdvisoryLock } from "@/server/db/advisory-lock";
-import { EXPERIENCE_SLUG, type ReservationStatus } from "@/server/domain/reservations/constants";
+import { type ReservationStatus } from "@/server/domain/reservations/constants";
 import {
   getPostgresAdminReservationMutationRepository,
   type AdminReservationMutationRepository,
@@ -27,7 +27,7 @@ async function mutateReservation(
   const dataSource = repository ?? (await getPostgresAdminReservationMutationRepository());
   const metadata = assertCurrent(await dataSource.findMutationById(id));
   return dataSource.transaction(async (transaction) => {
-    await acquireSlotAdvisoryLock(transaction, EXPERIENCE_SLUG, metadata.slotStart);
+    await acquireSlotAdvisoryLock(transaction, metadata.slotStart);
     const current = assertCurrent(await dataSource.findMutationInTransaction(transaction, id));
 
     if (action === "delete") {
