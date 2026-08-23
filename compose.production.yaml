@@ -1,0 +1,18 @@
+services:
+  caddy:
+    ports: !override
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile.production:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  postgres_data:
+    name: ${POSTGRES_VOLUME_NAME:-amielar-production-postgres-data}
+  caddy_data:
+    name: ${CADDY_DATA_VOLUME_NAME:-amielar-production-caddy-data}
+  caddy_config:
+    name: ${CADDY_CONFIG_VOLUME_NAME:-amielar-production-caddy-config}

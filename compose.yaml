@@ -28,8 +28,8 @@ services:
     build:
       context: .
       target: migrator
-    env_file:
-      - .env.docker.local
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
     networks:
       - backend
     depends_on:
@@ -40,8 +40,13 @@ services:
     build:
       context: .
       target: runner
-    env_file:
-      - .env.docker.local
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
+      ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET}
+      APP_ORIGIN: ${APP_ORIGIN}
+      NODE_ENV: ${NODE_ENV:-production}
     expose:
       - "3000"
     networks:
