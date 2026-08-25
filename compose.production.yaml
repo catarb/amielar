@@ -1,4 +1,12 @@
 services:
+  migrate:
+    build: !reset null
+    image: ${MIGRATOR_IMAGE:?MIGRATOR_IMAGE required}
+
+  app:
+    build: !reset null
+    image: ${APP_IMAGE:?APP_IMAGE required}
+
   caddy:
     ports: !override
       - "80:80"

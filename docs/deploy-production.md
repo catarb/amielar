@@ -8,6 +8,7 @@ Esta guía describe el procedimiento futuro para un VPS. No crea secretos, no mo
 - Docker y Compose instalados y validados.
 - Puertos públicos limitados a SSH, HTTP y HTTPS según el firewall.
 - `.env.production` creado en el servidor, fuera de Git, con valores reales y contraseñas URL-encoded dentro de `DATABASE_URL`.
+- Imágenes publicadas en GHCR mediante el workflow manual y referenciadas por tag Git SHA inmutable.
 - Base productiva nueva, sin copiar volúmenes locales ni datos QA.
 - Backup externo configurado antes de declarar producción operativa.
 
@@ -17,15 +18,28 @@ Generar posteriormente, sin reutilizar QA:
 - Hash scrypt nuevo para `ADMIN_PASSWORD_HASH`.
 - `ADMIN_SESSION_SECRET` aleatorio de al menos 32 bytes.
 
+## Build externo y distribución GHCR
+
+El build se ejecuta externamente mediante `.github/workflows/build-images.yml` con `workflow_dispatch`. El workflow publica en GHCR:
+
+- `ghcr.io/catarb/amielar-app:<git-sha>` desde el target `runner`.
+- `ghcr.io/catarb/amielar-migrator:<git-sha>` desde el target `migrator`.
+
+También actualiza el alias móvil `staging`. El tag SHA es la referencia confiable para desplegar y para volver a la versión anterior. El workflow no accede por SSH, no ejecuta migraciones y no despliega.
+
+Si los paquetes GHCR son privados, el VPS necesitará posteriormente `docker login ghcr.io` con un token de mínimo privilegio que tenga únicamente `read:packages`. Ese token no se crea ni se guarda en este repositorio.
+
 ## Deploy inicial
 
-Usar `compose.yaml` junto con `compose.production.yaml`:
+Usar `compose.yaml` junto con `compose.production.yaml`, definiendo `APP_IMAGE` y `MIGRATOR_IMAGE` en `.env.production` con el mismo release SHA:
 
 ```sh
 docker compose --env-file .env.production -f compose.yaml -f compose.production.yaml up -d db
 docker compose --env-file .env.production -f compose.yaml -f compose.production.yaml run --rm migrate
 docker compose --env-file .env.production -f compose.yaml -f compose.production.yaml up -d app caddy
 ```
+
+El overlay productivo consume imágenes remotas y no contiene builds para `app` ni `migrate`. En el VPS no se ejecutan `npm install`, `npm run build` ni se instala Node/npm en el host.
 
 Verificar:
 
@@ -37,7 +51,7 @@ docker compose --env-file .env.production -f compose.yaml -f compose.production.
 ## Nueva versión
 
 1. Crear y verificar un backup.
-2. Obtener la nueva imagen o construirla según la estrategia aprobada.
+2. Obtener la nueva imagen por `docker compose pull` usando el release SHA seleccionado.
 3. Ejecutar migraciones explícitamente.
 4. Actualizar `app`.
 5. Verificar `/api/health`, logs y rutas públicas.
@@ -122,6 +136,6 @@ HSTS debe habilitarse únicamente después de validar HTTPS estable en staging/p
 
 CSP queda pendiente de una validación específica y no bloquea el deploy inicial.
 
-## Distribución de imágenes
+## Rollback de imágenes
 
-No se configura todavía registry ni CI/CD. Las opciones posteriores son build en VPS o registry privado/GHCR. Por los recursos limitados, se recomienda construir externamente y transferir una imagen versionada.
+Para un rollback de aplicación sin migración incompatible, seleccionar el tag SHA anterior en `APP_IMAGE` y mantener `MIGRATOR_IMAGE` correspondiente a ese release. No prometer rollback automático de schema: el backup previo a migraciones sigue siendo obligatorio.
