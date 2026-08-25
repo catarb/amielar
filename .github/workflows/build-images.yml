@@ -2,6 +2,9 @@ name: Build and publish AMIELAR images
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "ghcr-staging-*"
 
 permissions:
   contents: read
