@@ -48,6 +48,21 @@ curl -fsS https://amielarargentina.com/api/health
 docker compose --env-file .env.production -f compose.yaml -f compose.production.yaml ps
 ```
 
+## HTTPS de staging
+
+Staging usa un Caddyfile y volumenes independientes de produccion. En `/srv/amielar/staging/.env.staging` deben definirse:
+
+```env
+CADDYFILE_PATH=./Caddyfile.staging
+CADDY_DATA_VOLUME_NAME=amielar-staging-caddy-data
+CADDY_CONFIG_VOLUME_NAME=amielar-staging-caddy-config
+APP_ORIGIN=https://staging.amielarargentina.com
+```
+
+`Caddyfile.staging` atiende exclusivamente `staging.amielarargentina.com` y hace proxy a `app:3000`. El volumen PostgreSQL de staging debe conservarse como `amielar-staging-postgres-data`; los volumenes de Caddy no deben reutilizar los de produccion.
+
+El subdominio de staging requiere un registro DNS independiente apuntando al VPS. El apex y `www` no se modifican. Solo se debe iniciar Caddy una vez que el dominio de staging resuelva al VPS y se haya verificado el preflight correspondiente. Esta preparacion no cambia `MX`, `SPF`, `DKIM` ni `DMARC`.
+
 ## Nueva versión
 
 1. Crear y verificar un backup.
