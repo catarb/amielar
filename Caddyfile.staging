@@ -1,0 +1,5 @@
+staging.amielarargentina.com {
+  reverse_proxy app:3000 {
+    header_up X-Real-IP {http.request.remote.host}
+  }
+}
