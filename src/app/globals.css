@@ -1700,12 +1700,13 @@ main > div > div.mt-5 > section > div.grid > .card-shell:nth-child(2) > .label-c
   .reservation-shell {
     min-height: calc(100svh - var(--header-offset, 0px) - var(--reservation-offset));
     height: auto;
+    padding-block: 2.25rem 3rem !important;
   }
 
   .reservation-composition {
     min-height: 0;
-    height: min(620px, calc(100dvh - var(--header-offset, 0px) - 1.5rem));
-    max-height: calc(100dvh - var(--header-offset, 0px) - 1.5rem);
+    height: auto;
+    max-height: none;
   }
 
   .reservation-composition > .reservation-image-block,
@@ -1714,7 +1715,7 @@ main > div > div.mt-5 > section > div.grid > .card-shell:nth-child(2) > .label-c
   }
 
   .reservation-composition > .reservation-image-block {
-    height: 100%;
+    height: auto;
   }
 
   .reservation-form-wrap {
