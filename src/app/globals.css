@@ -979,6 +979,11 @@ main > div > div.mt-5 > section > div.grid > .card-shell:nth-child(2) > .label-c
   color: var(--earth);
 }
 
+.field-group > span:first-child {
+  width: 100%;
+  text-align: center;
+}
+
 .field-group input,
 .field-group select,
 .field-group textarea {
