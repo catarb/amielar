@@ -10,6 +10,7 @@ import { scrollToSection, scrollToSectionAfterLayout } from "@/lib/scroll-to-res
 
 const links = [
   { id: "introduccion", label: "Descubrí" },
+  { id: "investigacion", label: "Investigación" },
   { id: "experiencias", label: "Experiencias" },
   { id: "tarjeta-regalo", label: "Regalá" },
   { id: "informacion-practica", label: "Antes de venir" },
@@ -42,6 +43,10 @@ const getSectionScrollAdvance = (sectionId: string) => {
   const baseAdvance = window.innerWidth >= 1024
     ? Math.min(140, Math.max(104, window.innerWidth * 0.095))
     : 76;
+
+  if (sectionId === "investigacion") {
+    return Math.max(56, baseAdvance - (window.innerWidth >= 1024 ? 60 : 24));
+  }
 
   if (sectionId === "informacion-practica" && window.innerWidth >= 1024) {
     return baseAdvance + 7;

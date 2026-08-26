@@ -4,6 +4,8 @@ import {
   CalendarDays,
   Check,
   Clock3,
+  Eye,
+  FlaskConical,
   Gift,
   Leaf,
   MapPin,
@@ -11,6 +13,7 @@ import {
   MoveRight,
   ShieldCheck,
   Sparkles,
+  Search,
   UsersRound,
 } from "lucide-react";
 
@@ -355,6 +358,62 @@ export default function AireDeColmenaPage() {
       </section>
 
       <section
+        id="investigacion"
+        className="air-science-section relative z-10 scroll-mt-4 px-6 md:px-8 lg:px-10 xl:px-12"
+      >
+        <div className="mx-auto max-w-[1180px] py-[clamp(3rem,5.5vw,4.75rem)]">
+          <div data-mobile-scroll-anchor="true" className="mx-auto max-w-[800px] text-center">
+            <p className="site-eyebrow text-[var(--olive)]">Curiosidad y observación</p>
+            <h2 className="site-section-title mt-4 text-[var(--earth)]">
+              La Ciencia detrás de AMIELAR
+            </h2>
+            <p className="air-science-intro mx-auto mt-4 max-w-[45rem] text-[clamp(0.96rem,1.3vw,1.08rem)] leading-[1.72] text-[color:var(--muted-ink)]">
+              En AMIELAR también nos mueve una pregunta: ¿qué sucede cuando respiramos el aire de una colmena?
+              <br className="hidden sm:block" />
+              <br className="hidden sm:block" />
+              Sabemos que en su interior existe un microambiente complejo, con numerosos compuestos volátiles provenientes de la actividad de las abejas y de productos como la miel, el propóleo, la cera y el polen. Pero todavía queda mucho por conocer.
+            </p>
+          </div>
+
+          <div className="air-science-grid mt-[clamp(1.5rem,2.75vw,2.25rem)] grid gap-4 md:grid-cols-3">
+            <article className="air-science-card card-shell site-card-informative flex flex-col items-center p-[clamp(1.1rem,1.8vw,1.5rem)] text-center">
+              <span className="air-science-icon flex h-10 w-10 items-center justify-center rounded-[16px] border border-[rgba(127,136,93,0.25)] !bg-[rgba(248,245,235,0.96)] text-[var(--olive)]">
+                <Search className="h-6 w-6" aria-hidden="true" />
+              </span>
+              <h3 className="site-card-title mt-4 text-[var(--earth)]">Lo que sabemos</h3>
+              <p className="mt-2 text-[0.9rem] leading-6 text-[color:var(--muted-ink)]">
+                El aire de la colmena contiene una gran diversidad de compuestos volátiles. Diferentes investigaciones han comenzado a estudiar su composición y su posible relación con experiencias de bienestar.
+              </p>
+            </article>
+
+            <article className="air-science-card card-shell site-card-informative flex flex-col items-center p-[clamp(1.1rem,1.8vw,1.5rem)] text-center">
+              <span className="air-science-icon flex h-10 w-10 items-center justify-center rounded-[16px] border border-[rgba(190,153,52,0.28)] !bg-[rgba(252,247,231,0.98)] text-[var(--gold-deep)]">
+                <Eye className="h-6 w-6" aria-hidden="true" />
+              </span>
+              <h3 className="site-card-title mt-4 text-[var(--earth)]">Lo que queremos conocer</h3>
+              <p className="mt-2 text-[0.9rem] leading-6 text-[color:var(--muted-ink)]">
+                Nos interesa observar qué sensaciones experimentan las personas durante una sesión y qué nuevas preguntas pueden surgir sobre este particular ambiente de la colmena.
+              </p>
+            </article>
+
+            <article className="air-science-card card-shell site-card-informative flex flex-col items-center p-[clamp(1.1rem,1.8vw,1.5rem)] text-center">
+              <span className="air-science-icon flex h-10 w-10 items-center justify-center rounded-[16px] border border-[rgba(127,136,93,0.25)] !bg-[rgba(248,245,235,0.96)] text-[var(--olive)]">
+                <FlaskConical className="h-6 w-6" aria-hidden="true" />
+              </span>
+              <h3 className="site-card-title mt-4 text-[var(--earth)]">Explorar antes que prometer</h3>
+              <p className="mt-2 text-[0.9rem] leading-6 text-[color:var(--muted-ink)]">
+                La evidencia disponible todavía es limitada. Por eso AMIELAR no presenta el Aire de Colmena como un tratamiento médico: nuestra propuesta es observar, registrar y contribuir a generar conocimiento.
+              </p>
+            </article>
+          </div>
+
+          <p className="air-science-closing mx-auto mt-[clamp(2rem,4vw,3.25rem)] max-w-[45rem] text-center font-serif text-[clamp(1.15rem,2vw,1.45rem)] leading-[1.45] text-[var(--earth)]">
+            Una observación puede convertirse en una pregunta. Una pregunta, en una nueva investigación.
+          </p>
+        </div>
+      </section>
+
+      <section
         id="experiencias"
         className="relative z-10 scroll-mt-4 bg-[linear-gradient(180deg,rgba(156,160,122,0.08),rgba(255,255,255,0.4))]"
       >
@@ -450,7 +509,13 @@ export default function AireDeColmenaPage() {
                 >
                   <Icon className="h-[1.35rem] w-[1.35rem]" />
                 </span>
-                <p className="air-practical-card-text mt-4 text-[0.88rem] font-semibold leading-6 text-[var(--earth)]">
+                <p
+                  className={`air-practical-card-text mt-4 text-[0.88rem] font-semibold leading-6 text-[var(--earth)] ${
+                    item.text === "Temporada: septiembre a abril"
+                      ? "whitespace-nowrap !text-[0.74rem]"
+                      : ""
+                  }`}
+                >
                   {item.text}
                 </p>
               </div>

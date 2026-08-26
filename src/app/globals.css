@@ -485,6 +485,41 @@ main > div > div.mt-5 > section > div.grid > .card-shell:nth-child(2) > .label-c
   box-shadow: var(--shadow-hover);
 }
 
+.air-science-section {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(156, 160, 122, 0.075));
+}
+
+.air-science-card {
+  min-width: 0;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(255, 254, 249, 0.78), rgba(255, 254, 249, 0.86)),
+    url("/A_2.png");
+  background-position: center 48%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.air-science-card:nth-child(2) {
+  border-color: rgba(190, 153, 52, 0.2);
+  background-image:
+    linear-gradient(rgba(255, 254, 249, 0.77), rgba(253, 248, 231, 0.86)),
+    url("/A_2.png");
+  background-position: center 48%;
+}
+
+.air-science-card:nth-child(3) {
+  background-position: center 48%;
+}
+
+.air-science-icon {
+  flex: 0 0 auto;
+}
+
+.air-science-closing {
+  text-wrap: balance;
+}
+
 .air-gift-section {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(205, 179, 93, 0.055));
@@ -2517,6 +2552,10 @@ main > div > div.mt-5 > section > div.grid > .card-shell:nth-child(2) > .label-c
 
   .air-practical-card-text {
     margin-top: 0.875rem;
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
   }
 
   .air-practical-lower-grid {
