@@ -53,12 +53,16 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--header-offset, 0px);
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
 }
 
 body {
   --amielar-font-serif: var(--font-garamond), "Times New Roman", serif;
   margin: 0;
   min-width: 320px;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
   background:
     radial-gradient(circle at top left, rgba(205, 179, 93, 0.08), transparent 28%),
     radial-gradient(circle at top right, rgba(156, 160, 122, 0.08), transparent 24%),
