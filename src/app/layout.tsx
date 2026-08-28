@@ -17,10 +17,25 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 });
 
+const siteDescription =
+  "Experiencias de bienestar y conexión con la naturaleza a través del mundo de las abejas, en Arata, La Pampa.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://amielarargentina.com"),
   title: "AMIELAR",
-  description:
-    "Frontend conceptual para AMIELAR, experiencia de api-inhalacion, apiturismo y productos de la colmena en La Pampa.",
+  description: siteDescription,
+  alternates: {
+    canonical: "https://amielarargentina.com",
+  },
+  openGraph: {
+    title: "AMIELAR",
+    description: siteDescription,
+    url: "https://amielarargentina.com",
+  },
+  twitter: {
+    title: "AMIELAR",
+    description: siteDescription,
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
