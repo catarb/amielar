@@ -33,11 +33,13 @@ const stateLabel: Record<State, string> = {
   BLOCKED: "Bloqueada",
   RESERVED_AND_BLOCKED: "Reservada + bloqueada",
 };
+const BLOCKED_COLOR_CLASS = "bg-[#ead1e8]";
+const BLOCKED_BADGE_CLASS = `${BLOCKED_COLOR_CLASS} text-[#73356f]`;
 const stateClass: Record<State, string> = {
   AVAILABLE: "bg-[rgba(180,225,192,0.52)] text-[#26744A]",
   RESERVED: "bg-[rgba(243,226,145,0.62)] text-[#927009]",
-  BLOCKED: "bg-[rgba(243,191,191,0.54)] text-[#A63232]",
-  RESERVED_AND_BLOCKED: "bg-[#ead1e8] text-[#73356f]",
+  BLOCKED: BLOCKED_BADGE_CLASS,
+  RESERVED_AND_BLOCKED: BLOCKED_BADGE_CLASS,
 };
 const pad = (n: number) => String(n).padStart(2, "0");
 const formatDate = (date: string) => {
@@ -276,7 +278,7 @@ export default function AdminAvailabilityManager() {
                 aria-current={selected ? "date" : undefined}
                 disabled={!day.inSeason || busy}
                 onClick={() => selectDay(day.date)}
-                className={`min-h-[4.6rem] rounded-xl border p-1 text-center transition sm:min-h-[5.8rem] sm:p-2 ${selected ? "border-[var(--gold-deep)] ring-2 ring-[rgba(190,153,52,0.25)]" : "border-[rgba(67,59,38,0.1)]"} ${!day.inSeason ? "cursor-default bg-black/[0.03] text-black/35" : day.availableCount === 0 ? "cursor-pointer bg-[rgba(243,191,191,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : day.availableCount < day.totalSlots ? "cursor-pointer bg-[rgba(243,226,145,0.35)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : "cursor-pointer bg-[rgba(180,225,192,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]"}`}
+                className={`min-h-[4.6rem] rounded-xl border p-1 text-center transition sm:min-h-[5.8rem] sm:p-2 ${selected ? "border-[var(--gold-deep)] ring-2 ring-[rgba(190,153,52,0.25)]" : "border-[rgba(67,59,38,0.1)]"} ${!day.inSeason ? "cursor-default bg-black/[0.03] text-black/35" : day.blockedCount > 0 ? `cursor-pointer ${BLOCKED_COLOR_CLASS} hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]` : day.availableCount === 0 ? "cursor-pointer bg-[rgba(243,191,191,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : day.availableCount < day.totalSlots ? "cursor-pointer bg-[rgba(243,226,145,0.35)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : "cursor-pointer bg-[rgba(180,225,192,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]"}`}
               >
                 <span className="block text-base font-semibold sm:text-lg">
                   {Number(day.date.slice(-2))}
@@ -314,7 +316,7 @@ export default function AdminAvailabilityManager() {
             Sin disponibilidad
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span data-calendar-legend-dot="blocked" aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#ead1e8]" />
+            <span data-calendar-legend-dot="blocked" aria-hidden="true" className={`h-2.5 w-2.5 shrink-0 rounded-full ${BLOCKED_COLOR_CLASS}`} />
             Con bloqueo
           </span>
         </div>

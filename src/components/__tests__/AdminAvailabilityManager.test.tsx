@@ -5,9 +5,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import AdminAvailabilityManager from "../AdminAvailabilityManager";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: vi.fn() }) }));
-const day = (availableCount = 16) => ({ date: "2026-09-15", inSeason: true, totalSlots: 16, availableCount, reservedCount: 16 - availableCount, blockedCount: 0 });
+const day = (availableCount = 16, blockedCount = 0) => ({ date: "2026-09-15", inSeason: true, totalSlots: 16, availableCount, reservedCount: 16 - availableCount, blockedCount });
 const month = new Response(JSON.stringify({ month: "2026-09", days: [day()] }), { status: 200 });
-const detail = (state: "AVAILABLE" | "RESERVED" = "AVAILABLE") => new Response(JSON.stringify({ timezone: "America/Argentina/Buenos_Aires", slots: [{ startTime: "14:00", endTime: "15:00", state, ...(state === "RESERVED" ? { reservationId: "11111111-1111-4111-8111-111111111111" } : {}) }], blocks: [] }), { status: 200 });
+const detail = (state: "AVAILABLE" | "RESERVED" | "BLOCKED" = "AVAILABLE") => new Response(JSON.stringify({ timezone: "America/Argentina/Buenos_Aires", slots: [{ startTime: "14:00", endTime: "15:00", state, ...(state === "RESERVED" ? { reservationId: "11111111-1111-4111-8111-111111111111" } : {}) }], blocks: [] }), { status: 200 });
 
 describe("AdminAvailabilityManager", () => {
   afterEach(() => { cleanup(); vi.restoreAllMocks(); });
@@ -28,6 +28,13 @@ describe("AdminAvailabilityManager", () => {
     fireEvent.click(within(dialog).getByRole("button", { name: "Guardar reserva" }));
     expect(await screen.findByText("Reserva cargada correctamente.")).toBeInTheDocument();
     expect(screen.getByText("Reservada")).toBeInTheDocument();
+  });
+  it("usa lila para días y horarios bloqueados", async () => {
+    const fetchMock = vi.fn((url: string) => Promise.resolve(url.includes("month=") ? new Response(JSON.stringify({ month: "2026-09", days: [day(15, 1)] }), { status: 200 }) : detail("BLOCKED")));
+    vi.stubGlobal("fetch", fetchMock); render(<AdminAvailabilityManager />);
+    const dayButton = await screen.findByRole("button", { name: /15 de septiembre/ }); fireEvent.click(dayButton);
+    expect(dayButton).toHaveClass("bg-[#ead1e8]");
+    expect(await screen.findByText("Bloqueada")).toHaveClass("bg-[#ead1e8]", "text-[#73356f]");
   });
   it("expone los slots reservados como enlaces al detalle", async () => {
     vi.stubGlobal("fetch", vi.fn((url: string) => Promise.resolve(url.includes("month=") ? month.clone() : detail("RESERVED")))); render(<AdminAvailabilityManager />);
