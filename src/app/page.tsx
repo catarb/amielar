@@ -319,7 +319,7 @@ export default function Home() {
                   icon={Mail}
                   accent="olive"
                   href="mailto:administracion@amielarargentina.com"
-                  className="w-full min-h-[178px] justify-center px-5 py-7 text-center md:min-h-[164px] md:px-4 md:py-5 lg:px-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:w-full [&_p]:max-w-full [&_p]:text-center [&_p]:text-[clamp(0.76rem,0.78vw,0.88rem)] [&_p]:leading-5 [&_p]:whitespace-normal [&_p]:break-words [&_p]:[overflow-wrap:anywhere] [&_p]:[word-break:break-word] md:[&_p]:whitespace-nowrap"
+                  className="w-full min-h-[178px] justify-center px-5 py-7 text-center md:min-h-[164px] md:px-4 md:py-5 lg:px-5 [&_div.inline-flex]:mx-auto [&_div.inline-flex]:mb-4 [&_h3]:text-center [&_h3]:text-[1.18rem] [&_p]:mt-2 [&_p]:w-full [&_p]:max-w-full [&_p]:text-center [&_p]:text-[clamp(0.76rem,0.78vw,0.88rem)] [&_p]:leading-5 [&_p]:whitespace-normal [&_p]:break-words [&_p]:[overflow-wrap:anywhere] [&_p]:[word-break:break-word]"
                 />
               </div>
             </div>
