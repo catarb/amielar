@@ -1,32 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const MEDIA_DESCRIPTION = "Personas viviendo la experiencia Aire de Colmena dentro de la cabaña";
 
-function subscribeToReducedMotion(onChange: () => void) {
-  const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
-  mediaQuery.addEventListener("change", onChange);
-
-  return () => mediaQuery.removeEventListener("change", onChange);
-}
-
-function getReducedMotionPreference() {
-  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
-}
-
-function getServerReducedMotionPreference() {
-  return true;
-}
-
 export function AirHeroMedia() {
-  const prefersReducedMotion = useSyncExternalStore(
-    subscribeToReducedMotion,
-    getReducedMotionPreference,
-    getServerReducedMotionPreference,
-  );
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(true);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+    const syncPreference = () => setPrefersReducedMotion(mediaQuery.matches);
+    syncPreference();
+    mediaQuery.addEventListener("change", syncPreference);
+    return () => mediaQuery.removeEventListener("change", syncPreference);
+  }, []);
 
   return (
     <>

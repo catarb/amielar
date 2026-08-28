@@ -367,7 +367,7 @@ export default function Home() {
               <div className="mt-3.5 space-y-1.5 text-[0.84rem]">
                 <div className="flex items-center gap-3">
                   <MessageCircleMore className="h-4 w-4 text-[var(--olive)]" />
-                  WhatsApp · +54 9 2302 39-3510
+                  <span>WhatsApp · +54 9 2302 39-3510</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="h-4 w-4 text-[var(--olive)]" />

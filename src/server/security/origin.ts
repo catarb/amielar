@@ -17,7 +17,13 @@ export function isAllowedOrigin(request: Request, env: OriginEnvironment = proce
       (expected.pathname !== "/" && expected.pathname !== "")
     ) return false;
 
-    return expected.protocol === actual.protocol && expected.hostname === actual.hostname && expected.port === actual.port;
+    if (expected.protocol === actual.protocol && expected.hostname === actual.hostname && expected.port === actual.port) return true;
+
+    if (env.NODE_ENV === "development") {
+      return new URL(request.url).origin === actual.origin;
+    }
+
+    return false;
   } catch {
     return false;
   }

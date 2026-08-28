@@ -50,6 +50,17 @@
   box-sizing: border-box;
 }
 
+.admin-shell {
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.admin-shell input,
+.admin-shell select,
+.admin-shell textarea {
+  font-size: 1rem;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--header-offset, 0px);
@@ -1054,6 +1065,24 @@ main > div > div.mt-5 > section > div.grid > .card-shell:nth-child(2) > .label-c
   background: white;
 }
 
+.field-group input[aria-invalid="true"],
+.field-group select[aria-invalid="true"],
+.field-group textarea[aria-invalid="true"] {
+  border-color: #a63232;
+  background: rgba(243, 191, 191, 0.12);
+}
+
+.reservation-form-error {
+  border: 1px solid rgba(166, 50, 50, 0.28);
+  border-radius: 0.85rem;
+  background: rgba(243, 191, 191, 0.16);
+  padding: 0.65rem 0.8rem;
+  color: #a63232;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .reservation-composition {
   min-height: min(620px, calc(100svh - var(--header-offset, 0px) - 1.75rem));
   border: 1px solid rgba(67, 59, 38, 0.1);
@@ -1779,8 +1808,15 @@ main > div > div.mt-5 > section > div.grid > .card-shell:nth-child(2) > .label-c
 @media (min-width: 1024px) and (max-height: 700px) {
   .reservation-form-wrap {
     align-items: flex-start;
-    overflow-y: auto;
+    overflow: visible;
   }
+
+  .reservation-shell { padding-block: 1.25rem 1.75rem !important; }
+  .reservation-shell form { gap: 0.45rem; }
+  .reservation-shell .field-group { gap: 0.25rem; }
+  .reservation-shell .field-group input,
+  .reservation-shell .field-group select { min-height: 2.45rem; padding-block: 0.45rem; }
+  .reservation-shell .field-group textarea { min-height: 2.8rem; }
 }
 
 @media (min-width: 768px) {

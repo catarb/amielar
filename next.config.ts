@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
+const isDevelopment = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
   output: "standalone",
+  ...(isDevelopment ? { allowedDevOrigins: ["192.168.68.102"] } : {}),
   images: {
     formats: ["image/avif", "image/webp"],
   },

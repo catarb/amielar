@@ -8,7 +8,7 @@ const DESKTOP_MIN_WIDTH = 1024;
 const MOBILE_MAX_WIDTH = 767;
 const DESKTOP_TOP_GAP = 24;
 const MOBILE_TOP_GAP = 16;
-const RESERVATION_TOP_GAP = 0;
+const RESERVATION_TOP_GAP = 16;
 const HISTORY_TOP_GAP = 8;
 
 export const PENDING_SECTION_KEY = "amielar:pending-section";
@@ -52,7 +52,9 @@ export function scrollToSection(
 
   if (isDesktop) {
     if (targetId === RESERVATION_ID) {
-      topGap = RESERVATION_TOP_GAP;
+      const availableViewportHeight = Math.max(viewportHeight - headerHeight, 0);
+      const freeSpace = availableViewportHeight - sectionHeight;
+      topGap = freeSpace >= 0 ? freeSpace / 2 : RESERVATION_TOP_GAP;
     } else if (targetId === HISTORY_ID) {
       topGap = HISTORY_TOP_GAP;
     } else if (targetId === QUESTIONS_ID) {

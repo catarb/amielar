@@ -2,42 +2,58 @@
 
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
 import AdminAvailabilityManager from "../AdminAvailabilityManager";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: vi.fn() }) }));
-
-const availability = (state: "AVAILABLE" | "RESERVED" = "AVAILABLE") => new Response(JSON.stringify({ timezone: "America/Argentina/Buenos_Aires", slots: [{ startTime: "14:00", endTime: "15:00", state, ...(state === "RESERVED" ? { reservationId: "11111111-1111-4111-8111-111111111111" } : {}) }], blocks: [] }), { status: 200 });
+const day = (availableCount = 16) => ({ date: "2026-09-15", inSeason: true, totalSlots: 16, availableCount, reservedCount: 16 - availableCount, blockedCount: 0 });
+const month = new Response(JSON.stringify({ month: "2026-09", days: [day()] }), { status: 200 });
+const detail = (state: "AVAILABLE" | "RESERVED" = "AVAILABLE") => new Response(JSON.stringify({ timezone: "America/Argentina/Buenos_Aires", slots: [{ startTime: "14:00", endTime: "15:00", state, ...(state === "RESERVED" ? { reservationId: "11111111-1111-4111-8111-111111111111" } : {}) }], blocks: [] }), { status: 200 });
 
 describe("AdminAvailabilityManager", () => {
   afterEach(() => { cleanup(); vi.restoreAllMocks(); });
-
-  it("abre la carga manual desde un slot disponible y refresca después de guardar", async () => {
-    const fetchMock = vi.fn().mockResolvedValueOnce(availability()).mockResolvedValueOnce(new Response(JSON.stringify({ reservationId: "reservation-id", status: "PENDIENTE_PAGO" }), { status: 201 })).mockResolvedValueOnce(new Response(JSON.stringify({ timezone: "America/Argentina/Buenos_Aires", slots: [{ startTime: "14:00", endTime: "15:00", state: "RESERVED", reservationId: "reservation-id" }], blocks: [] }), { status: 200 }));
-    vi.stubGlobal("fetch", fetchMock);
-    render(<AdminAvailabilityManager />);
-    fireEvent.change(screen.getByLabelText("Fecha"), { target: { value: "2026-12-15" } });
-    fireEvent.click(screen.getByRole("button", { name: "Consultar" }));
+  it("carga el resumen mensual, selecciona un día y conserva la carga manual", async () => {
+    let detailCalls = 0;
+    const fetchMock = vi.fn((url: string, options?: RequestInit) => options?.method === "POST" ? Promise.resolve(new Response(JSON.stringify({ reservationId: "reservation-id" }), { status: 201 })) : Promise.resolve(url.includes("month=") ? month.clone() : detail(detailCalls++ === 0 ? "AVAILABLE" : "RESERVED")));
+    vi.stubGlobal("fetch", fetchMock); render(<AdminAvailabilityManager />);
+    const legendDots = [...document.querySelectorAll("[data-calendar-legend-dot]")];
+    expect(legendDots).toHaveLength(4);
+    expect(new Set(legendDots.map((dot) => dot.getAttribute("data-calendar-legend-dot"))).size).toBe(4);
+    const dayButton = await screen.findByRole("button", { name: /15 de septiembre/ }); fireEvent.click(dayButton);
+    expect(dayButton).toHaveClass("cursor-pointer");
     fireEvent.click(await screen.findByRole("button", { name: /14:00/ }));
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(within(screen.getByRole("dialog")).getByText("15/12/2026")).toBeInTheDocument();
-    expect(within(screen.getByRole("dialog")).getByText("14:00–15:00")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("Nombre completo *"), { target: { value: "Ana Prueba" } });
-    fireEvent.change(screen.getByLabelText("Teléfono *"), { target: { value: "+5492304000000" } });
-    fireEvent.change(screen.getByLabelText("Localidad *"), { target: { value: "General Pico" } });
-    fireEvent.click(screen.getByRole("button", { name: "Guardar reserva" }));
+    const dialog = screen.getByText("Cargar reserva manual").closest("form")!;
+    fireEvent.change(within(dialog).getByLabelText("Nombre completo"), { target: { value: "Ana Prueba" } });
+    fireEvent.change(within(dialog).getByLabelText("Teléfono"), { target: { value: "+5492304000000" } });
+    fireEvent.change(within(dialog).getByLabelText("Localidad"), { target: { value: "General Pico" } });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Guardar reserva" }));
     expect(await screen.findByText("Reserva cargada correctamente.")).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenLastCalledWith("/api/admin/disponibilidad?date=2026-12-15", expect.objectContaining({ cache: "no-store" }));
     expect(screen.getByText("Reservada")).toBeInTheDocument();
   });
+  it("expone los slots reservados como enlaces al detalle", async () => {
+    vi.stubGlobal("fetch", vi.fn((url: string) => Promise.resolve(url.includes("month=") ? month.clone() : detail("RESERVED")))); render(<AdminAvailabilityManager />);
+    fireEvent.click(await screen.findByRole("button", { name: /15 de septiembre/ }));
+    expect(await screen.findByRole("link", { name: /14:00/ })).toHaveAttribute("href", "/admin/reservas/11111111-1111-4111-8111-111111111111");
+  });
 
-  it("lleva los slots reservados al detalle y no vuelve clickeables los bloqueados", async () => {
-    const fetchMock = vi.fn().mockResolvedValue(availability("RESERVED"));
+  it("elimina un bloqueo con DELETE y refresca el detalle", async () => {
+    const block = { id: "22222222-2222-4222-8222-222222222222", startTime: "06:00", endTime: "10:00", reason: "Me voy de viaje" };
+    let deleted = false;
+    const fetchMock = vi.fn((url: string, options?: RequestInit) => {
+      if (options?.method === "DELETE") {
+        deleted = true;
+        return Promise.resolve(new Response(JSON.stringify({ success: true }), { status: 200 }));
+      }
+      if (url.includes("month=")) return Promise.resolve(month.clone());
+      return Promise.resolve(new Response(JSON.stringify({ timezone: "America/Argentina/Buenos_Aires", slots: [], blocks: deleted ? [] : [block] }), { status: 200 }));
+    });
     vi.stubGlobal("fetch", fetchMock);
+    vi.spyOn(window, "confirm").mockReturnValue(true);
     render(<AdminAvailabilityManager />);
-    fireEvent.change(screen.getByLabelText("Fecha"), { target: { value: "2026-12-15" } });
-    fireEvent.click(screen.getByRole("button", { name: "Consultar" }));
-    const link = await screen.findByRole("link", { name: /14:00/ });
-    expect(link).toHaveAttribute("href", "/admin/reservas/11111111-1111-4111-8111-111111111111");
+    fireEvent.click(await screen.findByRole("button", { name: /15 de septiembre/ }));
+    expect(await screen.findByText("Me voy de viaje")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Eliminar" }));
+    expect(fetchMock).toHaveBeenCalledWith(`/api/admin/bloqueos/${block.id}`, { method: "DELETE" });
+    expect(await screen.findByText("Bloqueo eliminado.")).toBeInTheDocument();
+    expect(screen.queryByText("Me voy de viaje")).not.toBeInTheDocument();
   });
 });

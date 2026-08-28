@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { isAllowedOrigin } from "../origin";
 
-function request(origin?: string): Request {
-  return new Request("http://localhost/api/admin/reservas/id", { headers: origin ? { origin } : undefined });
+function request(origin?: string, url = "http://localhost/api/admin/reservas/id"): Request {
+  return new Request(url, { headers: origin ? { origin } : undefined });
 }
 
 describe("admin Origin validation", () => {
@@ -21,5 +21,11 @@ describe("admin Origin validation", () => {
     expect(isAllowedOrigin(request("https://amielar.example:8443"), {})).toBe(false);
     expect(isAllowedOrigin(request("https://amielar.example:8443"), { APP_ORIGIN: "not-a-url" })).toBe(false);
     expect(isAllowedOrigin(request("https://amielar.example:8443"), { APP_ORIGIN: "https://amielar.example/path" })).toBe(false);
+  });
+
+  it("accepts the same LAN origin as the request URL only in development", () => {
+    const lanRequest = request("http://192.168.68.102:3000", "http://192.168.68.102:3000/api/admin/bloqueos/id");
+    expect(isAllowedOrigin(lanRequest, { APP_ORIGIN: "http://localhost:3000", NODE_ENV: "development" })).toBe(true);
+    expect(isAllowedOrigin(lanRequest, { APP_ORIGIN: "http://localhost:3000", NODE_ENV: "production" })).toBe(false);
   });
 });

@@ -11,7 +11,7 @@ export default async function AdminProtectedLayout({ children }: Readonly<{ chil
   if (!session) redirect("/admin/login");
 
   return (
-    <main className="relative z-10 min-h-screen px-4 py-5 sm:px-8 sm:py-8">
+    <main className="admin-shell relative z-10 min-h-screen px-4 py-5 sm:px-8 sm:py-8">
       <div className="mx-auto max-w-6xl">
         <header className="card-shell flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>

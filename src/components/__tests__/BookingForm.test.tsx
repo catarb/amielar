@@ -90,15 +90,16 @@ describe("BookingForm", () => {
 
     fetchMock.mockRejectedValueOnce(new Error("network"));
     fireEvent.change(screen.getByLabelText("Fecha preferida"), { target: { value: "2026-12-16" } });
-    expect(await screen.findByText("No pudimos consultar los horarios disponibles. Intentá nuevamente.")).toBeInTheDocument();
+    expect(await screen.findByText("No se pudo cargar horarios.")).toBeInTheDocument();
   });
 
-  it("muestra éxito provisional y no confirma automáticamente", async () => {
+  it("muestra éxito y no exige un segundo click para WhatsApp", async () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(availability([{ startTime: "18:00", endTime: "19:00" }]))
       .mockResolvedValueOnce(new Response(JSON.stringify({ reservationId: "uuid", status: "PENDIENTE_PAGO" }), { status: 201 }));
     vi.stubGlobal("fetch", fetchMock);
     render(<BookingForm />);
+    expect(screen.queryByText("Revisá los campos marcados en rojo antes de continuar.")).not.toBeInTheDocument();
     chooseDate();
     await screen.findByRole("option", { name: "18:00" });
     fireEvent.change(screen.getByLabelText("Horario"), { target: { value: "18:00" } });
@@ -108,7 +109,8 @@ describe("BookingForm", () => {
     expect(await screen.findByText("¡Recibimos tu reserva!")).toBeInTheDocument();
     expect(screen.getByText(/Tu solicitud quedó registrada/)).toBeInTheDocument();
     expect(screen.getByText("Experiencia")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Continuar por WhatsApp" })).toHaveAttribute("href", expect.stringContaining("Aire%20de%20Colmena"));
+    expect(screen.queryByRole("link", { name: "Continuar por WhatsApp" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Hacer otra reserva" })).toBeInTheDocument();
     expect(screen.queryByText("Reserva confirmada")).not.toBeInTheDocument();
     expect(fetchMock).toHaveBeenLastCalledWith("/api/reservas", expect.objectContaining({ method: "POST" }));
     expect(JSON.parse(fetchMock.mock.calls[1][1].body as string).website).toBe("");
@@ -163,6 +165,7 @@ describe("BookingForm", () => {
     fireEvent.change(screen.getByLabelText("Horario"), { target: { value: "18:00" } });
     fireEvent.click(screen.getByRole("button", { name: "Enviar solicitud" }));
     expect(await screen.findByText("Ingresá tu nombre completo.")).toBeInTheDocument();
+    expect(screen.getByText("Revisá los campos marcados en rojo antes de continuar.")).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 

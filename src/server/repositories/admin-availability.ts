@@ -11,6 +11,8 @@ export function createAdminAvailabilityRepository(database: Database) {
   return {
     async findReservations(start: Date, end: Date) { return database.select(reservationFields).from(reservations).where(and(gte(reservations.slotStart, start), lt(reservations.slotStart, end))); },
     async findBlocks(start: Date, end: Date) { return database.select(blockFields).from(availabilityBlocks).where(and(lt(availabilityBlocks.startsAt, end), gt(availabilityBlocks.endsAt, start))); },
+    async findReservationsForRange(start: Date, end: Date) { return database.select(reservationFields).from(reservations).where(and(gte(reservations.slotStart, start), lt(reservations.slotStart, end))); },
+    async findBlocksForRange(start: Date, end: Date) { return database.select(blockFields).from(availabilityBlocks).where(and(lt(availabilityBlocks.startsAt, end), gt(availabilityBlocks.endsAt, start))); },
     async findBlock(id: string) { const [row] = await database.select(blockFields).from(availabilityBlocks).where(eq(availabilityBlocks.id, id)).limit(1); return row ?? null; },
     async transaction<T>(callback: (tx: AdminAvailabilityTransaction) => Promise<T>) { return database.transaction(callback); },
     async findReservationsInTransaction(tx: AdminAvailabilityTransaction, start: Date, end: Date) { return tx.select(reservationFields).from(reservations).where(and(gte(reservations.slotStart, start), lt(reservations.slotStart, end))); },
