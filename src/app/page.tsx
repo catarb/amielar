@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, MessageCircleMore, MoveRight } from "lucide-react";
@@ -17,6 +18,16 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { featuredAireDeColmenaFaqs } from "@/data/aireDeColmenaFaqs";
 import { apiBenefits, featureCards, galleryItems, products } from "@/data/site";
+
+export const metadata: Metadata = {
+  title: "Amielar | Respirá aire de colmena",
+  openGraph: {
+    title: "Amielar | Respirá aire de colmena",
+  },
+  twitter: {
+    title: "Amielar | Respirá aire de colmena",
+  },
+};
 
 const productsWhatsappMessage = "Hola, quisiera consultar por los productos de la colmena de AMIELAR.";
 
@@ -207,7 +218,7 @@ export default function Home() {
               <SectionTitle
                 eyebrow="Galería y experiencia"
                 title="Una atmósfera visual más cercana a la maqueta: noble, aireada y serena."
-                description="Combinamos las referencias que nos compartiste con imágenes nuevas para completar la narrativa del paisaje, la cabaña y los productos."
+                description="Un recorrido en imágenes por la esencia de AMIELAR: el paisaje, la cabaña, las abejas y los pequeños detalles que hacen de cada visita una experiencia única."
                 align="left"
                 className="gallery-copy mx-auto w-full max-w-[560px] gap-3 !items-center !text-center [&_h2]:mx-auto [&_h2]:max-w-none [&_p]:mx-auto [&_p]:max-w-none xl:!items-start xl:!text-left xl:[&_h2]:mx-0 xl:[&_h2]:max-w-none xl:[&_p]:mx-0"
               />
