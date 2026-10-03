@@ -5,7 +5,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import { isAdminAuthenticated } from "@/server/auth/admin-auth";
 import { ReservationDomainError } from "@/server/domain/reservations/errors";
 import { isAllowedOrigin } from "@/server/security/origin";
-import { AdminAvailabilityError, createAdminAvailabilityBlock } from "@/server/services/admin-availability";
+import { AdminAvailabilityError, createAdminAvailabilityBlock, toggleAdminAvailabilitySlot } from "@/server/services/admin-availability";
 import { TIMEZONE } from "@/server/domain/reservations/constants";
 import { ADMIN_BLOCK_BODY_BYTES, readLimitedJson } from "@/server/security/request-body";
 
@@ -14,6 +14,35 @@ const schema = z.object({ date: z.string(), startTime: z.string(), endTime: z.st
 const errorResponse = (code: string, message: string, status: number, extra: Record<string, unknown> = {}) => NextResponse.json({ error: { code, message, ...extra } }, { status, headers: HEADERS });
 
 export async function POST(request: Request): Promise<Response> { return handleAdminBlockCreateRequest(request); }
+
+const toggleSchema = z.object({ date: z.string(), startTime: z.string(), expectedState: z.enum(["AVAILABLE", "BLOCKED"]) }).strict();
+
+export async function PATCH(request: Request): Promise<Response> { return handleAdminSlotToggleRequest(request); }
+
+export async function handleAdminSlotToggleRequest(
+  request: Request,
+  authenticate: typeof isAdminAuthenticated = isAdminAuthenticated,
+  originCheck: typeof isAllowedOrigin = isAllowedOrigin,
+  toggle: typeof toggleAdminAvailabilitySlot = toggleAdminAvailabilitySlot,
+): Promise<Response> {
+  if (!(await authenticate())) return errorResponse("UNAUTHORIZED", "No autorizado.", 401);
+  if (!originCheck(request)) return errorResponse("CSRF_VALIDATION_FAILED", "La solicitud no es válida.", 403);
+  const bodyResult = await readLimitedJson(request, ADMIN_BLOCK_BODY_BYTES);
+  if (!bodyResult.ok) return errorResponse(bodyResult.reason === "too_large" ? "PAYLOAD_TOO_LARGE" : "INVALID_JSON", "La solicitud no es válida.", bodyResult.reason === "too_large" ? 413 : 400);
+  const parsed = toggleSchema.safeParse(bodyResult.value);
+  if (!parsed.success) return errorResponse("VALIDATION_ERROR", "La solicitud no es válida.", 422);
+  try {
+    return NextResponse.json(await toggle(parsed.data), { headers: HEADERS });
+  } catch (error) {
+    if (error instanceof ReservationDomainError) return errorResponse("VALIDATION_ERROR", "El horario no es válido.", 422);
+    if (error instanceof AdminAvailabilityError) {
+      if (error.code === "OUT_OF_SEASON") return errorResponse(error.code, error.message, 422);
+      if (error.code === "SLOT_RESERVED" || error.code === "SLOT_STATE_CHANGED") return errorResponse(error.code, error.message, 409);
+    }
+    console.error("Admin availability slot toggle failed", { errorType: error instanceof Error ? error.name : "UnknownError" });
+    return errorResponse("INTERNAL_ERROR", "No se pudo actualizar la disponibilidad.", 500);
+  }
+}
 
 export async function handleAdminBlockCreateRequest(
   request: Request,

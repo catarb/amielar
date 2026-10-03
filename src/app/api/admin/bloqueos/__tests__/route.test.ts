@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { handleAdminBlockCreateRequest } from "../route";
+import { handleAdminBlockCreateRequest, handleAdminSlotToggleRequest } from "../route";
 
 const bodyRequest = (body: string, origin = "http://localhost") => new Request("http://localhost/api/admin/bloqueos", { method: "POST", headers: { "content-type": "application/json", origin }, body });
 
@@ -31,5 +31,22 @@ describe("POST admin bloqueos", () => {
     expect(response.status).toBe(413);
     expect((await response.json()).error.code).toBe("PAYLOAD_TOO_LARGE");
     expect(create).not.toHaveBeenCalled();
+  });
+});
+
+describe("PATCH admin bloqueos", () => {
+  const request = (body: unknown) => new Request("http://localhost/api/admin/bloqueos", { method: "PATCH", headers: { origin: "http://localhost", "content-type": "application/json" }, body: JSON.stringify(body) });
+  const input = { date: "2026-12-15", startTime: "18:00", expectedState: "AVAILABLE" };
+  it("exige autenticación y origen válido", async () => {
+    expect((await handleAdminSlotToggleRequest(request(input), async () => false)).status).toBe(401);
+    expect((await handleAdminSlotToggleRequest(request(input), async () => true, () => false)).status).toBe(403);
+  });
+  it("valida el cuerpo y devuelve el estado persistido", async () => {
+    const toggle = vi.fn().mockResolvedValue({ state: "BLOCKED" });
+    expect((await handleAdminSlotToggleRequest(request({ ...input, confirmImpact: true }), async () => true, () => true, toggle)).status).toBe(422);
+    const response = await handleAdminSlotToggleRequest(request(input), async () => true, () => true, toggle);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ state: "BLOCKED" });
+    expect(toggle).toHaveBeenCalledWith(input);
   });
 });

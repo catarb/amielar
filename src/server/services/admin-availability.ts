@@ -11,7 +11,7 @@ export type AdminSlotState = "AVAILABLE" | "RESERVED" | "BLOCKED" | "RESERVED_AN
 export type AdminAvailability = { date: string; timezone: typeof TIMEZONE; slots: Array<{ startTime: string; endTime: string; state: AdminSlotState; reservationId?: string; reservationStatus?: string }>; blocks: Array<{ id: string; startTime: string; endTime: string; reason: string | null }> };
 export type AdminAvailabilityMonth = { month: string; timezone: typeof TIMEZONE; days: Array<{ date: string; inSeason: boolean; totalSlots: number; availableCount: number; reservedCount: number; blockedCount: number }> };
 
-export class AdminAvailabilityError extends Error { constructor(public readonly code: "OUT_OF_SEASON" | "BLOCK_OVERLAPS_EXISTING" | "BLOCK_IMPACTS_RESERVATIONS" | "BLOCK_NOT_FOUND", message: string, public readonly impact?: { count: number; slots: string[] }) { super(message); } }
+export class AdminAvailabilityError extends Error { constructor(public readonly code: "OUT_OF_SEASON" | "BLOCK_OVERLAPS_EXISTING" | "BLOCK_IMPACTS_RESERVATIONS" | "BLOCK_NOT_FOUND" | "SLOT_RESERVED" | "SLOT_STATE_CHANGED", message: string, public readonly impact?: { count: number; slots: string[] }) { super(message); } }
 
 function ensureSeason(date: string) { assertValidDate(date); if (!isDateInSeason(date)) throw new AdminAvailabilityError("OUT_OF_SEASON", "Fuera de temporada."); }
 function active(row: { deletedAt: Date | null; status: string }) { return !row.deletedAt && ACTIVE_RESERVATION_STATUSES.includes(row.status as never); }
@@ -50,3 +50,28 @@ export async function createAdminAvailabilityBlock(input: BlockInput, repository
 }
 
 export async function deleteAdminAvailabilityBlock(id: string, repository?: AdminAvailabilityRepository) { const source = repository ?? await getPostgresAdminAvailabilityRepository(); const meta = await source.findBlock(id); if (!meta) throw new AdminAvailabilityError("BLOCK_NOT_FOUND", "Bloqueo inexistente."); const slots = generateSlotsForDate(formatInTimeZone(meta.startsAt, TIMEZONE, "yyyy-MM-dd")).filter((s) => s.startsAt < meta.endsAt && getSlotEnd(s.startsAt) > meta.startsAt); return source.transaction(async (tx) => { await acquireSlotAdvisoryLocks(tx, EXPERIENCE_SLUG, slots.map((s) => s.startsAt)); if (!await source.findBlockInTransaction(tx, id)) throw new AdminAvailabilityError("BLOCK_NOT_FOUND", "Bloqueo inexistente."); await source.deleteBlock(tx, id); }); }
+
+export async function toggleAdminAvailabilitySlot(input: { date: string; startTime: string; expectedState: "AVAILABLE" | "BLOCKED" }, repository?: AdminAvailabilityRepository) {
+  ensureSeason(input.date);
+  const daySlots = generateSlotsForDate(input.date);
+  const slot = daySlots.find((candidate) => candidate.startTime === input.startTime);
+  if (!slot) throw new ReservationDomainError("INVALID_START_TIME", "Horario inválido.");
+  const source = repository ?? await getPostgresAdminAvailabilityRepository();
+  return source.transaction(async (tx) => {
+    await acquireSlotAdvisoryLocks(tx, EXPERIENCE_SLUG, daySlots.map((candidate) => candidate.startsAt));
+    const reservations = await source.findReservationsInTransaction(tx, slot.startsAt, slot.endsAt);
+    if (reservations.some(active)) throw new AdminAvailabilityError("SLOT_RESERVED", "El horario tiene una reserva activa.");
+    const block = await source.findOverlappingBlock(tx, slot.startsAt, slot.endsAt);
+    if ((block ? "BLOCKED" : "AVAILABLE") !== input.expectedState) {
+      throw new AdminAvailabilityError("SLOT_STATE_CHANGED", "La disponibilidad cambió. Actualizá el calendario.");
+    }
+    if (!block) {
+      await source.insertBlock(tx, slot.startsAt, slot.endsAt, null);
+      return { state: "BLOCKED" as const };
+    }
+    await source.deleteBlock(tx, block.id);
+    if (block.startsAt < slot.startsAt) await source.insertBlock(tx, block.startsAt, slot.startsAt, block.reason);
+    if (block.endsAt > slot.endsAt) await source.insertBlock(tx, slot.endsAt, block.endsAt, block.reason);
+    return { state: "AVAILABLE" as const };
+  });
+}

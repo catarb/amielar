@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EXPERIENCES } from "@/server/domain/reservations/experiences";
 
 type State = "AVAILABLE" | "RESERVED" | "BLOCKED" | "RESERVED_AND_BLOCKED";
@@ -65,6 +65,8 @@ export default function AdminAvailabilityManager() {
   const [date, setDate] = useState("");
   const [data, setData] = useState<Availability | null>(null);
   const [busy, setBusy] = useState(false);
+  const [pendingSlot, setPendingSlot] = useState<string | null>(null);
+  const toggleInFlight = useRef(false);
   const [notice, setNotice] = useState("");
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [start, setStart] = useState("06:00");
@@ -207,6 +209,49 @@ export default function AdminAvailabilityManager() {
       "Bloqueo eliminado.",
     );
   }
+  async function toggleSlot(slot: Slot) {
+    if (!date || toggleInFlight.current || busy || (slot.state !== "AVAILABLE" && slot.state !== "BLOCKED")) return;
+    toggleInFlight.current = true;
+    setPendingSlot(slot.startTime);
+    setNotice("");
+    const nextState = slot.state === "AVAILABLE" ? "BLOCKED" : "AVAILABLE";
+    const delta = nextState === "AVAILABLE" ? 1 : -1;
+    const selectedDate = date;
+    setData((current) => current && {
+      ...current,
+      slots: current.slots.map((item) => item.startTime === slot.startTime ? { ...item, state: nextState } : item),
+    });
+    setDays((current) => current.map((day) => day.date === selectedDate ? {
+      ...day,
+      availableCount: day.availableCount + delta,
+      blockedCount: day.blockedCount - delta,
+    } : day));
+    try {
+      const response = await fetch("/api/admin/bloqueos", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: selectedDate, startTime: slot.startTime, expectedState: slot.state }),
+      });
+      if (response.status === 401) { router.replace("/admin/login"); throw new Error("No autorizado."); }
+      if (!response.ok) throw new Error("No se pudo actualizar la disponibilidad.");
+      await Promise.all([loadMonth(), loadDay(selectedDate)]);
+    } catch {
+      setData((current) => current && {
+        ...current,
+        slots: current.slots.map((item) => item.startTime === slot.startTime ? { ...item, state: slot.state } : item),
+      });
+      setDays((current) => current.map((day) => day.date === selectedDate ? {
+        ...day,
+        availableCount: day.availableCount - delta,
+        blockedCount: day.blockedCount + delta,
+      } : day));
+      setNotice("No se pudo actualizar la disponibilidad.");
+      void Promise.all([loadMonth(), loadDay(selectedDate)]);
+    } finally {
+      toggleInFlight.current = false;
+      setPendingSlot(null);
+    }
+  }
   async function saveReservation(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!date || !selectedSlot) return;
@@ -242,6 +287,7 @@ export default function AdminAvailabilityManager() {
             type="button"
             className="secondary-button min-h-10"
             aria-label="Mes anterior"
+            disabled={pendingSlot !== null}
             onClick={() => setMonth(shiftMonth(month, -1))}
           >
             ←
@@ -253,6 +299,7 @@ export default function AdminAvailabilityManager() {
             type="button"
             className="secondary-button min-h-10"
             aria-label="Mes siguiente"
+            disabled={pendingSlot !== null}
             onClick={() => setMonth(shiftMonth(month, 1))}
           >
             →
@@ -276,7 +323,7 @@ export default function AdminAvailabilityManager() {
                 type="button"
                 aria-label={label}
                 aria-current={selected ? "date" : undefined}
-                disabled={!day.inSeason || busy}
+                disabled={!day.inSeason || busy || pendingSlot !== null}
                 onClick={() => selectDay(day.date)}
                 className={`min-h-[4.6rem] rounded-xl border p-1 text-center transition sm:min-h-[5.8rem] sm:p-2 ${selected ? "border-[var(--gold-deep)] ring-2 ring-[rgba(190,153,52,0.25)]" : "border-[rgba(67,59,38,0.1)]"} ${!day.inSeason ? "cursor-default bg-black/[0.03] text-black/35" : day.blockedCount > 0 ? `cursor-pointer ${BLOCKED_COLOR_CLASS} hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]` : day.availableCount === 0 ? "cursor-pointer bg-[rgba(243,191,191,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : day.availableCount < day.totalSlots ? "cursor-pointer bg-[rgba(243,226,145,0.35)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : "cursor-pointer bg-[rgba(180,225,192,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]"}`}
               >
@@ -337,23 +384,7 @@ export default function AdminAvailabilityManager() {
         ) : (
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {data.slots.map((slot) =>
-              slot.state === "AVAILABLE" ? (
-                <button
-                  type="button"
-                  key={slot.startTime}
-                  onClick={() => setSelectedSlot(slot)}
-                  className="flex min-h-14 items-center justify-between rounded-2xl border border-black/10 bg-white/65 px-4 text-left"
-                >
-                  <span className="font-semibold">
-                    {slot.startTime}–{slot.endTime}
-                  </span>
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${stateClass[slot.state]}`}
-                  >
-                    {stateLabel[slot.state]}
-                  </span>
-                </button>
-              ) : slot.reservationId ? (
+              slot.reservationId ? (
                 <Link
                   key={slot.startTime}
                   href={`/admin/reservas/${slot.reservationId}`}
@@ -368,19 +399,27 @@ export default function AdminAvailabilityManager() {
                     {stateLabel[slot.state]}
                   </span>
                 </Link>
-              ) : (
+              ) : slot.state === "AVAILABLE" || slot.state === "BLOCKED" ? (
                 <div
                   key={slot.startTime}
-                  className="flex min-h-14 items-center justify-between rounded-2xl border border-black/10 bg-white/65 px-4"
+                  className="flex min-h-14 items-center justify-between gap-2 rounded-2xl border border-black/10 bg-white/65 pl-4 pr-2"
                 >
-                  <span className="font-semibold">
-                    {slot.startTime}–{slot.endTime}
-                  </span>
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${stateClass[slot.state]}`}
+                  {slot.state === "AVAILABLE" ? <button type="button" onClick={() => setSelectedSlot(slot)} className="min-h-11 flex-1 text-left font-semibold focus-visible:rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold-deep)]" aria-label={`Cargar reserva en horario ${slot.startTime} a ${slot.endTime}`}>{slot.startTime}–{slot.endTime}</button> : <span className="font-semibold">{slot.startTime}–{slot.endTime}</span>}
+                  <button
+                    type="button"
+                    disabled={pendingSlot !== null || busy}
+                    onClick={() => void toggleSlot(slot)}
+                    aria-label={`${slot.state === "AVAILABLE" ? "Bloquear" : "Habilitar"} horario ${slot.startTime} a ${slot.endTime}`}
+                    aria-busy={pendingSlot === slot.startTime}
+                    className={`min-h-11 shrink-0 cursor-pointer rounded-full px-3 text-xs font-semibold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold-deep)] disabled:cursor-wait ${stateClass[slot.state]}`}
                   >
-                    {stateLabel[slot.state]}
-                  </span>
+                    {stateLabel[slot.state]}{pendingSlot === slot.startTime ? "…" : ""}
+                  </button>
+                </div>
+              ) : (
+                <div key={slot.startTime} className="flex min-h-14 items-center justify-between rounded-2xl border border-black/10 bg-white/65 px-4">
+                  <span className="font-semibold">{slot.startTime}–{slot.endTime}</span>
+                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${stateClass[slot.state]}`}>{stateLabel[slot.state]}</span>
                 </div>
               ),
             )}
@@ -437,7 +476,7 @@ export default function AdminAvailabilityManager() {
           </label>
           <button
             type="button"
-            disabled={!date || busy}
+            disabled={!date || busy || pendingSlot !== null}
             onClick={() => void createBlock()}
             className="primary-button justify-center"
           >
@@ -454,6 +493,7 @@ export default function AdminAvailabilityManager() {
           <button
             type="button"
             className="primary-button mt-4"
+            disabled={pendingSlot !== null}
             onClick={() => void createBlock(true)}
           >
             Confirmar bloqueo igualmente
@@ -486,6 +526,7 @@ export default function AdminAvailabilityManager() {
                 </div>
                 <button
                   type="button"
+                  disabled={pendingSlot !== null || busy}
                   onClick={() => void removeBlock(block.id)}
                   className="text-sm font-semibold text-[#A63232] underline"
                 >

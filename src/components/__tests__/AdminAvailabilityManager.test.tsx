@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import AdminAvailabilityManager from "../AdminAvailabilityManager";
 
@@ -20,7 +20,7 @@ describe("AdminAvailabilityManager", () => {
     expect(new Set(legendDots.map((dot) => dot.getAttribute("data-calendar-legend-dot"))).size).toBe(4);
     const dayButton = await screen.findByRole("button", { name: /15 de septiembre/ }); fireEvent.click(dayButton);
     expect(dayButton).toHaveClass("cursor-pointer");
-    fireEvent.click(await screen.findByRole("button", { name: /14:00/ }));
+    fireEvent.click(await screen.findByRole("button", { name: "Cargar reserva en horario 14:00 a 15:00" }));
     const dialog = screen.getByText("Cargar reserva manual").closest("form")!;
     fireEvent.change(within(dialog).getByLabelText("Nombre completo"), { target: { value: "Ana Prueba" } });
     fireEvent.change(within(dialog).getByLabelText("Teléfono"), { target: { value: "+5492304000000" } });
@@ -40,6 +40,46 @@ describe("AdminAvailabilityManager", () => {
     vi.stubGlobal("fetch", vi.fn((url: string) => Promise.resolve(url.includes("month=") ? month.clone() : detail("RESERVED")))); render(<AdminAvailabilityManager />);
     fireEvent.click(await screen.findByRole("button", { name: /15 de septiembre/ }));
     expect(await screen.findByRole("link", { name: /14:00/ })).toHaveAttribute("href", "/admin/reservas/11111111-1111-4111-8111-111111111111");
+  });
+
+  it("alterna bloqueo y disponibilidad, actualiza contadores y evita peticiones duplicadas", async () => {
+    let blocked = true;
+    let finishPatch: ((response: Response) => void) | undefined;
+    const fetchMock = vi.fn((url: string, options?: RequestInit) => {
+      if (options?.method === "PATCH") return new Promise<Response>((resolve) => { finishPatch = resolve; });
+      if (url.includes("month=")) return Promise.resolve(new Response(JSON.stringify({ days: [{ ...day(blocked ? 15 : 16, blocked ? 1 : 0), reservedCount: 0 }] }), { status: 200 }));
+      return Promise.resolve(detail(blocked ? "BLOCKED" : "AVAILABLE"));
+    });
+    vi.stubGlobal("fetch", fetchMock); render(<AdminAvailabilityManager />);
+    fireEvent.click(await screen.findByRole("button", { name: /15 de septiembre/ }));
+    const enable = await screen.findByRole("button", { name: "Habilitar horario 14:00 a 15:00" });
+    fireEvent.click(enable); fireEvent.click(enable);
+    expect(fetchMock.mock.calls.filter(([, options]) => options?.method === "PATCH")).toHaveLength(1);
+    expect(screen.getByText("16/16 libres")).toBeInTheDocument();
+    blocked = false; finishPatch!(new Response(JSON.stringify({ state: "AVAILABLE" }), { status: 200 }));
+    const disable = await screen.findByRole("button", { name: "Bloquear horario 14:00 a 15:00" });
+    await waitFor(() => expect(disable).not.toBeDisabled());
+    fireEvent.click(disable);
+    expect(screen.getByText("15/16 libres")).toBeInTheDocument();
+    blocked = true; finishPatch!(new Response(JSON.stringify({ state: "BLOCKED" }), { status: 200 }));
+    expect(await screen.findByRole("button", { name: "Habilitar horario 14:00 a 15:00" })).toBeInTheDocument();
+  });
+
+  it("revierte el cambio visual si el servidor falla y no permite alternar una reserva", async () => {
+    const fetchMock = vi.fn((url: string, options?: RequestInit) => options?.method === "PATCH"
+      ? Promise.resolve(new Response(JSON.stringify({ error: { code: "INTERNAL_ERROR" } }), { status: 500 }))
+      : Promise.resolve(url.includes("month=") ? new Response(JSON.stringify({ days: [{ ...day(15, 1), reservedCount: 1 }] }), { status: 200 }) : new Response(JSON.stringify({ timezone: "America/Argentina/Buenos_Aires", slots: [
+        { startTime: "14:00", endTime: "15:00", state: "BLOCKED" },
+        { startTime: "15:00", endTime: "16:00", state: "RESERVED", reservationId: "11111111-1111-4111-8111-111111111111" },
+      ], blocks: [] }), { status: 200 })));
+    vi.stubGlobal("fetch", fetchMock); render(<AdminAvailabilityManager />);
+    fireEvent.click(await screen.findByRole("button", { name: /15 de septiembre/ }));
+    expect(await screen.findByRole("link", { name: /15:00/ })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /horario 15:00 a 16:00/ })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Habilitar horario 14:00 a 15:00" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("No se pudo actualizar la disponibilidad.");
+    expect(screen.getByRole("button", { name: "Habilitar horario 14:00 a 15:00" })).toBeInTheDocument();
+    expect(screen.getByText("15/16 libres")).toBeInTheDocument();
   });
 
   it("elimina un bloqueo con DELETE y refresca el detalle", async () => {

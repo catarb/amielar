@@ -1,4 +1,4 @@
-import { and, asc, count, eq, gte, gt, ilike, inArray, isNull, lt, or, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, gt, ilike, inArray, isNull, lt, or, sql } from "drizzle-orm";
 
 import { ACTIVE_RESERVATION_STATUSES, RESERVATION_STATUSES, type ReservationStatus } from "@/server/domain/reservations/constants";
 import type { ExperienceSlug } from "@/server/domain/reservations/experiences";
@@ -87,7 +87,7 @@ export function createAdminReservationRepository(database: Database) {
           .select(reservationSelection)
           .from(reservations)
           .where(where)
-          .orderBy(asc(reservations.slotStart), asc(reservations.createdAt), asc(reservations.id))
+          .orderBy(desc(reservations.slotStart), desc(reservations.createdAt), desc(reservations.id))
           .limit(filters.pageSize)
           .offset((filters.page - 1) * filters.pageSize),
         database.select({ total: count() }).from(reservations).where(where),
