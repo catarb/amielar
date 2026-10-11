@@ -35,8 +35,8 @@ export function AdminLoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-      <label className="block text-sm font-semibold text-[var(--earth)]">
+    <form onSubmit={handleSubmit} className="admin-login-form mt-6 w-full max-w-[380px] space-y-4">
+      <label className="block text-center text-sm font-semibold text-[var(--earth)]">
         Usuario
         <input
           name="username"
@@ -47,7 +47,7 @@ export function AdminLoginForm() {
           className="mt-2 min-h-12 w-full rounded-2xl border border-[rgba(67,59,38,0.15)] bg-white/80 px-4 text-[var(--ink)] outline-none transition focus:border-[var(--gold-deep)]"
         />
       </label>
-      <label className="block text-sm font-semibold text-[var(--earth)]">
+      <label className="block text-center text-sm font-semibold text-[var(--earth)]">
         Contraseña
         <input
           name="password"
