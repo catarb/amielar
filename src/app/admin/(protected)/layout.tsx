@@ -13,12 +13,13 @@ export default async function AdminProtectedLayout({ children }: Readonly<{ chil
   return (
     <main className="admin-shell relative z-10 min-h-screen px-4 py-5 sm:px-8 sm:py-8">
       <div className="mx-auto max-w-6xl">
-        <header className="card-shell flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <div>
+        <header className="admin-header card-shell grid grid-cols-1 justify-items-center gap-4 p-5 text-center sm:p-6 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
+          <div className="hidden lg:block" aria-hidden="true" />
+          <div className="flex min-w-0 flex-col items-center lg:col-start-2">
             <p className="label-chip">AMIELAR · ADMINISTRACIÓN</p>
-            <p className="mt-3 font-serif text-3xl leading-none text-[var(--earth)] sm:text-4xl">Panel administrativo</p>
+            <p className="mt-3 admin-title text-3xl leading-none text-[var(--earth)] sm:text-4xl">Panel administrativo</p>
           </div>
-          <AdminLogoutButton />
+          <div className="lg:col-start-3 lg:row-start-1 lg:justify-self-end"><AdminLogoutButton /></div>
         </header>
         <AdminNavigation />
         <div className="mt-5">{children}</div>

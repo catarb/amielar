@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { EXPERIENCES } from "@/server/domain/reservations/experiences";
+import AdminBulkAvailabilityDialog from "./AdminBulkAvailabilityDialog";
 
 type State = "AVAILABLE" | "RESERVED" | "BLOCKED" | "RESERVED_AND_BLOCKED";
 type Slot = {
@@ -68,6 +69,8 @@ export default function AdminAvailabilityManager() {
   const [pendingSlot, setPendingSlot] = useState<string | null>(null);
   const toggleInFlight = useRef(false);
   const [notice, setNotice] = useState("");
+  const [bulkWeekday, setBulkWeekday] = useState<number | null | undefined>(undefined);
+  const closeBulk = useCallback(() => setBulkWeekday(undefined), []);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [start, setStart] = useState("06:00");
   const [end, setEnd] = useState("07:00");
@@ -98,16 +101,18 @@ export default function AdminAvailabilityManager() {
         days?: Day[];
         error?: { message?: string };
       };
-      if (response.status === 401) return router.replace("/admin/login");
+      if (response.status === 401) { router.replace("/admin/login"); return false; }
       if (!response.ok)
         throw new Error(
           body.error?.message ?? "No se pudo cargar el calendario.",
         );
       setDays(body.days ?? []);
+      return true;
     } catch (e) {
       setNotice(
         e instanceof Error ? e.message : "No se pudo cargar el calendario.",
       );
+      return false;
     } finally {
       setBusy(false);
     }
@@ -123,7 +128,7 @@ export default function AdminAvailabilityManager() {
       const body = (await response.json()) as Availability & {
         error?: { message?: string };
       };
-      if (response.status === 401) return router.replace("/admin/login");
+      if (response.status === 401) { router.replace("/admin/login"); return false; }
       if (!response.ok)
         throw new Error(
           body.error?.message ?? "No se pudo cargar la disponibilidad.",
@@ -133,10 +138,12 @@ export default function AdminAvailabilityManager() {
         slots: body.slots,
         blocks: body.blocks,
       });
+      return true;
     } catch (e) {
       setNotice(
         e instanceof Error ? e.message : "No se pudo cargar la disponibilidad.",
       );
+      return false;
     } finally {
       setBusy(false);
     }
@@ -152,6 +159,12 @@ export default function AdminAvailabilityManager() {
     setSelectedSlot(null);
     setNotice("");
     void loadDay(nextDate);
+  }
+  async function bulkApplied(result: { updated: number; reserved: number; unchanged: number }) {
+    const [monthLoaded, dayLoaded] = await Promise.all([loadMonth(month), date ? loadDay(date) : Promise.resolve(true)]);
+    if (!monthLoaded || !dayLoaded) throw new Error("No se pudo actualizar la vista del calendario.");
+    setNotice(`Se actualizaron ${result.updated} horarios.${result.reserved ? ` ${result.reserved} horarios con reservas existentes se conservaron sin cambios.` : ""}${result.unchanged ? ` ${result.unchanged} ya tenían el estado solicitado.` : ""}`);
+    closeBulk();
   }
   async function mutate(url: string, options: RequestInit, success: string) {
     setBusy(true);
@@ -280,34 +293,37 @@ export default function AdminAvailabilityManager() {
     ? (new Date(`${days[0].date}T00:00:00Z`).getUTCDay() + 6) % 7
     : 0;
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-      <section className="card-shell p-4 sm:p-7 lg:col-span-2">
-        <div className="flex items-center justify-between gap-3">
+    <div className="grid grid-cols-1 gap-6">
+      <section className="card-shell admin-availability-calendar w-full min-w-0 p-4 sm:p-7">
+        <div className="admin-calendar-navigation">
           <button
             type="button"
-            className="secondary-button min-h-10"
+            className="secondary-button admin-calendar-nav-button"
             aria-label="Mes anterior"
-            disabled={pendingSlot !== null}
+            disabled={pendingSlot !== null || bulkWeekday !== undefined || busy}
             onClick={() => setMonth(shiftMonth(month, -1))}
           >
             ←
           </button>
-          <h2 className="font-serif text-2xl capitalize text-[var(--earth)]">
-            {monthTitle(month)}
+          <h2 className="admin-calendar-month text-[var(--earth)]">
+            {monthTitle(month).replace(/^./, (letter) => letter.toUpperCase())}
           </h2>
           <button
             type="button"
-            className="secondary-button min-h-10"
+            className="secondary-button admin-calendar-nav-button"
             aria-label="Mes siguiente"
-            disabled={pendingSlot !== null}
+            disabled={pendingSlot !== null || bulkWeekday !== undefined || busy}
             onClick={() => setMonth(shiftMonth(month, 1))}
           >
             →
           </button>
         </div>
-        <div className="mt-5 grid grid-cols-7 gap-1 text-center text-[0.66rem] font-semibold uppercase tracking-wide text-[var(--muted-ink)] sm:gap-2 sm:text-xs">
-          {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day) => (
-            <span key={day}>{day}</span>
+        <div className="admin-calendar-month-action">
+          <button type="button" className="secondary-button admin-calendar-manage-button" disabled={busy || pendingSlot !== null} onClick={() => setBulkWeekday(null)}>Gestionar mes</button>
+        </div>
+        <div className="admin-calendar-grid mt-6 grid grid-cols-7 gap-1 text-center text-[0.7rem] font-semibold text-[var(--muted-ink)] sm:gap-2 sm:text-xs">
+          {[{ short: "Lun", name: "lunes", value: 1 }, { short: "Mar", name: "martes", value: 2 }, { short: "Mié", name: "miércoles", value: 3 }, { short: "Jue", name: "jueves", value: 4 }, { short: "Vie", name: "viernes", value: 5 }, { short: "Sáb", name: "sábados", value: 6 }, { short: "Dom", name: "domingos", value: 0 }].map((day) => (
+            <button key={day.value} type="button" disabled={busy || pendingSlot !== null} aria-label={`Editar todos los ${day.name} de ${monthTitle(month)}`} onClick={() => setBulkWeekday(day.value)} className="flex min-h-11 w-full cursor-pointer items-center justify-center rounded-lg transition hover:bg-[rgba(190,153,52,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold-deep)] disabled:cursor-wait">{day.short}</button>
           ))}
           {Array.from({ length: firstDayOffset }, (_, i) => (
             <span key={`empty-${i}`} />
@@ -325,7 +341,7 @@ export default function AdminAvailabilityManager() {
                 aria-current={selected ? "date" : undefined}
                 disabled={!day.inSeason || busy || pendingSlot !== null}
                 onClick={() => selectDay(day.date)}
-                className={`min-h-[4.6rem] rounded-xl border p-1 text-center transition sm:min-h-[5.8rem] sm:p-2 ${selected ? "border-[var(--gold-deep)] ring-2 ring-[rgba(190,153,52,0.25)]" : "border-[rgba(67,59,38,0.1)]"} ${!day.inSeason ? "cursor-default bg-black/[0.03] text-black/35" : day.blockedCount > 0 ? `cursor-pointer ${BLOCKED_COLOR_CLASS} hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]` : day.availableCount === 0 ? "cursor-pointer bg-[rgba(243,191,191,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : day.availableCount < day.totalSlots ? "cursor-pointer bg-[rgba(243,226,145,0.35)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : "cursor-pointer bg-[rgba(180,225,192,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]"}`}
+                className={`flex min-w-0 min-h-[4.6rem] flex-col items-center justify-center rounded-xl border p-1 text-center leading-tight transition sm:min-h-[5.8rem] sm:p-2 ${selected ? "border-[var(--gold-deep)] ring-2 ring-[rgba(190,153,52,0.25)]" : "border-[rgba(67,59,38,0.1)]"} ${!day.inSeason ? "cursor-default bg-black/[0.03] text-black/35" : day.blockedCount > 0 ? `cursor-pointer ${BLOCKED_COLOR_CLASS} hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]` : day.availableCount === 0 ? "cursor-pointer bg-[rgba(243,191,191,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : day.availableCount < day.totalSlots ? "cursor-pointer bg-[rgba(243,226,145,0.35)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]" : "cursor-pointer bg-[rgba(180,225,192,0.3)] hover:shadow-[0_4px_12px_rgba(67,59,38,0.1)]"}`}
               >
                 <span className="block text-base font-semibold sm:text-lg">
                   {Number(day.date.slice(-2))}
@@ -335,9 +351,10 @@ export default function AdminAvailabilityManager() {
                     <span className="block text-[0.68rem] font-semibold sm:text-xs">
                       {day.availableCount}/{day.totalSlots} libres
                     </span>
-                    <span className="hidden text-[0.62rem] text-[var(--muted-ink)] sm:block">
-                      {day.reservedCount} reservas · {day.blockedCount}{" "}
-                      bloqueados
+                    <span className="hidden text-[0.55rem] text-[var(--muted-ink)] sm:block lg:text-[0.62rem]">
+                      <span className="block whitespace-nowrap lg:inline">{day.reservedCount} reservas</span>
+                      <span className="hidden lg:inline"> · </span>
+                      <span className="block whitespace-nowrap lg:inline">{day.blockedCount} bloqueados</span>
                     </span>
                   </>
                 ) : (
@@ -349,7 +366,7 @@ export default function AdminAvailabilityManager() {
             );
           })}
         </div>
-        <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-xs text-[var(--muted-ink)]">
+        <div className="mt-5 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-[var(--muted-ink)]">
           <span className="inline-flex items-center gap-1.5">
             <span data-calendar-legend-dot="available" aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full bg-[rgba(180,225,192,0.72)]" />
             Disponible
@@ -368,21 +385,21 @@ export default function AdminAvailabilityManager() {
           </span>
         </div>
       </section>
-      <section className="card-shell p-6 sm:p-8">
-        <div className="flex items-center justify-between">
-          <p className="label-chip">Detalle del día</p>
+      <section className="card-shell w-full min-w-0 p-5 sm:p-6">
+        <div className="grid grid-cols-1 justify-items-center gap-2 text-center sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
+          <p className="label-chip sm:col-start-2">Detalle del día</p>
           {date && (
-            <span className="text-sm font-semibold text-[var(--earth)]">
+            <span className="text-sm font-semibold text-[var(--earth)] sm:col-start-3 sm:justify-self-end">
               {formatDate(date)}
             </span>
           )}
         </div>
         {!data ? (
-          <p className="mt-6 text-sm text-[var(--muted-ink)]">
+          <p className="mt-4 text-center text-sm text-[var(--muted-ink)]">
             Seleccioná un día de temporada para consultar sus 16 horarios.
           </p>
         ) : (
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {data.slots.map((slot) =>
               slot.reservationId ? (
                 <Link
@@ -426,27 +443,27 @@ export default function AdminAvailabilityManager() {
           </div>
         )}
       </section>
-      <section className="card-shell p-6 sm:p-8">
-        <p className="label-chip">Nuevo bloqueo</p>
-        <div className="mt-5 grid gap-3">
-          <label className="text-sm font-semibold">
+      <section className="card-shell w-full min-w-0 p-5 sm:p-6">
+        <p className="label-chip mx-auto">Nuevo bloqueo</p>
+        <div className="mx-auto mt-3 grid w-full max-w-[20rem] grid-cols-1 gap-3 text-center sm:max-w-[24rem] lg:max-w-[40rem] lg:grid-cols-2 lg:gap-x-6">
+          <label className="min-w-0 text-sm font-semibold">
             Desde
             <select
               value={start}
               onChange={(e) => setStart(e.target.value)}
-              className="mt-2 min-h-11 w-full rounded-2xl border px-3 font-normal"
+              className="mt-1.5 min-h-11 w-full rounded-2xl border px-3 font-normal"
             >
               {slots.map((v) => (
                 <option key={v}>{v}</option>
               ))}
             </select>
           </label>
-          <label className="text-sm font-semibold">
+          <label className="min-w-0 text-sm font-semibold">
             Hasta
             <select
               value={end}
               onChange={(e) => setEnd(e.target.value)}
-              className="mt-2 min-h-11 w-full rounded-2xl border px-3 font-normal"
+              className="mt-1.5 min-h-11 w-full rounded-2xl border px-3 font-normal"
             >
               {slots.map((v, i) => (
                 <option key={v}>
@@ -457,7 +474,7 @@ export default function AdminAvailabilityManager() {
           </label>
           <button
             type="button"
-            className="secondary-button justify-center"
+            className="secondary-button w-full justify-center sm:max-w-[18rem] sm:justify-self-center lg:col-span-2"
             onClick={() => {
               setStart("06:00");
               setEnd("22:00");
@@ -465,27 +482,27 @@ export default function AdminAvailabilityManager() {
           >
             Bloquear día completo
           </button>
-          <label className="text-sm font-semibold">
+          <label className="min-w-0 text-sm font-semibold lg:col-span-2 lg:mx-auto lg:w-full lg:max-w-[30rem]">
             Motivo (opcional)
             <input
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               maxLength={200}
-              className="mt-2 min-h-11 w-full rounded-2xl border px-3 font-normal"
+              className="mt-1.5 min-h-11 w-full rounded-2xl border px-3 text-left font-normal"
             />
           </label>
           <button
             type="button"
             disabled={!date || busy || pendingSlot !== null}
             onClick={() => void createBlock()}
-            className="primary-button justify-center"
+            className="primary-button w-full justify-center sm:max-w-[18rem] sm:justify-self-center lg:col-span-2"
           >
             Crear bloqueo
           </button>
         </div>
       </section>
       {impact && (
-        <section className="card-shell border border-[#c99a3d] p-6 lg:col-span-2">
+        <section className="card-shell border border-[#c99a3d] p-6">
           <p>
             Este rango afecta {impact.count} reserva
             {impact.count === 1 ? "" : "s"} ({impact.slots.join(", ")}).
@@ -501,12 +518,12 @@ export default function AdminAvailabilityManager() {
         </section>
       )}
       {notice && (
-        <p role="alert" className="text-sm text-[#A63232] lg:col-span-2">
+        <p role="alert" className="text-sm text-[#A63232]">
           {notice}
         </p>
       )}
       {data?.blocks.length ? (
-        <section className="card-shell p-6 sm:p-8 lg:col-span-2">
+        <section className="card-shell p-6 sm:p-8">
           <p className="label-chip">Bloqueos del día</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {data.blocks.map((block) => (
@@ -543,7 +560,7 @@ export default function AdminAvailabilityManager() {
             onSubmit={saveReservation}
             className="max-h-[calc(100vh-2rem)] w-full max-w-xl overflow-y-auto rounded-3xl bg-[var(--background)] p-6"
           >
-            <h2 className="font-serif text-2xl">Cargar reserva manual</h2>
+            <h2 className="admin-title text-2xl">Cargar reserva manual</h2>
             <p className="mt-2 text-sm">
               {formatDate(date)} · {selectedSlot.startTime}–
               {selectedSlot.endTime}
@@ -603,6 +620,7 @@ export default function AdminAvailabilityManager() {
           </form>
         </div>
       )}
+      {bulkWeekday !== undefined && <AdminBulkAvailabilityDialog month={month} weekday={bulkWeekday} onClose={closeBulk} onApplied={bulkApplied} />}
     </div>
   );
 }

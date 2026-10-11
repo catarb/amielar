@@ -75,3 +75,60 @@ export async function toggleAdminAvailabilitySlot(input: { date: string; startTi
     return { state: "AVAILABLE" as const };
   });
 }
+
+export type BulkAvailabilityInput = {
+  month: string;
+  weekday?: number;
+  ranges: Array<{ startTime: string; endTime: string; action: "AVAILABLE" | "BLOCKED" }>;
+};
+
+export async function updateAdminAvailabilityBulk(input: BulkAvailabilityInput, repository?: AdminAvailabilityRepository) {
+  if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(input.month) ||
+      (input.weekday !== undefined && (!Number.isInteger(input.weekday) || input.weekday < 0 || input.weekday > 6)) ||
+      input.ranges.length < 1 || input.ranges.length > 16) {
+    throw new ReservationDomainError("INVALID_DATE", "Selección masiva inválida.");
+  }
+  const [year, monthNumber] = input.month.split("-").map(Number);
+  const normalized = input.ranges.map((item) => {
+    if (item.action !== "AVAILABLE" && item.action !== "BLOCKED") throw new ReservationDomainError("INVALID_START_TIME", "Acción inválida.");
+    const start = Number(item.startTime.slice(0, 2));
+    const end = Number(item.endTime.slice(0, 2));
+    if (!/^\d{2}:00$/.test(item.startTime) || !/^\d{2}:00$/.test(item.endTime) || start < 6 || end > 22 || start >= end) {
+      throw new ReservationDomainError("INVALID_START_TIME", "Rango horario inválido.");
+    }
+    return { ...item, start, end };
+  }).sort((a, b) => a.start - b.start);
+  if (normalized.some((item, index) => index > 0 && item.start < normalized[index - 1].end)) {
+    throw new ReservationDomainError("INVALID_START_TIME", "Los rangos no pueden superponerse.");
+  }
+  const targetSlots = Array.from({ length: new Date(Date.UTC(year, monthNumber, 0)).getUTCDate() }, (_, index) => {
+    const date = `${input.month}-${String(index + 1).padStart(2, "0")}`;
+    if (!isDateInSeason(date) || (input.weekday !== undefined && new Date(`${date}T00:00:00Z`).getUTCDay() !== input.weekday)) return [];
+    return generateSlotsForDate(date).filter((slot) => normalized.some((item) => Number(slot.startTime.slice(0, 2)) >= item.start && Number(slot.startTime.slice(0, 2)) < item.end)).map((slot) => ({
+      ...slot,
+      action: normalized.find((item) => Number(slot.startTime.slice(0, 2)) >= item.start && Number(slot.startTime.slice(0, 2)) < item.end)!.action,
+    }));
+  }).flat();
+  const source = repository ?? await getPostgresAdminAvailabilityRepository();
+  return source.transaction(async (tx) => {
+    await acquireSlotAdvisoryLocks(tx, EXPERIENCE_SLUG, targetSlots.map((slot) => slot.startsAt));
+    let updated = 0;
+    let reserved = 0;
+    let unchanged = 0;
+    for (const slot of targetSlots) {
+      const reservations = await source.findReservationsInTransaction(tx, slot.startsAt, slot.endsAt);
+      if (reservations.some(active)) { reserved++; continue; }
+      const block = await source.findOverlappingBlock(tx, slot.startsAt, slot.endsAt);
+      if ((block ? "BLOCKED" : "AVAILABLE") === slot.action) { unchanged++; continue; }
+      if (slot.action === "BLOCKED") {
+        await source.insertBlock(tx, slot.startsAt, slot.endsAt, null);
+      } else if (block) {
+        await source.deleteBlock(tx, block.id);
+        if (block.startsAt < slot.startsAt) await source.insertBlock(tx, block.startsAt, slot.startsAt, block.reason);
+        if (block.endsAt > slot.endsAt) await source.insertBlock(tx, slot.endsAt, block.endsAt, block.reason);
+      }
+      updated++;
+    }
+    return { updated, reserved, unchanged };
+  });
+}

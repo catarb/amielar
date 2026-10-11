@@ -9,7 +9,7 @@ export function AdminDashboard() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <span className="label-chip">Panel administrativo</span>
-            <h3 className="mt-4 font-serif text-4xl text-[var(--ink)]">Gestion de reservas</h3>
+            <h3 className="mt-4 admin-title text-4xl text-[var(--ink)]">Gestion de reservas</h3>
             <p className="mt-3 max-w-2xl text-base leading-7 text-[color:var(--muted-ink)]">
               Administra sesiones de api-inhalacion, disponibilidad y proximas visitas con una interfaz consistente con la identidad de marca.
             </p>
@@ -37,7 +37,7 @@ export function AdminDashboard() {
                 </span>
               </div>
               <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-[color:var(--muted-ink)]">{label}</p>
-              <p className="mt-3 font-serif text-6xl text-[var(--gold-deep)]">{value}</p>
+              <p className="mt-3 admin-title text-6xl text-[var(--gold-deep)]">{value}</p>
             </article>
           ))}
         </div>
@@ -45,7 +45,7 @@ export function AdminDashboard() {
 
       <div className="card-shell overflow-hidden">
         <div className="flex flex-col gap-4 border-b border-[rgba(67,59,38,0.08)] p-6 md:flex-row md:items-center md:justify-between">
-          <h4 className="font-serif text-3xl text-[var(--ink)]">Proximas reservas</h4>
+          <h4 className="admin-title text-3xl text-[var(--ink)]">Proximas reservas</h4>
           <label className="flex items-center gap-3 rounded-full border border-[rgba(67,59,38,0.12)] bg-white px-4 py-3 text-sm text-[color:var(--muted-ink)]">
             <Search className="h-4 w-4" />
             <input type="search" placeholder="Buscar cliente..." className="w-full bg-transparent outline-none md:w-56" />

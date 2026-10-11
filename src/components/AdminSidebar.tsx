@@ -11,7 +11,7 @@ export function AdminSidebar() {
   return (
     <aside className="card-shell h-full p-6 md:p-7">
       <div>
-        <p className="font-serif text-4xl leading-none text-[var(--earth)]">Panel admin</p>
+        <p className="admin-title text-4xl leading-none text-[var(--earth)]">Panel admin</p>
         <p className="mt-2 text-sm text-[color:var(--muted-ink)]">AMIELAR · La Pampa Wellness</p>
       </div>
 
